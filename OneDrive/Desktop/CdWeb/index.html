@@ -1,0 +1,39 @@
+<!--
+/********************************************************
+ * Author:  Omar Hesham, 2015-2017.
+ *          Bruno St-Aubin, 2017-2019.
+ * Advanced Real-Time Simulation Lab.
+ * Carleton University, Ottawa, Canada.​​
+ * License: GNU General Public License v3.0
+ *
+ * Project: Web-based Cell-DEVS Simulation Viewer
+ */
+-->
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="user-scalable=no" />
+		<meta name="description" content="This web application is a viewer for Cell-DEVS simulation log files">
+		<meta name="author" content="Bruno St-Aubin, Omar Hesham">
+		
+		<title>Cell-DEVS Simulation Viewer | ARS Lab | Carleton University</title>
+		
+		<link rel='shortcut icon' href='assets/favicon.ico'>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="css/style.css?v=1.0">
+		<link rel="stylesheet" href="css/widgets.css?v=1.0">
+		<link rel="stylesheet" href="css/dashboard.css?v=1.0">
+		<link rel="stylesheet" href="css/theme-4.css?v=1.0">
+		
+		<script src="references/d3-4.12.0/d3.js"></script>
+	</head>
+
+	<body>
+		<script type="module">
+			import Main from "./src/main.js";
+		
+			var main = new Main(document.body);
+		</script>
+	</body>
+</html>

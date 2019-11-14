@@ -1,0 +1,228 @@
+html, body {
+	width : 100%;
+	height : 100%;
+	margin : 0px;
+	
+	background-color : var(--color-1);
+	color : var(--color-4);
+	
+    font-family: var(--f-body);
+    font-size: 10pt;
+}
+			
+h1, h2, h3, h4, h5 {
+    font-family: var(--f-header);
+	color : var(--color-5);
+}
+
+a {
+    font-family: var(--f-link);
+	color : var(--color-6);
+	text-decoration : none;
+}
+
+.link-button {
+    font-size: 0.9em;
+    text-align: center;
+}
+
+.link-button, button {
+    background-color: var(--color-5);
+    border-radius: 4px;
+    border: none;
+    box-shadow: 0px 1px 5px 0px var(--color-1);
+    color: var(--color-4);
+    padding: 3px 6px;
+    text-shadow: 0px 1px 1px rgba(50, 50, 50, 1);
+    line-height: 1.45;
+	cursor:pointer;
+    background-repeat: no-repeat;
+}
+
+.link-button:active, button:active {
+	box-shadow: inset 0px 1px 5px 0px rgba(0,0,0,1);
+}
+
+.link-button:focus, button:focus {
+	outline:0;
+}
+
+.link-button:disabled, button:disabled {
+	background-color: var(--color-7);
+    color: #464343;
+    text-shadow: 0px 1px 1px rgba(150, 150, 150, 1);
+    opacity: 1;
+	cursor : not-allowed;
+}
+
+input[type=range] {
+	-webkit-appearance: none;
+	box-shadow: 0px 1px 5px 0px var(--color-1);
+    background-color: transparent;
+	cursor: pointer;
+}
+
+input[type=color] {
+	margin: 1px 8px;
+    padding: 0px;
+    border: transparent;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+  
+  
+input[type=range]::-webkit-slider-runnable-track{
+  background: repeating-linear-gradient(90deg, var(--color-5),var(--color-5) 18px, var(--color-2) 18px, var(--color-2) 20px);
+  box-shadow: inset 1px 1px 3px var(--color-2), 0px 0px 1px var(--color-1);
+}
+
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  background: var(--color-4);
+  border-radius: 1px;
+  border: 0px solid #000;
+  box-shadow: 0px 2px 2px var(--color-2), 0px 1px 3px var(--color-1);
+  height: 18px;
+  width: 5px;
+}
+
+
+input[type=range]:disabled::-webkit-slider-runnable-track {
+	background: repeating-linear-gradient(90deg, rgb(178, 178, 178),rgb(178, 178, 178) 18px, rgb(100, 100, 100) 18px, rgb(100, 100, 100) 20px);
+	box-shadow: inset 1px 1px 3px rgb(178, 178, 178), 0px 0px 1px black ;
+    color: #464343;
+	cursor : not-allowed;
+}
+
+input[type=range]:disabled::-webkit-slider-thumb{
+    visibility:hidden;
+}
+
+input[type=number] {
+	font-size : 1.1em;
+}
+
+input, select {
+    border-radius: 4px;
+    border: none;
+    font-size: 1.1em;
+	
+    line-height: 23px;
+    height: 23px;
+    padding: 2px;
+}
+
+select {
+    box-sizing: content-box;
+}
+
+.hidden {
+	display : none !important;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+
+.popup-container, .dash-box {
+    text-align: left;
+    background-color: var(--color-2);
+    border-radius: 5px;
+    box-shadow: 0px 1px 8px #111;
+}
+
+.popup {
+	position:fixed;
+	top : 0px;
+	bottom : 0px;
+	right : 0px;
+	left : 0px;
+	z-index:1000;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.popup .popup-container {
+    position: absolute;
+    max-width: 400px;
+    max-height: 500px;
+    min-height: 300px;
+    margin: auto;
+    bottom: 0px;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+.popup .popup-header {
+    position: relative;
+}
+
+.popup .popup-header .popup-title {
+    margin: 10px;
+}
+
+.popup .popup-header .close {
+    position: absolute;
+    right: 5px;
+    top: -5px;
+    line-height: 28px;
+	font-size: 28px;
+    background: none;
+    box-shadow: none;
+}
+
+.popup .popup-body {
+	overflow-y: auto;
+    top: 40px;
+    bottom: 0px;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+}
+
+button.collapse {
+    background: none;
+    box-shadow: none;
+    width: 50px;
+    padding: 0px;
+    line-height: 1;
+    font-size: 1.5em;
+}
+
+.tooltip {
+	position: absolute;
+    padding: 5px;
+    border: solid thin var(--color-3);
+    border-radius: 4px;
+    pointer-events: none;
+    background: var(--color-1);
+	opacity : 0;
+}
+
+.tooltip .tooltip-title {
+	font-weight : bold;
+}
+
+.tooltip .tooltip-line > * {
+	display:inline-block;
+	vertical-align : middle;
+	margin-left:3px;
+	margin-right:3px;
+}
+
+.tooltip .legend, .tooltip .legend rect {
+	width:12px;
+	height:2px;
+}

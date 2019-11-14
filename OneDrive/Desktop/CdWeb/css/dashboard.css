@@ -1,0 +1,126 @@
+
+
+.dashboard {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.dashboard .cell {
+    flex-grow: 1;
+    width: 33.3333%;
+    height: 100px;
+    margin-top: 8px;
+}
+
+.dashboard .cell.span-1 {
+    width: 25%;
+}
+
+.dashboard .cell.span-2 {
+    width: 50%;
+}
+
+.dashboard .cell.span-3 {
+    width: 75%;
+}
+
+.dashboard .cell.span-4 {
+    width: 100%;
+}
+
+.dashboard .cell .dash-box {
+	position : relative;
+	height : 100%;
+    margin: 4px;
+}
+
+.dashboard .cell:last-child .dash-box {
+    background: none;
+    border: dashed 2px var(--color-3);
+	color : var(--color-3);
+	
+	font-size : 40px;
+	
+	display:flex;
+	justify-content : center;
+	align-items : center;
+}
+
+.dashboard .cell .dash-box > * {
+	position : absolute;
+}
+
+.dashboard .cell .cell-content {
+    width: 100%;
+    height: 100%;
+    padding: 15px 25px 15px 25px;
+    box-sizing: border-box;
+}
+
+.dashboard .cell .expand {
+    width: 20px;
+    height: 100%;
+	display:flex;
+	align-items : center;
+	justify-content : center;
+	color : var(--color-3);
+}
+
+.dashboard .cell .expand.limit {
+	display : none;
+}
+
+.dashboard .cell .expand:active {
+	background:var(--color-1);
+}
+
+.dashboard .cell .expand:hover { 
+	border-style : dashed;
+	border-color : var(--color-3);
+    border-width: 0px;
+	cursor : pointer;
+}
+
+.dashboard .cell .expand i {
+    transform: scale(1,2);
+    visibility : hidden;
+}
+
+.dashboard .cell .expand:hover i {
+    visibility : initial;
+}
+
+.dashboard .cell .expand.left {
+    border-right-width: 1.5px;
+	left : 0px;
+}
+
+.dashboard .cell .expand.right {
+    border-left-width: 1.5px;
+	right : 0px;
+}
+
+.dashboard .cell.last i {
+	cursor : pointer;
+}
+
+.dashboard .cell .close {
+	right: 0px;
+    top: 0px;
+    font-size: 1.3em;
+    cursor: pointer;
+    z-index: 100;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dashboard .cell .close i {
+	visibility : hidden;
+}
+
+.dashboard .cell .close:hover i {
+    visibility : initial;
+}
