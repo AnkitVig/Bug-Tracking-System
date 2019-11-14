@@ -1,0 +1,35 @@
+
+
+selection.js file -> make it for common DEVS or move inside auto/.
+
+gridLayer:
+all values on hover are undefined. - fixed
+
+values of each cell-states are diffrent from previous version. 100 and now 101. - model overridden issue fixed
+
+stateSum:
+frequencies are not proper - fixed
+
+gridLayer:
+colors were overridden - fixed
+
+-----------
+transitionMap:
+not working. need to fix preloaded values, working fine with frame slider
+
+to get 2d thing working, add z value as 0 for all.
+
+selection.js: generic transformation.
+select cell should work as before, select cell from layer and see impact on cell tracker
+
+change all the hover text from 'cell' to 'model' in nls.js
+
+fix y.Max in all the auto.js (specially in stateSum) - to fix it working with DEVS 
+
+based on the parser: it should show the visualizers
+
+include theme option
+
+increase sample text to detect parser
+
+

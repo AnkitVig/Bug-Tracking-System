@@ -1,0 +1,457 @@
+.main, .popup {
+	font-size : 1.1em;
+}
+
+.main {
+    margin: 0 auto 20px auto;
+    margin-top: 20px;
+    max-width: 1240px;
+}
+
+.main > *:not(:first-child) {
+    margin-top: 20px;
+}
+
+.header h1 {
+    margin: 0px;
+	font-size : 1.3em;
+}
+
+.header-app h1 {
+	font-size : 1.5em;
+}
+
+.header-app a {
+	color : var(--color-4);
+}
+
+.dropzone {
+    text-align: center;
+}
+
+.dropzone .dropzone-message {
+    padding: 5px;
+    position: absolute;
+    pointer-events: none;
+}
+
+.dropzone .box .dropzone-instructions {
+    color: var(--color-3);
+	font-size : 0.9em;
+    font-weight: bold;
+}
+
+.dropzone .box {
+    border-radius: 10px;
+    border: dashed 2px var(--color-3);
+    height: 110px;
+    margin: 5px auto;
+    width: 110px;
+}
+
+.dropzone input {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+	cursor : pointer;
+}
+
+.info {
+	width : 300px;
+}
+
+.popup .popup-title,
+.grid .grid-title,
+.palette .palette-title,
+.dropzone .dropzone-title,
+.info .info-title,
+.selector .selector-title,
+.settings .settings-title,
+.configuration .configuration-title,
+.chart .chart-title {
+	font-weight : bold;
+	margin-bottom : 8px;
+}
+
+.info .info-label {
+	font-weight : bold;
+	margin-right : 8px;
+}
+
+.info .info-value {
+	
+}
+
+.playback {
+	text-align :center;
+}
+
+.playback > *, .playback .controls > * {
+	display : inline-block;
+	vertical-align : middle;
+}
+
+.playback .controls button {
+	border-radius : 0px;
+	margin: 0px 1px;
+	width : 28px;
+	height: 28px;
+}
+
+.playback .controls button:first-child {
+	border-radius : 4px 0px 0px 4px;
+}
+
+.playback .controls button:last-child {
+	border-radius : 0px 4px 4px 0px;
+}
+
+.playback .slider {
+    margin: auto 10px;
+    width: 200px;
+}
+
+.settings .settings-line {
+	margin-top : 5px;
+}
+
+.settings .settings-value {
+	margin-left : 5px;
+	cursor : pointer;
+}
+
+.settings input[type="number"] {
+	width : 60px;
+}
+
+.settings input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+
+.settings .settings-line > * {
+	display : inline-block;
+}
+
+.settings label[for] {
+	cursor:pointer;
+}
+
+img.palette {
+	cursor : pointer;
+	height : 28px;
+	width : 28px;
+}
+
+.popup .palette {
+    padding: 15px;
+}
+
+.palette.disabled {
+	cursor : not-allowed;
+}
+
+.palette .palette-classes {
+    width: 100%;
+}
+
+.palette .palette-row {
+	margin : 2px;
+}
+
+.palette .palette-row > input[type=number] {
+	width:80px;
+}
+
+.palette .palette-row > input[type=color] {
+	cursor:pointer;
+}
+
+.palette .palette-row-header {
+	font-weight : bold;
+}
+
+.palette .palette-row > * {
+    margin: 2px;
+    padding: 0;
+    vertical-align: middle;
+}
+
+.palette button.remove {
+    background: none;
+    box-shadow: none;
+    border-radius: 30px;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 28px;
+    vertical-align: middle;
+    font-weight: bold;
+    color: var(--color-8);
+}
+
+.control .dash-box {
+    padding: 0px 10px 10px 10px;
+}
+
+.control .row {
+	flex-wrap:initial;
+    justify-content: center;
+}
+
+.control .row.row-0 {
+    justify-content: center;
+} 
+
+.control .row.row-0 i {
+    transform: scale(2,1);
+}
+
+.control .row.row-1 > * {
+    margin: 0 6px;
+    padding: 0 6px;
+} 
+
+.control .row.row-1 > *:not(:first-child):not(:last-child) {
+	border-left : dotted 2px var(--color-4);
+}
+
+.control .row.row-2 {
+	margin-top: 10px;
+	justify-content : center;
+}
+
+.control .row.row-2 .save,
+.control .row.row-2 .load {
+	margin-left : 8px;
+	margin-right : 8px;
+}
+
+.control .row.row-2 .load.loading {
+	color : var(--color-4);
+}
+
+.control .row.row-1 .min-container {
+	margin:0px;
+	padding:0px;
+}
+
+.control .min-container .min {
+	
+}
+
+.control .row.row-1 {
+    max-height: 500px;
+    transition: max-height 0.07s ease-in;
+}
+
+.control.collapsed .row.row-1 {
+    max-height: 0px;
+    transition: max-height 0.07s ease-out;
+    visibility: collapse;
+    /*height: 0px;*/
+}
+
+.selector {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.selector .load-container,
+.selector .title-container {
+    width:100%;
+}
+
+.selector .load-container {
+    text-align: right;
+}
+
+.selector .select-container {
+	flex-grow:1;
+    overflow-y: auto;
+    border: solid thin var(--color-4);
+    border-radius: 4px;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+.selector .select-container .select {
+
+}
+
+.selector .load-container .load {
+	justify-content : right;
+}
+
+.selector .select .definition-line {
+    padding: 4px 12px;
+	cursor : pointer;
+}
+
+.selector .select .definition-line:hover, 
+.selector .select .definition-line.selected {
+    background: var(--color-3);
+    color: var(--color-1);
+	font-weight : bold;
+}
+
+.configuration .configuration-line {
+	margin : 8px 0px;
+}
+
+.configuration .configuration-line > * {
+	display:inline-block;
+}
+
+.configuration .configuration-line .label {
+	margin-right:8px;
+}
+
+.chart {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.chart .svg-container {
+    display: flex;
+    flex: 1 1 auto;
+}
+
+.chart .svg-container .chart-svg {
+    height: 100%;
+    width: 100%;
+}
+
+.chart .svg-container .bar {
+    stroke:var(--color-1);
+}
+
+.chart .svg-container text {
+    fill: var(--color-4);
+}
+
+.chart .svg-container .axis path,
+.chart .svg-container .axis line {
+    stroke: var(--color-4);
+}
+
+.chart.cell-track .svg-container .overlay-vertical-line {
+    stroke: #e86547;
+    stroke-dasharray: 4 2;
+    stroke-width: 2px;
+}
+
+
+.chart.cell-track .svg-container .line-1 {
+	stroke : #e6194B;
+}
+
+.chart.cell-track .svg-container .line-2 { 
+	stroke : #3cb44b;
+}
+
+.chart.cell-track .svg-container .line-3 { 
+	stroke : #ffe119;
+}
+
+.chart.cell-track .svg-container .line-4 { 
+	stroke : #4363d8;
+}
+
+.chart.cell-track .svg-container .line-5 { 
+	stroke : #f58231;
+}
+
+.chart.cell-track .svg-container .line-6 { 
+	stroke : #911eb4;
+}
+
+.chart.cell-track .svg-container .line-7 { 
+	stroke : #42d4f4;
+}
+
+.chart.cell-track .svg-container .line-8 { 
+	stroke : #f032e6;
+}
+
+.chart.cell-track .svg-container .line-9 { 
+	stroke : #bfef45;
+}
+
+.chart.cell-track .svg-container .line-10 { 
+	stroke : #fabebe;
+}
+
+
+.chart.cell-track .svg-container .mouse {
+	stroke-width : 1px;
+	stroke:var(--color-4);
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.grid-canvas-container {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.grid-canvas {
+	cursor : pointer;
+}
+
+.mouse.line-1 {
+	fill : #e6194B;
+}
+
+.mouse.line-2 { 
+	fill : #3cb44b;
+}
+
+.mouse.line-3 { 
+	fill : #ffe119;
+}
+
+.mouse.line-4 { 
+	fill : #4363d8;
+}
+
+.mouse.line-5 { 
+	fill : #f58231;
+}
+
+.mouse.line-6 { 
+	fill : #911eb4;
+}
+
+.mouse.line-7 { 
+	fill : #42d4f4;
+}
+
+.mouse.line-8 { 
+	fill : #f032e6;
+}
+
+.mouse.line-9 { 
+	fill : #bfef45;
+}
+
+.mouse.line-10 { 
+	fill : #fabebe;
+}
+
+.transitionMap.configuration .label.colors {
+	font-weight : bold;
+}
+
+.transitionMap.configuration .configuration-line.colors {
+	margin-left : 10px;
+}

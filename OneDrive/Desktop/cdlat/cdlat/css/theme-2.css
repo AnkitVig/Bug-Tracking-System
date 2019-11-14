@@ -1,0 +1,19 @@
+
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+@import url(https://fonts.googleapis.com/css?family=Varela+Round);
+@import url(https://fonts.googleapis.com/css?family=Inconsolata);
+
+:root {
+  --color-1: #1a6055;
+  --color-2: #1F7669;
+  --color-3: #87BD9A;
+  --color-4: #F1E36E; 
+  --color-5: #A1D568; 
+  --color-6: #df804f; 
+  --color-7: rgb(178, 178, 178); 
+  --color-8: #ce0000; 
+  --f-body: 'Roboto', sans-serif;
+  --f-header: 'Varela Round', sans-serif;
+  --f-link: 'Varela Round', sans-serif;
+  --f-other: 'Inconsolata', sans-serif;
+}
