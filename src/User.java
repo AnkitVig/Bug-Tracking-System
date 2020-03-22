@@ -1,20 +1,15 @@
-import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -24,35 +19,94 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
 //import Database;
+enum Permissions
+{
+	AddProject,EditProject,DeleteProject,AddBug,EditBug,DeleteBug;
+}
 
 public class User extends JFrame {
 
-	private JPanel contentPane;
-	private JTextField usernameField;
-	private JTextField roleField;
-	private JPasswordField passwordField;
-	private String password,username, role;
-	private JLabel error;
-	private String errorText="Invalid user name or password!";
-	private JLabel lblManagerLogin;
-	JButton btnLogin;
-	private JLabel label;
-
 	/**
-	 * Launch the application.
+	 * 
 	 */
+	private static final long serialVersionUID = 1L;
+	
+	private String password;
+	protected String username;
+	private String role;
+	private int userId;
+	private String name;
+	private String email;
+	Permissions permissionList;
+	
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Permissions getPermissionList() {
+		return permissionList;
+	}
+
+	public void setPermissionList(Permissions permissionList) {
+		this.permissionList = permissionList;
+	}
+
+
+	 private JButton btnLogin;
+	 private JLabel error;
+
+	
 	public static void main(String[] args) {
-//		if(!getMac().equals("90-48-9A-AC-21-17"))
-	//	{
-		//	JOptionPane.showMessageDialog(null,"Unknown Computer, Can not run!");
-			//return;
-//		}
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-//					Process process = Runtime.getRuntime().exec("E:\\xampp\\apache_start.bat");
-	//				Process process2 = Runtime.getRuntime().exec("E:\\xampp\\mysql_start.bat");
-					
+			
 					User frame = new User();
 					frame.setIconImage(Toolkit.getDefaultToolkit().getImage("F:\\Working Directory\\final project with sql\\Bill\\logo.png"));
 					frame.setVisible(true);
@@ -69,11 +123,18 @@ public class User extends JFrame {
 	 */
 	public User()
 	{
-		//setIconImage(Toolkit.getDefaultToolkit().getImage(System.getProperty("user.dir")+"/logo.png"));
 		GUI();
 	}
 	protected void GUI()
 	{
+		 final JPanel contentPane;
+		 final JTextField usernameField;
+		 final JTextField roleField;
+		 final JPasswordField passwordField;
+		 final String errorText="Invalid user name or password!";
+		 final JLabel lblManagerLogin;
+
+		 final JLabel label;
 		setTitle("User");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 531, 387);
@@ -118,9 +179,7 @@ public class User extends JFrame {
 					btnLogin.doClick();
 				}
 		});
-	//}
-//}
-	
+
 		btnLogin = new JButton("Login");
 	
 		 btnLogin.addActionListener(new ActionListener() {
@@ -142,7 +201,7 @@ public class User extends JFrame {
 						if(Database.varifyLogin(username,password,role))
 							{
 								error.setText("");
-								Manager p=new Manager();
+								Manager p=new Manager( userId);
 								
 								p.setVisible(true);
 								
@@ -156,7 +215,7 @@ public class User extends JFrame {
 						if(Database.varifyLogin(username,password,role))
 						{
 							error.setText("");
-							 Tester t=new Tester();
+							 Tester t=new Tester( userId);
 							 t.setVisible(true);
 							
 						}
@@ -168,7 +227,7 @@ public class User extends JFrame {
 							if(Database.varifyLogin(username,password,role))
 							{
 								error.setText("");
-								Developer d=new Developer();
+								Developer d=new Developer( userId);
 								d.setVisible(true);
 								
 							}

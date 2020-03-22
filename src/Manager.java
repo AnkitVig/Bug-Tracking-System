@@ -1,15 +1,18 @@
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.JMenu;
-import java.awt.Toolkit;
+
 	
 
 	public class Manager extends User implements ActionListener {
@@ -36,6 +39,55 @@ import java.awt.Toolkit;
 		private JMenuItem mntmPrintSale;
 
 		
+		private String password;
+		public String getPassword() {
+			return password;
+		}
+		public void setPassword(String password) {
+			this.password = password;
+		}
+		public String getUsername() {
+			return username;
+		}
+		public void setUsername(String username) {
+			this.username = username;
+		}
+		public String getRole() {
+			return role;
+		}
+		public void setRole(String role) {
+			this.role = role;
+		}
+		public int getUserId() {
+			return userId;
+		}
+		public void setUserId(int userId) {
+			this.userId = userId;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getEmail() {
+			return email;
+		}
+		public void setEmail(String email) {
+			this.email = email;
+		}
+		public Permissions getPermissionList() {
+			return permissionList;
+		}
+		public void setPermissionList(Permissions permissionList) {
+			this.permissionList = permissionList;
+		}
+		private String username;
+		private String role;
+		private int userId;
+		private String name;
+		private String email;
+		Permissions permissionList;
 		/**
 		 * Create the frame.
 		 */
@@ -44,16 +96,28 @@ import java.awt.Toolkit;
 			
 		
 		}
+		public Manager(int user_id) {
+			setUserId(user_id);
+		
+		}
 		@Override
 		protected void GUI()
-		{
-			//setIconImage(Toolkit.getDefaultToolkit().getImage("F:\\Working Directory\\fianl project with sql\\Bill\\logo.png"));
+		{	final JPanel contentPane;
+			contentPane = new JPanel();
+			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+			setContentPane(contentPane);
+			contentPane.setLayout(null);
+		
 			setTitle("Manager Panel");
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			setBounds(100, 100, 840, 619);
 			
 			JMenuBar menuBar = new JMenuBar();
 			setJMenuBar(menuBar);
+			JLabel lblUserName = new JLabel("Welcome !!");
+			lblUserName.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblUserName.setBounds(154, 141, 91, 14);
+			contentPane.add(lblUserName);
 			
 			mnProjects = new JMenu("Projects");
 			menuBar.add(mnProjects);
@@ -124,6 +188,7 @@ import java.awt.Toolkit;
 			getContentPane().add(panels.get(0));
 		*/	
 		}
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
