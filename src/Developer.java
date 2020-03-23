@@ -34,6 +34,7 @@ import javax.swing.JMenu;
 		JMenu mnExport;
 		ArrayList<JPanel> panels=new ArrayList<JPanel>();
 		int cPanel=0;
+		JButton viewBug, solveBug;
 
 
 	   	private static String[] columnNames = {"Bug ID", "Bug Title", "Bug Description", "Bug Priority", "Bug Status", "Bug Due Date"
@@ -102,9 +103,7 @@ import javax.swing.JMenu;
 	}
 		@Override
 		protected void GUI()
-		{	final JLabel title, select;
-	 		final  JComboBox bugselect ;
-		   	final JButton search;
+		{	
 			//setIconImage(Toolkit.getDefaultToolkit().getImage("F:\\Working Directory\\fianl project with sql\\Bill\\logo.png"));
 			setTitle("Developer Panel");
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -122,19 +121,69 @@ import javax.swing.JMenu;
 			mnExport.add(logout);
 			logout.addActionListener(this);
 			
+			 viewBug = new JButton("View Bug");
+			 solveBug = new JButton("Assign Bug");
+			
+				viewBug.setBounds(150, 150, 150, 20);
+
+				viewBug.addActionListener(this);
+				solveBug.setBounds(150, 200, 150, 20);
+
+				solveBug.addActionListener(this);
+
+		        add(viewBug);
+		        add(solveBug);
+
+			
 			
 			getContentPane().setLayout(new BorderLayout(0, 0));
 			
 			
-			 title = new JLabel("Select Bug assigned to you from the list");
+			 
+		}
+		
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+	        
+			System.out.println("Selected: " + e.getActionCommand()); 
+			if(e.getSource() == viewBug)
+			{
+				viewBug();
+			}
+			
+			else if(e.getSource() == solveBug)
+			{
+				solveBug();
+			}
+			else if(e.getActionCommand().equals("Logout"))
+			{
+				this.dispose();
+			}
+		}
+		
+		
+		
+		public void viewBug()
+		{
+				JFrame frame1 = new JFrame("View Bug");
+			 
+		       frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		        frame1.setLayout(new BorderLayout());
+		        
+		        
+		        
+		        JLabel title = new JLabel("Select Bug assigned to you from the list");
 
 		        title.setForeground(Color.red);
 
 		        title.setFont(new Font("Tahoma", Font.PLAIN, 25));
 
-		        select = new JLabel("Select Bug");
+		        JLabel select = new JLabel("Select Bug");
 		        select.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		        search = new JButton("Search");
+		        JButton search = new JButton("Search");
 
 		 
 
@@ -142,7 +191,7 @@ import javax.swing.JMenu;
 
 		        select.setBounds(50, 90, 500, 40);
 
-		        search.setBounds(50, 320, 150, 20);
+		        search.setBounds(50, 500, 150, 20);
 
 		        search.addActionListener(this);
 
@@ -150,17 +199,17 @@ import javax.swing.JMenu;
 
 		        
 
-		        add(title);
+		        frame1.add(title);
 
-		        add(select);
-		        add(search);
+		        frame1.add(select);
+		        frame1.add(search);
 		        
-	            bugselect = new JComboBox();
+	            final JComboBox bugselect = new JComboBox();
 	            bugselect.setBounds(50, 150, 75, 20);
-
+	            
 	 
 
-	            add(bugselect);
+	            frame1.add(bugselect);
 		        
 		    //    try {
 
@@ -194,41 +243,33 @@ import javax.swing.JMenu;
 
 //		        }
 			
-		/*	panels.add(new addProject());
-			panels.add(new updateProduct());
-			panels.add(new deleteProduct());
-			panels.add(new addCashier());
-			panels.add(new deleteCashier());
-			panels.add(new showStock());
-			panels.add(new searchProduct());
-			panels.add(new searchCashier());
-			panels.add(new Sale());
-			getContentPane().add(panels.get(0));
-			
-		*/
-		            
 		            search.addActionListener(new ActionListener() {
 		    			public void actionPerformed(ActionEvent arg0) {
 		    				
 		    				String bugID=(String) bugselect.getSelectedItem();
 		    				
-		    				 viewBug(bugID);
+		    				viewBug(bugID);
 		    				
 		    			}
 		    		});
-		}
-		
+		  
+		            frame1.setVisible(true);
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-	        
-			System.out.println("Selected: " + e.getActionCommand()); 
-			
-			if(e.getActionCommand().equals("Logout"))
-			{
-				this.dispose();
-			}
+			        frame1.setSize(700, 700);
+
+		}		
+		
+		public static void solveBug()
+		{
+			 JFrame frame1 = new JFrame("Select bug ID to View Bug");
+
+		       frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		        frame1.setLayout(new BorderLayout());
+		        
+		        frame1.setVisible(true);
+
+		        frame1.setSize(400, 300);
 		}
 		
 		public static void viewBug(String bugID)
