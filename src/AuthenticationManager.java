@@ -1,8 +1,8 @@
 
-public class Database {
-	Database DB = new Database();
+public class AuthenticationManager {
+	AuthenticationManager DB = new AuthenticationManager();
 	
-	public Database()
+	public AuthenticationManager()
 	{
 		//setIconImage(Toolkit.getDefaultToolkit().getImage(System.getProperty("user.dir")+"/logo.png"));
 		

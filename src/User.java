@@ -21,17 +21,25 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import util.*;
 //import Database;
 enum Permissions
 {
 	AddProject,EditProject,DeleteProject,AddBug,EditBug,DeleteBug;
 }
-
+enum BugStatus
+{
+	Open,InProgress,Close;
+}
 public class User extends JFrame {
 
 	/**
 	 * 
 	 */
+	private Connection connection;
 	private static final long serialVersionUID = 1L;
 	
 	private String password;
@@ -235,7 +243,7 @@ public class User extends JFrame {
 			error.setText("");
 			if(role.equals("manager")) 
 			{
-				if(Database.varifyLogin(username,password,role))
+				if(AuthenticationManager.varifyLogin(username,password,role))
 					{
 						error.setText("");
 						Manager p=new Manager( userId);
@@ -249,7 +257,7 @@ public class User extends JFrame {
 			}
 			else if(  role.equals("tester"))
 			{
-				if(Database.varifyLogin(username,password,role))
+				if(AuthenticationManager.varifyLogin(username,password,role))
 				{
 					error.setText("");
 					 Tester t=new Tester( userId);
@@ -261,10 +269,10 @@ public class User extends JFrame {
 			}
 			else if(  role.equals("developer"))
 				{
-					if(Database.varifyLogin(username,password,role))
+					if(AuthenticationManager.varifyLogin(username,password,role))
 					{
 						error.setText("");
-						Developer d=new Developer( userId);
+						Developer d=new Developer( 1);
 						d.setVisible(true);
 						
 					}

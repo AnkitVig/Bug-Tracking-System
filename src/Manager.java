@@ -12,13 +12,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JMenu;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import util.*;
 	
 
 	public class Manager extends User implements ActionListener {
 		/**
 		 * 
 		 */
+		private Connection connection;
 		private static final long serialVersionUID = 9104811318735213684L;
 		JMenuItem itmAddProject;
 		JMenu mnProjects;

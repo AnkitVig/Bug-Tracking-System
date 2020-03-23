@@ -20,6 +20,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import util.*;
 import javax.swing.JMenu;
 
 	
@@ -28,6 +33,7 @@ import javax.swing.JMenu;
 		/**
 		 * 
 		 */
+		private Connection connection;
 		private static final long serialVersionUID = 9104811318735213684L;
 
 		JButton viewBug, assignBug, deleteBug;
@@ -177,198 +183,10 @@ import javax.swing.JMenu;
 		public void viewBug()
 		{
 			 
-				JFrame frame1 = new JFrame("View Bug");
-				 
-			       frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-			        frame1.setLayout(new BorderLayout());
-			        
-			        
-			        
-			        JLabel title = new JLabel("Select Bug assigned to you from the list");
-
-			        title.setForeground(Color.red);
-
-			        title.setFont(new Font("Tahoma", Font.PLAIN, 25));
-
-			        JLabel select = new JLabel("Select Bug");
-			        select.setFont(new Font("Tahoma", Font.PLAIN, 20));
-			        JButton search = new JButton("Search");
-
-			 
-
-			        title.setBounds(50, 50, 500, 40);
-
-			        select.setBounds(50, 90, 500, 40);
-
-			        search.setBounds(50, 500, 150, 20);
-
-			        search.addActionListener(this);
-
-			        //setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-			        
-
-			        frame1.add(title);
-
-			        frame1.add(select);
-			        frame1.add(search);
-			        
-		            final JComboBox bugselect = new JComboBox();
-		            bugselect.setBounds(50, 150, 75, 20);
-		            
-		 
-
-		            frame1.add(bugselect);
-			        
-			    //    try {
-
-//			            Class.forName("oracle.jdbc.driver.OracleDriver");
-
-//			            con = DriverManager.getConnection("jdbc:oracle:thin:@mcndesktop07:1521:xe", "sandeep", "welcome");
-
-//			            st = con.createStatement();
-
-//			            rs = st.executeQuery("select uname from emp");
-
-			            Vector v = new Vector();
-			            v.add("random1");
-			            v.add("random2");
-
-//			            while (rs.next()) {
-
-//			                ids = rs.getString(1);
-	//
-//			                v.add(ids);
-
-			 //           }
-
-			         
-			            bugselect.setModel(new DefaultComboBoxModel(v));
-			           // st.close();
-
-			            //rs.close();
-
-//			        } catch (Exception e) {
-
-//			        }
 				
-			            search.addActionListener(new ActionListener() {
-			    			public void actionPerformed(ActionEvent arg0) {
-			    				
-			    				String bugID=(String) bugselect.getSelectedItem();
-			    				
-			    				viewBug(bugID);
-			    				
-			    			}
-			    		});
-			  
-			            frame1.setVisible(true);
-
-				        frame1.setSize(700, 700);
-		        
-
 		}
 		public static void viewBug(String bugID)
 		{
-			 JFrame frame1 = new JFrame("Database Search Result");
-
-		       frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-		        frame1.setLayout(new BorderLayout());
-
-		//TableModel tm = new TableModel();
-
-		        DefaultTableModel model = new DefaultTableModel();
-
-		        model.setColumnIdentifiers(columnNames);
-
-		//DefaultTableModel model = new DefaultTableModel(tm.getData1(), tm.getColumnNames());
-
-		//table = new JTable(model);
-
-		        JTable table = new JTable();
-
-		        table.setModel(model);
-
-		        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
-		        table.setFillsViewportHeight(true);
-
-		        JScrollPane scroll = new JScrollPane(table);
-
-		        scroll.setHorizontalScrollBarPolicy(
-
-		                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-		        scroll.setVerticalScrollBarPolicy(
-
-		                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-
-		//String textvalue = textbox.getText();
-
-		        String uname = "";
-
-		        String email = "";
-
-		        String pass = "";
-
-		        String cou = "";
-
-		 
-
-		        try {
-
-		   //         pst = con.prepareStatement("select * from emp where UNAME='" + from + "'");
-
-		    //        ResultSet rs = pst.executeQuery();
-
-		            int i = 0;
-
-//		            if (rs.next()) {
-//
-//		                uname = rs.getString("uname");
-//
-//		                email = rs.getString("umail");
-//
-//		                pass = rs.getString("upass");
-//
-//		                cou = rs.getString("ucountry");
-//
-//		                model.addRow(new Object[]{uname, email, pass, cou});
-//
-//		                i++;
-//
-//		            }
-
-		            if (i < 1) {
-
-		                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
-
-		            }
-
-		            if (i == 1) {
-
-		                System.out.println(i + " Record Found");
-
-		            } else {
-
-		                System.out.println(i + " Records Found");
-
-		            }
-
-		        } catch (Exception ex) {
-
-		            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-
-		        }
-
-		        frame1.add(scroll);
-
-		        frame1.setVisible(true);
-
-		        frame1.setSize(400, 300);
 		}
 		
 		
