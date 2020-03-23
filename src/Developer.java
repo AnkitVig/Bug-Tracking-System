@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -33,9 +34,10 @@ import javax.swing.JMenu;
 		JMenu mnExport;
 		ArrayList<JPanel> panels=new ArrayList<JPanel>();
 		int cPanel=0;
-	   	private JButton b1;
-	  
-	   	private static String[] columnNames = {"Bug ID", "Bug Name", "Bug Status", "Country"};
+
+
+	   	private static String[] columnNames = {"Bug ID", "Bug Title", "Bug Description", "Bug Priority", "Bug Status", "Bug Due Date"
+	   			,"Select New Bug status", "Change status"};
 		
 		public String getPassword() {
 			return password;
@@ -100,11 +102,12 @@ import javax.swing.JMenu;
 	}
 		@Override
 		protected void GUI()
-		{	final JLabel l0, l1, l2;
-	 		final  JComboBox c1 ;
+		{	final JLabel title, select;
+	 		final  JComboBox bugselect ;
+		   	final JButton search;
 			//setIconImage(Toolkit.getDefaultToolkit().getImage("F:\\Working Directory\\fianl project with sql\\Bill\\logo.png"));
 			setTitle("Developer Panel");
-			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setBounds(100, 100, 840, 619);
 			
 			JMenuBar menuBar = new JMenuBar();
@@ -123,34 +126,41 @@ import javax.swing.JMenu;
 			getContentPane().setLayout(new BorderLayout(0, 0));
 			
 			
-			 l0 = new JLabel("Select Bug assigned to you from the list");
+			 title = new JLabel("Select Bug assigned to you from the list");
 
-		        l0.setForeground(Color.red);
+		        title.setForeground(Color.red);
 
-		        l0.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		        title.setFont(new Font("Tahoma", Font.PLAIN, 25));
 
-		        l1 = new JLabel("Select name");
-
-		        b1 = new JButton("submit");
+		        select = new JLabel("Select Bug");
+		        select.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		        search = new JButton("Search");
 
 		 
 
-		        l0.setBounds(100, 50, 350, 40);
+		        title.setBounds(50, 50, 500, 40);
 
-		        l1.setBounds(75, 90, 75, 20);
+		        select.setBounds(50, 90, 500, 40);
 
-		        b1.setBounds(110, 140, 150, 20);
+		        search.setBounds(50, 320, 150, 20);
 
-		        b1.addActionListener(this);
+		        search.addActionListener(this);
 
 		        //setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		        
 
-		        add(l0);
+		        add(title);
 
-		        add(l1);
-		        add(b1);
+		        add(select);
+		        add(search);
+		        
+	            bugselect = new JComboBox();
+	            bugselect.setBounds(50, 150, 75, 20);
+
+	 
+
+	            add(bugselect);
 		        
 		    //    try {
 
@@ -174,14 +184,8 @@ import javax.swing.JMenu;
 
 		 //           }
 
-		           
-		            c1 = new JComboBox(v);
-		            c1.setBounds(100, 90, 100, 20);
-
-		 
-
-		            add(c1);
-
+		         
+		            bugselect.setModel(new DefaultComboBoxModel(v));
 		           // st.close();
 
 		            //rs.close();
@@ -203,10 +207,10 @@ import javax.swing.JMenu;
 			
 		*/
 		            
-		            b1.addActionListener(new ActionListener() {
+		            search.addActionListener(new ActionListener() {
 		    			public void actionPerformed(ActionEvent arg0) {
 		    				
-		    				String bugID=(String) c1.getSelectedItem();
+		    				String bugID=(String) bugselect.getSelectedItem();
 		    				
 		    				 viewBug(bugID);
 		    				
@@ -231,7 +235,7 @@ import javax.swing.JMenu;
 		{
 			 JFrame frame1 = new JFrame("Database Search Result");
 
-		        frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		       frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		        frame1.setLayout(new BorderLayout());
 
