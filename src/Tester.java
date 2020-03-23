@@ -277,4 +277,21 @@ import javax.swing.JMenu;
 				this.dispose();
 			}
 		}
+		
+		public static void viewBug(int bugID)
+		{
+		
+		}
+		public static void assignBug(int user_id,int bug_id)
+		{
+			
+		}
+		public static void closeBug(int bugID)
+		{
+		
+		}
+		public static void notifyUser(int userID)
+		{
+		
+		}
 	}

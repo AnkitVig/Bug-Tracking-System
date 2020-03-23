@@ -289,4 +289,26 @@ import javax.swing.JMenu;
 				this.dispose();
 			}
 		}
+		
+		
+		public static void viewBug(int bugID)
+		{
+			//implemented in each subclass
+		}
+		public static void reportGenerator(int project_id) 
+		 {
+			 
+		 }
+		public static void viewBugList(int project_id) 
+		 {
+			 
+		 }
+		public static void assignProject(int userId, int project_id) 
+		 {
+			 
+		 }
+		public static void grantPermission(int userID, Permissions permission) 
+		 {
+			 
+		 }
 	}

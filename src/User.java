@@ -9,11 +9,14 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -131,8 +134,8 @@ public class User extends JFrame {
 		 final JTextField usernameField;
 		 final JTextField roleField;
 		 final JPasswordField passwordField;
-		 final String errorText="Invalid user name or password!";
 		 final JLabel lblManagerLogin;
+		 final JComboBox c1 ;
 
 		 final JLabel label;
 		setTitle("User");
@@ -166,11 +169,17 @@ public class User extends JFrame {
 		JLabel lblRole = new JLabel("Role\r\n");
 		lblRole.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblRole.setBounds(154, 200, 91, 14);
-		contentPane.add(lblRole);		
+		contentPane.add(lblRole);	
+		Vector v = new Vector();
+		 	v.add("Manager"); 
+	        v.add("Developer"); 
+	        v.add("Tester"); 
+	        
+	    c1 = new JComboBox(v);
+		c1.setBounds(282, 200, 129, 20);
+
+        add(c1);
 		
-		roleField = new JTextField();
-		roleField.setBounds(282, 200, 129, 20);
-		contentPane.add(roleField);
 		
 		passwordField.addActionListener(new ActionListener() {
 			
@@ -186,58 +195,16 @@ public class User extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				password=passwordField.getText().toString().toLowerCase();
 				username=usernameField.getText().toString().toLowerCase();
-				role=roleField.getText().toString().toLowerCase();
+				role=(String) c1.getSelectedItem();
 				passwordField.setText("");
 				usernameField.setText("");
-				roleField.setText("");
 				
-				if(password.equals("")||username.equals("")||role.equals(""))
-					error.setText(errorText);
-				else
-				{
-					error.setText("");
-					if(role.equals("manager")) 
-					{
-						if(Database.varifyLogin(username,password,role))
-							{
-								error.setText("");
-								Manager p=new Manager( userId);
-								
-								p.setVisible(true);
-								
-
-							}
-						else
-							error.setText(errorText);
-					}
-					else if(  role.equals("tester"))
-					{
-						if(Database.varifyLogin(username,password,role))
-						{
-							error.setText("");
-							 Tester t=new Tester( userId);
-							 t.setVisible(true);
-							
-						}
-						else
-							error.setText(errorText);
-					}
-					else if(  role.equals("developer"))
-						{
-							if(Database.varifyLogin(username,password,role))
-							{
-								error.setText("");
-								Developer d=new Developer( userId);
-								d.setVisible(true);
-								
-							}
-					else
-						error.setText(errorText);
-					}
-					
-				}
+				
+				login(username, password, role.toLowerCase());
+				
 			}
 		});
+		 
 		btnLogin.setBounds(282, 250, 89, 23);
 		contentPane.add(btnLogin);
 		
@@ -258,33 +225,89 @@ public class User extends JFrame {
 		
 		
 	}
-	public static String getMac()
+	public void login(String username, String password, String role)
 	{
-		InetAddress ip;
-		String mc="";
-		try {
-			ip = InetAddress.getLocalHost();
-			NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+		final String errorText="Invalid user name or password!";
+		if(password.equals("")||username.equals("")||role.equals(""))
+			error.setText(errorText);
+		else
+		{
+			error.setText("");
+			if(role.equals("manager")) 
+			{
+				if(Database.varifyLogin(username,password,role))
+					{
+						error.setText("");
+						Manager p=new Manager( userId);
+						
+						p.setVisible(true);
+						
 
-			byte[] mac = network.getHardwareAddress();
-
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < mac.length; i++) {
-				sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
+					}
+				else
+					error.setText(errorText);
 			}
-		
-			mc= sb.toString();
-
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			else if(  role.equals("tester"))
+			{
+				if(Database.varifyLogin(username,password,role))
+				{
+					error.setText("");
+					 Tester t=new Tester( userId);
+					 t.setVisible(true);
+					
+				}
+				else
+					error.setText(errorText);
+			}
+			else if(  role.equals("developer"))
+				{
+					if(Database.varifyLogin(username,password,role))
+					{
+						error.setText("");
+						Developer d=new Developer( userId);
+						d.setVisible(true);
+						
+					}
+			else
+				error.setText(errorText);
+			}
+			
 		}
-		return mc;
-		
-	
 	}
+	
+	public static void viewBug(int bugID)
+	{
+		//implemented in each subclass
+	}
+	
+	
+//	public static String getMac()
+//	{
+//		InetAddress ip;
+//		String mc="";
+//		try {
+//			ip = InetAddress.getLocalHost();
+//			NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+//
+//			byte[] mac = network.getHardwareAddress();
+//
+//			StringBuilder sb = new StringBuilder();
+//			for (int i = 0; i < mac.length; i++) {
+//				sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
+//			}
+//		
+//			mc= sb.toString();
+//
+//		} catch (UnknownHostException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (SocketException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return mc;
+//		
+//	
+//	}
 	
 }
