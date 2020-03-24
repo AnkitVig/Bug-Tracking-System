@@ -260,7 +260,7 @@ public class User extends JFrame {
 				if(AuthenticationManager.varifyLogin(username,password,role))
 				{
 					error.setText("");
-					 Tester t=new Tester( userId);
+					 Tester t=new Tester( 2);
 					 t.setVisible(true);
 					
 				}

@@ -2,6 +2,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
@@ -35,7 +36,7 @@ public class Developer extends User implements ActionListener {
 	/**
 	 * 
 	 */
-	private Connection connection;
+	private  Connection connection;
 	private PreparedStatement preparedStatment;
 	private static final long serialVersionUID = 9104811318735213684L;
 
@@ -165,19 +166,19 @@ public class Developer extends User implements ActionListener {
 
 		System.out.println("Selected: " + e.getActionCommand());
 		if (e.getSource() == viewBug) {
-			viewBug();
+			viewBugJframe();
 		}
 
 		else if (e.getSource() == solveBug) {
-			solveBug();
+			solveBugJframe();
 		} else if (e.getActionCommand().equals("Logout")) {
 			this.dispose();
 		}
 	}
 
-	public void viewBug() {
+	public void viewBugJframe() {
 		JFrame frame1 = new JFrame("View Bug");
-
+		JPanel panel = new JPanel(new GridBagLayout());
 		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		frame1.setLayout(new BorderLayout());
@@ -191,26 +192,26 @@ public class Developer extends User implements ActionListener {
 		JLabel select = new JLabel("Select Bug");
 		select.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		JButton search = new JButton("Search");
+		final JComboBox bugselect = new JComboBox();
 
-		title.setBounds(50, 50, 500, 40);
+		title.setBounds(20, 150, 500, 40);
 
-		select.setBounds(50, 90, 500, 40);
+		select.setBounds(50, 210, 500, 40);
 
-		search.setBounds(50, 500, 150, 20);
+		search.setBounds(50, 280, 150, 20);
 
 		search.addActionListener(this);
 
+		bugselect.setBounds(50, 150, 75, 20);
 		// setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		frame1.add(title);
 
 		frame1.add(select);
 		frame1.add(search);
-
-		final JComboBox bugselect = new JComboBox();
-		bugselect.setBounds(50, 150, 75, 20);
-
-		frame1.add(bugselect);
+		panel.add(bugselect);
+        frame1.add(panel);
+		
 
 		 ResultSet rs = null;
 		try {
@@ -263,26 +264,16 @@ public class Developer extends User implements ActionListener {
 
 		frame1.setVisible(true);
 
-		frame1.setSize(700, 700);
+		frame1.setSize(700, 500);
 
 	}
 
-	public static void solveBug() {
-		JFrame frame1 = new JFrame("Select bug ID to View Bug");
 
-		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-		frame1.setLayout(new BorderLayout());
-
-		frame1.setVisible(true);
-
-		frame1.setSize(400, 300);
-	}
 
 	public void viewBug(String bugID) {
 	
 
-		JFrame frame1 = new JFrame("Database Search Result");
+		JFrame frame1 = new JFrame("Bug Search Result");
 
 		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -394,8 +385,122 @@ public class Developer extends User implements ActionListener {
 		frame1.setSize(700, 500);
 	}
 
-	public static void solveBug(int bugID) {
+	public void solveBugJframe() {
+		JFrame frame1 = new JFrame("Solve Bug");
+		JPanel panel = new JPanel(new GridBagLayout());
+		
+		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		frame1.setLayout(new BorderLayout());
+		final JPanel contentPane;
+		final JComboBox bugselect ;
+		
+		JLabel title = new JLabel("Select Bug assigned to you to set status 'InProgress'");
+
+		title.setForeground(Color.red);
+
+		title.setFont(new Font("Tahoma", Font.PLAIN, 20));
+
+	
+		JButton search = new JButton("Change status to 'InProgress'");
+	
+
+		title.setBounds(20, 150, 500, 40);
+
+		search.setBounds(50, 280, 300, 20);
+
+		search.addActionListener(this);
+
+
+		// setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+		frame1.add(title);
+		frame1.add(search);
+		JLabel select = new JLabel("Select Bug");
+		select.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		select.setBounds(50, 210, 500, 40);
+		bugselect = new JComboBox();
+	    bugselect.setBounds(154, 150, 129, 20);
+	    final JLabel success = new JLabel("");
+	    success.setForeground(Color.RED);
+	    success.setBounds(110, 310, 220, 14);
+		frame1.add(success);
+
+		 ResultSet rs = null;
+			try {
+				 connection = ConnectionFactory.getConnection();
+					String sql = "Select bugId from bugs where  bugdevID = "+ this.userId  ;
+					
+					PreparedStatement pstm = connection.prepareStatement(sql);
+				
+					
+					rs = pstm.executeQuery();
+
+
+						Vector v = new Vector();
+			
+
+			            while (rs.next()) {
+
+			                String ids = rs.getString(1);
+
+			                v.add(ids);
+
+			            	}
+
+			bugselect.setModel(new DefaultComboBoxModel(v));
+		}
+			catch (SQLException e) {
+				System.out.println("SQLException in get() method");
+				e.printStackTrace();
+			} finally {
+				DbUtil.close(rs);
+				DbUtil.close(preparedStatment);
+				DbUtil.close(connection);
+			}
+		
+
+		panel.add(bugselect);
+		frame1.add(select);
+        frame1.add(panel);
+        
+		frame1.setVisible(true);
+
+		frame1.setSize(700,500);
+		search.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				String bugID = (String) bugselect.getSelectedItem();
+				
+				solveBug(bugID);
+				success.setText("Successfully Updated " + bugID);
+
+			}
+
+			
+		});
 
 	}
+	private void solveBug(String bugID) {
+		
+		int rs ;
+		try {
+			 connection = ConnectionFactory.getConnection();
+				String sql = "Update bugs set bugStatus = 'InProgress' where  bugID = ?"  ;
 
+				PreparedStatement pstm = connection.prepareStatement(sql);
+				pstm.setString(1, bugID);
+			
+				rs = pstm.executeUpdate();
+		
+		}
+		catch (SQLException e) {
+			System.out.println("SQLException in get() method");
+			e.printStackTrace();
+		} finally {
+			
+			DbUtil.close(preparedStatment);
+			DbUtil.close(connection);
+		}
+	}
 }
