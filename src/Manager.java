@@ -5,11 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JMenu;
 import java.sql.Connection;
@@ -26,13 +28,16 @@ import util.*;
 		private static final long serialVersionUID = 9104811318735213684L;
 		JMenuItem itmAddProject;
 		JMenu mnProjects;
+		public static JButton btnSubmit;
 		//JMenuItem itmUpdateProject;
 		JMenuItem itmDeleteProject;
 		JMenu mnTeamMember ;
+		JMenuItem itmGrantPermission ;
 		JMenuItem itmDeleteMember;
 		JMenuItem itmAddMember;
 		JMenu mnBug ;
 		JMenuItem itmShowBug;
+		JMenuItem itmShowBugList;
 		JMenu mnExport;
 		ArrayList<JPanel> panels=new ArrayList<JPanel>();
 		int cPanel=0;
@@ -106,195 +111,128 @@ import util.*;
 		}
 		@Override
 		protected void GUI()
-		{	final JPanel contentPane;
-			contentPane = new JPanel();
-			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-			setContentPane(contentPane);
-			contentPane.setLayout(null);
+		{ final JPanel contentPane;
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		setTitle("Manager Panel");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 840, 619);
+
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		JLabel lblUserName = new JLabel("Welcome !!");
+		lblUserName.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblUserName.setBounds(154, 141, 91, 14);
+		contentPane.add(lblUserName);
+
+		mnProjects = new JMenu("Projects");
+		menuBar.add(mnProjects);
+
+		itmAddProject = new JMenuItem("Assign Projects");
+		mnProjects.add(itmAddProject);
+		itmAddProject.addActionListener(this);
+
+		itmGrantPermission = new JMenuItem("Grant Permissions");
+		mnProjects.add(itmGrantPermission);
+		itmGrantPermission.addActionListener(this);
+
+
+		mnBug = new JMenu("Bugs");
+		menuBar.add(mnBug);
+
+		itmShowBug = new JMenuItem("View Bug");
+		mnBug.add(itmShowBug);
+		itmShowBug.addActionListener(this);
+
+		itmShowBugList = new JMenuItem("View Bug List");
+		mnBug.add(itmShowBugList);
+		itmShowBugList.addActionListener(this);
+
+		mnSearch = new JMenu("Team");
+		menuBar.add(mnSearch);
+
+		mntmSearchProject = new JMenuItem("View Team members");
+		mnSearch.add(mntmSearchProject);
+		mntmSearchProject.addActionListener(this);
+
+
+		mnReports = new JMenu("Reports");
+		menuBar.add(mnReports);
+
+		mntmPrintSale = new JMenuItem("Print Reports");
+		mnReports.add(mntmPrintSale);
+		mntmPrintSale.addActionListener(this);
+
+		mnExport = new JMenu("Account");
+		menuBar.add(mnExport);
+
+		JMenuItem logout = new JMenuItem("Logout");
+		mnExport.add(logout);
+		logout.addActionListener(this);
 		
-			setTitle("Manager Panel");
-			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			setBounds(100, 100, 840, 619);
-			
-			JMenuBar menuBar = new JMenuBar();
-			setJMenuBar(menuBar);
-			JLabel lblUserName = new JLabel("Welcome !!");
-			lblUserName.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			lblUserName.setBounds(154, 141, 91, 14);
-			contentPane.add(lblUserName);
-			
-			mnProjects = new JMenu("Projects");
-			menuBar.add(mnProjects);
-			
-			itmAddProject = new JMenuItem("Add Projects");
-			mnProjects.add(itmAddProject);
-			itmAddProject.addActionListener(this);
-			
-			itmDeleteProject = new JMenuItem("Delete Projects");
-			mnProjects.add(itmDeleteProject);
-			itmDeleteProject.addActionListener(this);
-			
-			
-			mnTeamMember = new JMenu("Team Member");
-			menuBar.add(mnTeamMember);
-			
-			itmAddMember = new JMenuItem("Add Team Member");
-			mnTeamMember.add(itmAddMember);
-			itmAddMember.addActionListener(this);
-			
-			itmDeleteMember = new JMenuItem("Delete Team Member");
-			mnTeamMember.add(itmDeleteMember);
-			itmDeleteMember.addActionListener(this);
-			
-			mnBug = new JMenu("Bugs");
-			menuBar.add(mnBug);
-			
-			itmShowBug = new JMenuItem("Show Bugs");
-			mnBug.add(itmShowBug);
-			itmShowBug.addActionListener(this);
-			
-			mnSearch = new JMenu("Search");
-			menuBar.add(mnSearch);
-			
-			mntmSearchProject = new JMenuItem("Search Project");
-			mnSearch.add(mntmSearchProject);
-			mntmSearchProject.addActionListener(this);
-			
-			mntmSearchMember = new JMenuItem("Search Team Member");
-			mnSearch.add(mntmSearchMember);
-			
-			mnReports = new JMenu("Reports");
-			menuBar.add(mnReports);
-			
-			mntmPrintSale = new JMenuItem("Print Reports");
-			mnReports.add(mntmPrintSale);
-			mntmPrintSale.addActionListener(this);
-			
-			mnExport = new JMenu("Account");
-			menuBar.add(mnExport);
-			
-			JMenuItem logout = new JMenuItem("Logout");
-			mnExport.add(logout);
-			logout.addActionListener(this);
-			mntmSearchMember.addActionListener(this);
-			
-			getContentPane().setLayout(new BorderLayout(0, 0));
-			
-		/*	panels.add(new addProject());
-			panels.add(new updateProduct());
-			panels.add(new deleteProduct());
-			panels.add(new addCashier());
-			panels.add(new deleteCashier());
-			panels.add(new showStock());
-			panels.add(new searchProduct());
-			panels.add(new searchCashier());
-			panels.add(new Sale());
-			getContentPane().add(panels.get(0));
-		*/	
+		getContentPane().setLayout(new BorderLayout(0, 0));
+
 		}
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			System.out.println("Selected: " + e.getActionCommand());   
-			if(e.getActionCommand().equals("Add Product"))
-			{
-				System.out.println(panels.get(cPanel));
-				this.remove(panels.get(cPanel));
-				this.revalidate();
-				this.repaint();
-				getContentPane().add(panels.get(0));
-				this.setVisible(true);
-				cPanel=0;
-				this.setTitle("Add Product");
-			}
-			else if(e.getActionCommand().equals("Update Product"))
-			{
-				this.remove(panels.get(cPanel));
-				this.revalidate();
-				this.repaint();
-				getContentPane().add(panels.get(1));
-				this.setVisible(true);
-				cPanel=1;
-				this.setTitle("Update Product");
-			}
-			else if(e.getActionCommand().equals("Delete Product"))
-			{
-				this.remove(panels.get(cPanel));
-				this.revalidate();
-				this.repaint();
-				getContentPane().add(panels.get(2));
-				this.setVisible(true);
-				cPanel=2;
-				this.setTitle("Delete Product");
-			}
-			else if(e.getActionCommand().equals("Add Cashier"))
-			{
-				this.remove(panels.get(cPanel));
-				this.revalidate();
-				this.repaint();
-				getContentPane().add(panels.get(3));
-				this.setVisible(true);
-				cPanel=3;
-				this.setTitle("Add Cashier");
-			}
-			else if(e.getActionCommand().equals("Delete Cashier"))
-			{
-				this.remove(panels.get(cPanel));
-				this.revalidate();
-				this.repaint();
-				getContentPane().add(panels.get(4));
-				this.setVisible(true);
-				cPanel=4;
-				this.setTitle("Delete Cashier");
-			}
-			else if(e.getActionCommand().equals("Show Stock"))
-			{
-				this.remove(panels.get(cPanel));
-				getContentPane().add(panels.get(5));
-				this.revalidate();
-				this.repaint();
-				this.setVisible(true);
-				cPanel=5;
-				this.setTitle("Show Stock");
-			}
-			else if(e.getActionCommand().equals("Search Product"))
-			{
-				this.remove(panels.get(cPanel));
-				getContentPane().add(panels.get(6));
-				this.revalidate();
-				this.repaint();
-				this.setVisible(true);
-				cPanel=6;
-				this.setTitle("Search Product");
-			}
-			else if(e.getActionCommand().equals("Search Cashier"))
-			{
-				this.remove(panels.get(cPanel));
-				getContentPane().add(panels.get(7));
-				this.revalidate();
-				this.repaint();
-				this.setVisible(true);
-				cPanel=7;
-				this.setTitle("Search Cashier");
-			}
-			else if(e.getActionCommand().equals("Print Sale"))
-			{
-				this.remove(panels.get(cPanel));
-				getContentPane().add(panels.get(8));
-				this.revalidate();
-				this.repaint();
-				this.setVisible(true);
-				cPanel=8;
-				this.setTitle("Print Sale");
-			}
-			else if(e.getActionCommand().equals("Logout"))
-			{
-				this.dispose();
-			}
+		// TODO Auto-generated method stub
+		System.out.println("Selected: " + e.getActionCommand());  
+		if(e.getActionCommand().equals("Assign Projects"))
+		{
+		assignProjectJFrame();
 		}
+		else if(e.getActionCommand().equals("Grant Permissions"))
+		{
+		grantPermsiionsJFrame();
+		}
+		else if(e.getActionCommand().equals("View Bug"))
+		{
+		viewBugJFrame();
+		}
+		else if(e.getActionCommand().equals("View Bug List"))
+		{
+		viewBugListJFrame();
+		}
+		else if(e.getActionCommand().equals("View Team members"))
+		{
+		ViewTeamMembers();
+		}
+		else if(e.getActionCommand().equals("Print Reports"))
+		{
+		generateReportsJFrame();
+		}
+		else if(e.getActionCommand().equals("Logout"))
+		{
+		this.dispose();
+		}
+		}
+
 		
 		
+		private void grantPermsiionsJFrame() {
+			// TODO Auto-generated method stub
+			
+		}
+		private void viewBugJFrame() {
+			// TODO Auto-generated method stub
+			
+		}
+		private void viewBugListJFrame() {
+			// TODO Auto-generated method stub
+			
+		}
+		private void generateReportsJFrame() {
+			// TODO Auto-generated method stub
+			
+		}
+		private void ViewTeamMembers() {
+			// TODO Auto-generated method stub
+			
+		}
 		public static void viewBug(int bugID)
 		{
 			//implemented in each subclass
@@ -307,11 +245,75 @@ import util.*;
 		 {
 			 
 		 }
-		public static void assignProject(int userId, int project_id) 
+		public  void assignProjectJFrame()
+		{
+			JFrame PFrame = new JFrame("Assign Project ");
+			PFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+			PFrame.setLayout(new BorderLayout());
+
+			JLabel lblAssignto = new JLabel("Assign To :");
+			lblAssignto.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblAssignto.setBounds(110, 141, 100, 14);
+			PFrame.add(lblAssignto);
+
+			final JTextField AssigntoField = new JTextField();
+			AssigntoField.setBounds(282, 140, 200, 20);
+			PFrame.add(AssigntoField);
+			AssigntoField.setColumns(10);
+
+			JLabel lblProject = new JLabel("Projet :\r\n");
+			lblProject.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblProject.setBounds(110, 174, 100, 25);
+			PFrame.add(lblProject);
+
+			final JTextField ProjectField = new JTextField();
+			ProjectField.setBounds(282, 174, 200, 20);
+			PFrame.add(ProjectField);
+			ProjectField.setColumns(10);
+
+			JLabel lblDesc = new JLabel("Project Description :\r\n");
+			lblDesc.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblDesc.setBounds(110, 200, 200, 25);
+			PFrame.add(lblDesc);
+
+			final JTextField DesField = new JTextField();
+			DesField.setBounds(282, 200, 200, 60);
+			PFrame.add(DesField);
+			DesField.setColumns(10);
+
+			AssigntoField.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			btnSubmit.doClick();
+			}
+			});
+			JButton btnSubmit = new JButton("Submit");
+
+			btnSubmit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			String Assignto = AssigntoField.getText().toString().toLowerCase();
+			String Project =ProjectField.getText().toString().toLowerCase();
+			String Desc =DesField.getText().toString().toLowerCase();
+			AssigntoField.setText("");
+			ProjectField.setText("");
+			DesField.setText("");
+
+
+			}
+			});
+
+			btnSubmit.setBounds(282, 300, 89, 23);
+			PFrame.add(btnSubmit);
+
+
+		}
+		public  void assignProject(int userId, int project_id) 
 		 {
 			 
 		 }
-		public static void grantPermission(int userID, Permissions permission) 
+		public  void grantPermission(int userID, Permissions permission) 
 		 {
 			 
 		 }

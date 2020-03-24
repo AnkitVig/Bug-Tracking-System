@@ -46,11 +46,17 @@ import javax.swing.JMenu;
 		
 		ArrayList<JPanel> panels=new ArrayList<JPanel>();
 		int cPanel=0;
-	
+		public static JButton btnSubmit;
+		
 
 		
 		private String password;
 		private String username;
+		public static String assignto;
+		public static String projectId;
+		public static String bugName;
+		public static String bugDesc;
+		public static String bugPriority;
 		private String role;
 		private int userId;
 		private String name;
@@ -382,33 +388,255 @@ import javax.swing.JMenu;
 		}
 		
 		
-		public static void assignBugJframe()
+		public  void assignBugJframe()
 		{
 			
-			final JPanel contentPane = null ;
-			final JTextField developer_namefield;
+			final JComboBox projectselect ;
+			JPanel panel = new JPanel(new GridBagLayout());
+			JPanel panel2 = new JPanel(new GridBagLayout());
+			JPanel panel3 = new JPanel(new GridBagLayout());
+			JFrame frame1 = new JFrame("Assign Bug  ");
+			frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+			frame1.setLayout(new BorderLayout());
+
+			JLabel lblAssignto = new JLabel("Assign To :");
+			lblAssignto.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblAssignto.setBounds(110, 141, 100, 14);
+			frame1.add(lblAssignto);
+			final JComboBox userselect = new JComboBox();
+			panel3.setBounds(282, 140, 200, 20);
 			
-			 JFrame frame1 = new JFrame("Select bug ID to View Bug");
 
-		       frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		        frame1.setLayout(new BorderLayout());
-		        
-		        frame1.setVisible(true);
+			JLabel lblpojectId = new JLabel("Project Id :\r\n");
+			lblpojectId.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblpojectId.setBounds(110, 174, 100, 25);
+			frame1.add(lblpojectId);
+			projectselect = new JComboBox();
+			panel.setBounds(282, 174, 200, 20);
+		    
 
-		        frame1.setSize(400, 300);
-		        
+
+			JLabel lblBugNm = new JLabel("Bug Title :\r\n");
+			lblBugNm.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblBugNm.setBounds(110, 200, 100, 25);
+			frame1.add(lblBugNm);
+
+			final JTextField BugNmField = new JTextField();
+			BugNmField.setBounds(282, 200, 200, 20);
+			frame1.add(BugNmField);
+			BugNmField.setColumns(10);
+
+			
+			JLabel lblpriority = new JLabel("Bug Priority :\r\n");
+			lblpriority.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblpriority.setBounds(110, 230, 100, 25);
+			frame1.add(lblpriority);
+			Vector v = new Vector();
+		    v.add("CRITICAL"); 
+			v.add("HIGH"); 
+	        v.add("LOW"); 
+	    
+			final JComboBox priorityselect = new JComboBox(v);
+			panel2.setBounds(282, 230, 200, 20);
+			
+			
+			JLabel lblBugDec = new JLabel("Bug Description :\r\n");
+			lblBugDec.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblBugDec.setBounds(110, 260, 200, 25);
+			frame1.add(lblBugDec);
+
+			final JTextField BugDecField = new JTextField();
+			BugDecField.setBounds(282, 260, 200, 60);
+			frame1.add(BugDecField);
+			BugDecField.setColumns(100);
+			
+			
+			
+			 ResultSet rs = null;
+				try {
+					 connection = ConnectionFactory.getConnection();
+						String sql = "Select projectID from project" ;
+						
+						PreparedStatement pstm = connection.prepareStatement(sql);
+					
+						
+						rs = pstm.executeQuery();
+
+
+							Vector v1 = new Vector();
 				
-				JLabel lblUserName = new JLabel("Developer Name");
-				lblUserName.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				lblUserName.setBounds(154, 141, 91, 14);
-				contentPane.add(lblUserName);
+
+				            while (rs.next()) {
+
+				                String ids = rs.getString(1);
+
+				                v1.add(ids);
+
+				            	}
+
+				projectselect.setModel(new DefaultComboBoxModel(v1));
+			}
+				catch (SQLException e) {
+					System.out.println("SQLException in get() method");
+					e.printStackTrace();
+				} finally {
+					DbUtil.close(rs);
+					DbUtil.close(preparedStatment);
+					DbUtil.close(connection);
+				}
+			
+				 ResultSet rs2 = null;
+					try {
+						 connection = ConnectionFactory.getConnection();
+							String sql = "Select username from bug_tracking_user where role = 'developer'" ;
+							
+							PreparedStatement pstm = connection.prepareStatement(sql);
+						
+							
+							rs2 = pstm.executeQuery();
+
+
+								Vector v2 = new Vector();
+					
+
+					            while (rs2.next()) {
+
+					                String ids = rs.getString(1);
+
+					                v2.add(ids);
+
+					            	}
+
+					userselect.setModel(new DefaultComboBoxModel(v2));
+				}
+					catch (SQLException e) {
+						System.out.println("SQLException in get() method");
+						e.printStackTrace();
+					} finally {
+						DbUtil.close(rs);
+						DbUtil.close(preparedStatment);
+						DbUtil.close(connection);
+					}
 				
-				developer_namefield = new JTextField();
-				developer_namefield.setBounds(282, 140, 129, 20);
-				contentPane.add(developer_namefield);
-				developer_namefield.setColumns(10);
+
+			BugDecField.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			btnSubmit.doClick();
+			}
+			});
+
+			JButton btnSubmit = new JButton("Submit");
+			final JLabel success = new JLabel("");
+			success.setForeground(Color.GREEN);
+			success.setBounds(282, 400, 200, 60);
+
+			frame1.add(success);
+
+			btnSubmit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+
+			assignto=(String) userselect.getSelectedItem();
+			projectId=(String) projectselect.getSelectedItem();
+			bugName=BugNmField.getText().toString().toLowerCase();
+			bugDesc=BugDecField.getText().toString().toLowerCase();
+			bugPriority = (String) priorityselect.getSelectedItem();
+		//	AssigntoField.setText("");
+		//	pojectIdField.setText("");
+			BugNmField.setText("");
+			BugDecField.setText("");
+			
+			assignBug(assignto, projectId, bugName, bugDesc,bugPriority);
+
+			success.setText("Bug Successfully Added");
+			}
+			});
+
+			btnSubmit.setBounds(282, 360, 89, 23);
+			frame1.add(btnSubmit);
+
+			panel.add(projectselect);
+			
+	        frame1.add(panel);
+	        
+	        panel2.add(priorityselect);
+			
+	        frame1.add(panel2);
+			      frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+			       frame1.setLayout(new BorderLayout());
+			       
+			       frame1.setVisible(true);
+
+			       frame1.setSize(600, 600);
+			
 		}
+		protected void assignBug(String assignto2, String projectId, String bugName2, String bugDesc2, String bugPriority) {
+			
+			ResultSet rs = null;
+			int ids;
+			try {
+				
+				 connection = ConnectionFactory.getConnection();
+					String sql = "select id from bug_tracking_user where username = ?"  ;
+
+					PreparedStatement pstm = connection.prepareStatement(sql);
+					
+					pstm.setString(1, assignto2);
+				
+					rs = pstm.executeQuery();
+
+
+		            while (rs.next()) {
+
+		                ids = rs.getInt(1);
+
+
+		            	}
+			
+			}
+			catch (SQLException e) {
+				System.out.println("SQLException in get() method");
+				e.printStackTrace();
+			} finally {
+				
+				DbUtil.close(preparedStatment);
+				DbUtil.close(connection);
+			}
+			
+			int rs1 ;
+			try {
+				 connection = ConnectionFactory.getConnection();
+					String sql = "insert into bugs (bugTitle,bugDescription,bugPriority,bugProjectID,bugtesterID,bugdevID) values (?,?,?,?,?,?)"  ;
+
+					PreparedStatement pstm = connection.prepareStatement(sql);
+					String testerId = Integer.toString(this.userId);
+					pstm.setString(1, bugName2);
+					pstm.setString(2, bugDesc2);
+					pstm.setString(3, bugPriority);
+					pstm.setString(4, projectId);
+					pstm.setString(5, testerId);
+					pstm.setInt(6, ids);
+				
+					rs1 = pstm.executeUpdate();
+			
+			}
+			catch (SQLException e) {
+				System.out.println("SQLException in get() method");
+				e.printStackTrace();
+			} finally {
+				
+				DbUtil.close(preparedStatment);
+				DbUtil.close(connection);
+			}
+
+			
+		}
+
 		public  void closeBugJframe()
 		{
 			JFrame frame1 = new JFrame("Solve Bug");
@@ -447,7 +675,7 @@ import javax.swing.JMenu;
 			bugselect = new JComboBox();
 		    bugselect.setBounds(154, 150, 129, 20);
 		    final JLabel success = new JLabel("");
-		    success.setForeground(Color.RED);
+		    success.setForeground(Color.GREEN);
 		    success.setBounds(110, 310, 220, 14);
 			frame1.add(success);
 
