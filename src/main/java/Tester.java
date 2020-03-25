@@ -621,15 +621,15 @@ import javax.swing.JMenu;
 					pstm.setString(4, projectId);
 					pstm.setString(5, testerId);
 					pstm.setInt(6, ids);
-				
+
 					rs1 = pstm.executeUpdate();
-			
+
 			}
 			catch (SQLException e) {
 				System.out.println("SQLException in get() method");
 				e.printStackTrace();
 			} finally {
-				
+
 				DbUtil.close(preparedStatment);
 				DbUtil.close(connection);
 			}
