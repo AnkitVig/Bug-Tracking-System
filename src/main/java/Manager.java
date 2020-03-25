@@ -1,3 +1,5 @@
+package main.java;
+
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -30,7 +32,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import util.*;
+import main.java.util.*;
 	
 
 	public class Manager extends User implements ActionListener {
@@ -644,7 +646,7 @@ import util.*;
 
 			frame1.setVisible(true);
 
-			frame1.setSize(700, 900);
+			frame1.setSize(900, 600);
 			
 		}
 		private void ViewTeamMembers() {

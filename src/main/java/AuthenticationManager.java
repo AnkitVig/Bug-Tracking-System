@@ -1,3 +1,5 @@
+package main.java;
+
 
 public class AuthenticationManager {
 	AuthenticationManager DB = new AuthenticationManager();

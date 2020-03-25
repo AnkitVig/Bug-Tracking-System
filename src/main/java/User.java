@@ -1,3 +1,5 @@
+package main.java;
+
 
 import java.awt.EventQueue;
 
@@ -24,7 +26,8 @@ import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import util.*;
+import main.java.util.*;
+
 //import Database;
 enum Permissions
 {
