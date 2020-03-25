@@ -39,10 +39,11 @@ enum BugStatus
 }
 public class User extends JFrame {
 
-	/**
-	 * 
-	 */
-	private Connection connection;
+
+	/*@ invariant userId != NULL 
+	  @ && (\forall int userId; userId != NULL ;User u1.userId != User u2.userId);
+	@*/
+
 	private static final long serialVersionUID = 1L;
 	
 	private String password;

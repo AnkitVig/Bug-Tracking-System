@@ -164,6 +164,8 @@ import javax.swing.JMenu;
 		        add(deleteBug);
 			getContentPane().setLayout(new BorderLayout(0, 0));
 			
+//
+			
 
 		}
 		@Override
