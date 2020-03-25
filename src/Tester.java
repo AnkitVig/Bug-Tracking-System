@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -27,6 +28,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import util.*;
 import javax.swing.JMenu;
 
@@ -41,6 +45,7 @@ import javax.swing.JMenu;
 		private static final long serialVersionUID = 9104811318735213684L;
 
 		JButton viewBug, assignBug, deleteBug;
+		
 		JMenu mnExport;
 		private static String[] columnNames = {"Bug ID", "Bug Title", "Bug Description", "Bug Priority", "Bug Status", "Bug Due Date"};
 		
@@ -57,6 +62,7 @@ import javax.swing.JMenu;
 		public static String bugName;
 		public static String bugDesc;
 		public static String bugPriority;
+		public static String bugDate;
 		private String role;
 		private int userId;
 		private String name;
@@ -125,7 +131,7 @@ import javax.swing.JMenu;
 		{
 			//setIconImage(Toolkit.getDefaultToolkit().getImage("F:\\Working Directory\\fianl project with sql\\Bill\\logo.png"));
 			setTitle("Tester Panel");
-			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setBounds(100, 100, 840, 619);
 			
 			JMenuBar menuBar = new JMenuBar();
@@ -190,24 +196,27 @@ import javax.swing.JMenu;
 
 			JLabel title = new JLabel("Select Bug assigned to you from the list");
 
-			title.setForeground(Color.red);
+			//title.setForeground(Color.red);
 
 			title.setFont(new Font("Tahoma", Font.PLAIN, 25));
 
-			JLabel select = new JLabel("Select Bug");
-			select.setFont(new Font("Tahoma", Font.PLAIN, 20));
+			JLabel select = new JLabel("Select Bug :");
+			select.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			select.setBounds(110, 225, 100, 25);
+			
 			JButton search = new JButton("Search");
 			final JComboBox bugselect = new JComboBox();
 
-			title.setBounds(20, 150, 500, 40);
+			title.setBounds(80, 91, 2000, 35);
 
-			select.setBounds(50, 210, 500, 40);
 
-			search.setBounds(50, 280, 150, 20);
+			//select.setBounds(50, 210, 500, 40);
+
+			search.setBounds(282, 300, 89, 23);
 
 			search.addActionListener(this);
 
-			bugselect.setBounds(50, 150, 75, 20);
+			panel.setBounds(282, 141, 200, 20);
 			// setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 			frame1.add(title);
@@ -221,7 +230,7 @@ import javax.swing.JMenu;
 			 ResultSet rs = null;
 			try {
 				 connection = ConnectionFactory.getConnection();
-					String sql = "Select bugId from bugs where  bugtesterID ="+this.userId  ;
+					String sql = "Select bugId,bugTitle from bugs where  bugtesterID ="+this.userId  ;
 
 					PreparedStatement pstm = connection.prepareStatement(sql);
 					int i = 0;
@@ -240,9 +249,10 @@ import javax.swing.JMenu;
 
 			            while (rs.next()) {
 
-			                String ids = rs.getString(1);
+			            	String bugId = rs.getString("bugId");
+							String bugTitle = rs.getString("bugTitle");
 
-			                v.add(ids);
+			                v.add(bugId.concat("-").concat(bugTitle));
 
 			            	}
 
@@ -261,7 +271,7 @@ import javax.swing.JMenu;
 				public void actionPerformed(ActionEvent arg0) {
 
 					String bugID = (String) bugselect.getSelectedItem();
-
+					
 					viewBug(bugID);
 
 				}
@@ -427,11 +437,25 @@ import javax.swing.JMenu;
 			BugNmField.setBounds(282, 200, 200, 20);
 			frame1.add(BugNmField);
 			BugNmField.setColumns(10);
+			
+			JLabel lblBugDate = new JLabel("Bug Due Date :\r\n");
+			lblBugDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblBugDate.setBounds(110, 225, 150, 25);
+			frame1.add(lblBugDate);
+
+			final JTextField BugDateField = new JTextField();
+			BugDateField.setBounds(282, 225, 200, 20);
+			frame1.add(BugDateField);
+			BugDateField.setColumns(10);
+			JLabel lblBugDateformat = new JLabel("Only (yyyy-mm-dd) Date format accepted\r\n");
+			lblBugDateformat.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblBugDateformat.setBounds(500, 225, 300, 25);
+			frame1.add(lblBugDateformat);
 
 			
 			JLabel lblpriority = new JLabel("Bug Priority :\r\n");
 			lblpriority.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			lblpriority.setBounds(110, 230, 100, 25);
+			lblpriority.setBounds(110, 250, 100, 25);
 			frame1.add(lblpriority);
 			Vector v = new Vector();
 		    v.add("CRITICAL"); 
@@ -439,16 +463,16 @@ import javax.swing.JMenu;
 	        v.add("LOW"); 
 	    
 			final JComboBox priorityselect = new JComboBox(v);
-			panel2.setBounds(282, 230, 200, 20);
+			panel2.setBounds(282, 250, 200, 20);
 			
 			
 			JLabel lblBugDec = new JLabel("Bug Description :\r\n");
 			lblBugDec.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			lblBugDec.setBounds(110, 260, 200, 25);
+			lblBugDec.setBounds(110, 280, 200, 25);
 			frame1.add(lblBugDec);
 
 			final JTextField BugDecField = new JTextField();
-			BugDecField.setBounds(282, 260, 200, 60);
+			BugDecField.setBounds(282, 280, 200, 60);
 			frame1.add(BugDecField);
 			BugDecField.setColumns(100);
 			
@@ -503,7 +527,7 @@ import javax.swing.JMenu;
 
 					            while (rs2.next()) {
 
-					                String ids = rs.getString(1);
+					                String ids = rs2.getString(1);
 
 					                v2.add(ids);
 
@@ -531,28 +555,36 @@ import javax.swing.JMenu;
 
 			JButton btnSubmit = new JButton("Submit");
 			final JLabel success = new JLabel("");
-			success.setForeground(Color.GREEN);
+			
 			success.setBounds(282, 400, 200, 60);
 
 			frame1.add(success);
 
 			btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
-
-			assignto=(String) userselect.getSelectedItem();
-			projectId=(String) projectselect.getSelectedItem();
-			bugName=BugNmField.getText().toString().toLowerCase();
-			bugDesc=BugDecField.getText().toString().toLowerCase();
-			bugPriority = (String) priorityselect.getSelectedItem();
-		//	AssigntoField.setText("");
+				assignto=(String) userselect.getSelectedItem();
+				bugDate = BugDateField.getText().toString().toLowerCase();
+				projectId=(String) projectselect.getSelectedItem();
+				bugName=BugNmField.getText().toString().toLowerCase();
+				bugDesc=BugDecField.getText().toString().toLowerCase();
+				bugPriority = (String) priorityselect.getSelectedItem();
+			if(bugDate.equals("")||bugName.equals("")||bugDesc.equals(""))
+			{	success.setForeground(Color.RED);
+				success.setText("Empty Fields are not Allowed!!");
+			}
+			else
+			{
+			
+			
 		//	pojectIdField.setText("");
 			BugNmField.setText("");
 			BugDecField.setText("");
+			BugDateField.setText("");
 			
-			assignBug(assignto, projectId, bugName, bugDesc,bugPriority);
-
+			assignBug(assignto, projectId, bugName, bugDesc,bugPriority, bugDate);
+			success.setForeground(Color.GREEN);
 			success.setText("Bug Successfully Added");
+			}
 			}
 			});
 
@@ -566,19 +598,24 @@ import javax.swing.JMenu;
 	        panel2.add(priorityselect);
 			
 	        frame1.add(panel2);
+	        panel3.add(userselect);
+			
+	        frame1.add(panel3);
 			      frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 			       frame1.setLayout(new BorderLayout());
 			       
 			       frame1.setVisible(true);
 
-			       frame1.setSize(600, 600);
+			       frame1.setSize(700, 900);
 			
 		}
-		protected void assignBug(String assignto2, String projectId, String bugName2, String bugDesc2, String bugPriority) {
-			
+		protected void assignBug(String assignto2, String projectId, String bugName2, String bugDesc2, String bugPriority, String bugDateField) {
+	
+			Date date=Date.valueOf(bugDateField);
+	        
 			ResultSet rs = null;
-			int ids;
+			int ids = 0;
 			try {
 				
 				 connection = ConnectionFactory.getConnection();
@@ -603,7 +640,7 @@ import javax.swing.JMenu;
 				System.out.println("SQLException in get() method");
 				e.printStackTrace();
 			} finally {
-				
+				DbUtil.close(rs);
 				DbUtil.close(preparedStatment);
 				DbUtil.close(connection);
 			}
@@ -611,7 +648,7 @@ import javax.swing.JMenu;
 			int rs1 ;
 			try {
 				 connection = ConnectionFactory.getConnection();
-					String sql = "insert into bugs (bugTitle,bugDescription,bugPriority,bugProjectID,bugtesterID,bugdevID) values (?,?,?,?,?,?)"  ;
+					String sql = "insert into bugs (bugTitle,bugDescription,bugPriority,bugProjectID,bugtesterID,bugdevID,bugDueDate) values (?,?,?,?,?,?,?)"  ;
 
 					PreparedStatement pstm = connection.prepareStatement(sql);
 					String testerId = Integer.toString(this.userId);
@@ -621,6 +658,7 @@ import javax.swing.JMenu;
 					pstm.setString(4, projectId);
 					pstm.setString(5, testerId);
 					pstm.setInt(6, ids);
+					pstm.setDate(7, java.sql.Date.valueOf(bugDateField));
 				
 					rs1 = pstm.executeUpdate();
 			

@@ -177,6 +177,7 @@ public class Developer extends User implements ActionListener {
 	}
 
 	public void viewBugJframe() {
+
 		JFrame frame1 = new JFrame("View Bug");
 		JPanel panel = new JPanel(new GridBagLayout());
 		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -185,24 +186,27 @@ public class Developer extends User implements ActionListener {
 
 		JLabel title = new JLabel("Select Bug assigned to you from the list");
 
-		title.setForeground(Color.red);
+		//title.setForeground(Color.red);
 
 		title.setFont(new Font("Tahoma", Font.PLAIN, 25));
 
-		JLabel select = new JLabel("Select Bug");
-		select.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		JLabel select = new JLabel("Select Bug :");
+		select.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		select.setBounds(110, 225, 100, 25);
+		
 		JButton search = new JButton("Search");
 		final JComboBox bugselect = new JComboBox();
 
-		title.setBounds(20, 150, 500, 40);
+		title.setBounds(80, 91, 2000, 35);
 
-		select.setBounds(50, 210, 500, 40);
 
-		search.setBounds(50, 280, 150, 20);
+		//select.setBounds(50, 210, 500, 40);
+
+		search.setBounds(282, 300, 89, 23);
 
 		search.addActionListener(this);
 
-		bugselect.setBounds(50, 150, 75, 20);
+		panel.setBounds(282, 141, 200, 20);
 		// setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		frame1.add(title);
@@ -216,7 +220,7 @@ public class Developer extends User implements ActionListener {
 		 ResultSet rs = null;
 		try {
 			 connection = ConnectionFactory.getConnection();
-				String sql = "Select bugId from bugs where  bugdevID ="+this.userId  ;
+				String sql = "Select bugId,bugTitle from bugs where  bugdevID ="+this.userId  ;
 
 				PreparedStatement pstm = connection.prepareStatement(sql);
 				int i = 0;
@@ -235,9 +239,10 @@ public class Developer extends User implements ActionListener {
 
 		            while (rs.next()) {
 
-		                String ids = rs.getString(1);
+		            	String bugId = rs.getString("bugId");
+						String bugTitle = rs.getString("bugTitle");
 
-		                v.add(ids);
+		                v.add(bugId.concat("-").concat(bugTitle));
 
 		            	}
 
@@ -256,7 +261,7 @@ public class Developer extends User implements ActionListener {
 			public void actionPerformed(ActionEvent arg0) {
 
 				String bugID = (String) bugselect.getSelectedItem();
-
+				
 				viewBug(bugID);
 
 			}
@@ -265,7 +270,6 @@ public class Developer extends User implements ActionListener {
 		frame1.setVisible(true);
 
 		frame1.setSize(700, 500);
-
 	}
 
 
