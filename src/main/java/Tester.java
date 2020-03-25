@@ -658,16 +658,20 @@ import javax.swing.JMenu;
 					pstm.setString(4, projectId);
 					pstm.setString(5, testerId);
 					pstm.setInt(6, ids);
+<<<<<<< HEAD:src/Tester.java
 					pstm.setDate(7, java.sql.Date.valueOf(bugDateField));
 				
+=======
+
+>>>>>>> b364b0f6b2be657508bf18fa1949c464176a3804:src/main/java/Tester.java
 					rs1 = pstm.executeUpdate();
-			
+
 			}
 			catch (SQLException e) {
 				System.out.println("SQLException in get() method");
 				e.printStackTrace();
 			} finally {
-				
+
 				DbUtil.close(preparedStatment);
 				DbUtil.close(connection);
 			}
