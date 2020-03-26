@@ -719,6 +719,16 @@ public class Manager extends User implements ActionListener {
 		frame1.setSize(700, 500);
 	}
 
+	/*
+	 * @ public normal_behavior
+	 * 
+	 * @ requires bugId > 0 && bugStatus != "Closed" && bugdevID = this.userId
+	 * 
+	 * @ ensures bugTitle != NULL && bugDescription != NULL && bugPriority != NULL
+	 * && bugStatus != NULL && bugDueDate != NULL ;
+	 * 
+	 * @
+	 */
 	public void viewBug(String bugID) {
 		JFrame frame1 = new JFrame("Bug Search Result");
 
@@ -774,7 +784,8 @@ public class Manager extends User implements ActionListener {
 
 			connection = ConnectionFactory.getConnection();
 			String sql = "Select a.bugId, a.bugTitle, a.bugDescription,a.bugPriority"
-					+ ",a.bugStatus ,a.bugDueDate from bugs a where a.bugId ='" + bugID + "'";
+					+ ",a.bugStatus ,a.bugDueDate from bugs a where  bugStatus != 'CLOSED' or  bugStatus != 'closed' or bugStatus != 'Closed' and"
+					+ " a.bugId ='" + bugID + "'";
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
 			int i = 0;
