@@ -1,5 +1,14 @@
 package main.java;
 
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -43,6 +52,10 @@ import javax.swing.JMenu;
 		/**
 		 * 
 		 */
+		/*@ invariant  userId != null 
+		  @ && (\forall Integer  userId; userId != null ; u1.userId != u2.userId)
+		  @ && role == "Tester";
+		@*/
 		private Connection connection;
 		private PreparedStatement preparedStatment;
 		private static final long serialVersionUID = 9104811318735213684L;
@@ -132,7 +145,7 @@ import javax.swing.JMenu;
 		@Override
 		protected void GUI()
 		{
-			//setIconImage(Toolkit.getDefaultToolkit().getImage("F:\\Working Directory\\fianl project with sql\\Bill\\logo.png"));
+			
 			setTitle("Tester Panel");
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setBounds(100, 100, 840, 619);
@@ -164,10 +177,9 @@ import javax.swing.JMenu;
 		        add(deleteBug);
 			getContentPane().setLayout(new BorderLayout(0, 0));
 			
-//
-			
 
 		}
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
@@ -191,6 +203,7 @@ import javax.swing.JMenu;
 				this.dispose();
 			}
 		}
+		
 		public void viewBugJframe()
 		{
 			JFrame frame1 = new JFrame("View Bug");
@@ -215,7 +228,6 @@ import javax.swing.JMenu;
 			title.setBounds(80, 91, 2000, 35);
 
 
-			//select.setBounds(50, 210, 500, 40);
 
 			search.setBounds(282, 300, 89, 23);
 
@@ -240,14 +252,6 @@ import javax.swing.JMenu;
 					PreparedStatement pstm = connection.prepareStatement(sql);
 					int i = 0;
 					rs = pstm.executeQuery();
-
-//			            Class.forName("oracle.jdbc.driver.OracleDriver");
-
-//			            con = DriverManager.getConnection("jdbc:oracle:thin:@mcndesktop07:1521:xe", "sandeep", "welcome");
-
-//			            st = con.createStatement();
-
-//			            rs = st.executeQuery("select uname from emp");
 
 						Vector v = new Vector();
 			
@@ -287,6 +291,11 @@ import javax.swing.JMenu;
 			frame1.setSize(700, 500);
 				
 		}
+		
+		/*@ public normal_behavior 
+		 @ requires bugId > 0 && bugStatus != "Closed"  && bugdevID = this.userId
+		 @ ensures bugTitle != NULL && bugDescription  != NULL && bugPriority  != NULL && bugStatus  != NULL && bugDueDate != NULL ;
+		 @*/
 		public void viewBug(String bugID)
 		{
 
@@ -301,11 +310,6 @@ import javax.swing.JMenu;
 			DefaultTableModel model = new DefaultTableModel();
 
 			model.setColumnIdentifiers(columnNames);
-
-			// DefaultTableModel model = new DefaultTableModel(tm.getData1(),
-			// tm.getColumnNames());
-
-			// table = new JTable(model);
 
 			JTable table = new JTable();
 
@@ -345,7 +349,8 @@ import javax.swing.JMenu;
 				
 					connection = ConnectionFactory.getConnection();
 					String sql = "Select a.bugId, a.bugTitle, a.bugDescription,a.bugPriority"
-							+ ",a.bugStatus ,a.bugDueDate from bugs a where a.bugId ='"+bugID +"' and bugtesterID ="+this.userId ;
+							+ ",a.bugStatus ,a.bugDueDate from bugs a where  bugStatus != 'CLOSED' or  bugStatus != 'closed' or bugStatus != 'Closed' and"
+							+ " a.bugId ='"+bugID +"' and bugtesterID ="+this.userId ;
 
 					PreparedStatement pstm = connection.prepareStatement(sql);
 					int i = 0;
@@ -678,7 +683,15 @@ import javax.swing.JMenu;
 				DbUtil.close(preparedStatment);
 				DbUtil.close(connection);
 			}
-
+			try {
+				notifyUser(bugName2,assignto2);
+			} catch (AddressException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		}
 
@@ -803,8 +816,73 @@ import javax.swing.JMenu;
 		}
 
 	
-		public  void notifyUser(int userID)
-		{
-		
+		public  void notifyUser(String bugTitle,String username) throws AddressException,
+		MessagingException
+		{	String userEmail = null;
+			 ResultSet rs = null;
+				try {
+					 connection = ConnectionFactory.getConnection();
+						String sql = "Select email from bug_tracking_user where  username = ?" ;
+						
+						PreparedStatement pstm = connection.prepareStatement(sql);
+						pstm.setString(1, username);
+						
+						rs = pstm.executeQuery();
+
+
+				            while (rs.next()) {
+
+				                userEmail = rs.getString(1);
+
+				            	}
+
+				
+			}
+				catch (SQLException e) {
+					System.out.println("SQLException in get() method");
+					e.printStackTrace();
+				} finally {
+					DbUtil.close(rs);
+					DbUtil.close(preparedStatment);
+					DbUtil.close(connection);
+				}
+			
+
+			Properties emailProperties;
+			Session mailSession;
+			MimeMessage emailMessage;
+
+			String emailPort = "587";//gmail's smtp port
+
+			emailProperties = System.getProperties();
+			emailProperties.put("mail.smtp.port", emailPort);
+			emailProperties.put("mail.smtp.auth", "true");
+			emailProperties.put("mail.smtp.starttls.enable", "true");
+			
+			String[] toEmails = { userEmail };
+			String emailSubject = "Email from bug tracker";
+			String emailBody = "A bug with name '"+bugTitle+"' has been created and assigned to you for your review.";
+
+			mailSession = Session.getDefaultInstance(emailProperties, null);
+			emailMessage = new MimeMessage(mailSession);
+
+			for (int i = 0; i < toEmails.length; i++) {
+				emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmails[i]));
+			}
+
+			emailMessage.setSubject(emailSubject);
+			emailMessage.setContent(emailBody, "text/html");//for a html email
+			//emailMessage.setText(emailBody);// for a text email
+			
+			String emailHost = "smtp.gmail.com";
+			String fromUser = "bugtrackerdbc@gmail.com";//just the id alone without @gmail.com
+			String fromUserEmailPassword = "abcd98825";
+
+			Transport transport = mailSession.getTransport("smtp");
+
+			transport.connect(emailHost, fromUser, fromUserEmailPassword);
+			transport.sendMessage(emailMessage, emailMessage.getAllRecipients());
+			transport.close();
+			System.out.println("Email sent successfully.");
 		}
 	}

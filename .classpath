@@ -17,5 +17,7 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="/Users/ankitvig/Downloads/mysql-connector-java-8.0.19 2/mysql-connector-java-8.0.19.jar"/>
+	<classpathentry kind="lib" path="/Users/ankitvig/Downloads/mailactivation/activation.jar"/>
+	<classpathentry kind="lib" path="/Users/ankitvig/Downloads/mailactivation/mail.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

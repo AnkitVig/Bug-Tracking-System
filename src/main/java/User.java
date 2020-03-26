@@ -1,6 +1,5 @@
 package main.java;
 
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -29,23 +28,26 @@ import java.sql.SQLException;
 import main.java.util.*;
 
 //import Database;
-enum Permissions
-{
-	AddProject,EditProject,DeleteProject,AddBug,EditBug,DeleteBug;
+enum Permissions {
+	AddProject, EditProject, DeleteProject, AddBug, EditBug, DeleteBug;
 }
-enum BugStatus
-{
-	Open,InProgress,Close;
+
+enum BugStatus {
+	Open, Close, Resolved;
 }
+
 public class User extends JFrame {
 
-
-	/*@ invariant userId != NULL 
-	  @ && (\forall int userId; userId != NULL ;User u1.userId != User u2.userId);
-	@*/
+	/*
+	 * @ invariant userId != null
+	 * 
+	 * @ && (\forall Integer userId; userId != null ; u1.userId != u2.userId);
+	 * 
+	 * @
+	 */
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private String password;
 	protected String username;
 	private String role;
@@ -53,8 +55,7 @@ public class User extends JFrame {
 	private String name;
 	private String email;
 	Permissions permissionList;
-	
-	
+
 	public String getPassword() {
 		return password;
 	}
@@ -111,21 +112,20 @@ public class User extends JFrame {
 		this.permissionList = permissionList;
 	}
 
+	private JButton btnLogin;
+	private JLabel error;
 
-	 private JButton btnLogin;
-	 private JLabel error;
-
-	
 	public static void main(String[] args) {
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-			
+
 					User frame = new User();
-					frame.setIconImage(Toolkit.getDefaultToolkit().getImage("F:\\Working Directory\\final project with sql\\Bill\\logo.png"));
+					frame.setIconImage(Toolkit.getDefaultToolkit()
+							.getImage("F:\\Working Directory\\final project with sql\\Bill\\logo.png"));
 					frame.setVisible(true);
-					
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -136,20 +136,19 @@ public class User extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public User()
-	{
+	public User() {
 		GUI();
 	}
-	protected void GUI()
-	{
-		 final JPanel contentPane;
-		 final JTextField usernameField;
-		 final JTextField roleField;
-		 final JPasswordField passwordField;
-		 final JLabel lblManagerLogin;
-		 final JComboBox c1 ;
 
-		 final JLabel label;
+	protected void GUI() {
+		final JPanel contentPane;
+		final JTextField usernameField;
+		final JTextField roleField;
+		final JPasswordField passwordField;
+		final JLabel lblManagerLogin;
+		final JComboBox c1;
+
+		final JLabel label;
 		setTitle("User");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 531, 387);
@@ -157,169 +156,127 @@ public class User extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		
+
 		JLabel lblUserName = new JLabel("User name");
 		lblUserName.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblUserName.setBounds(154, 141, 91, 14);
 		contentPane.add(lblUserName);
-		
+
 		usernameField = new JTextField();
 		usernameField.setBounds(282, 140, 129, 20);
 		contentPane.add(usernameField);
 		usernameField.setColumns(10);
-		
+
 		JLabel lblPassword = new JLabel("Password\r\n");
 		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblPassword.setBounds(154, 174, 91, 14);
 		contentPane.add(lblPassword);
-		
+
 		passwordField = new JPasswordField();
 		passwordField.setBounds(282, 173, 129, 20);
 		contentPane.add(passwordField);
-		
+
 		JLabel lblRole = new JLabel("Role\r\n");
 		lblRole.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblRole.setBounds(154, 200, 91, 14);
-		contentPane.add(lblRole);	
+		contentPane.add(lblRole);
 		Vector v = new Vector();
-		 	v.add("Manager"); 
-	        v.add("Developer"); 
-	        v.add("Tester"); 
-	        
-	    c1 = new JComboBox(v);
+		v.add("Manager");
+		v.add("Developer");
+		v.add("Tester");
+
+		c1 = new JComboBox(v);
 		c1.setBounds(282, 200, 129, 20);
 
-        add(c1);
-		
-		
+		add(c1);
+
 		passwordField.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					btnLogin.doClick();
-				}
+				btnLogin.doClick();
+			}
 		});
 
 		btnLogin = new JButton("Login");
-	
-		 btnLogin.addActionListener(new ActionListener() {
+
+		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				password=passwordField.getText().toString().toLowerCase();
-				username=usernameField.getText().toString().toLowerCase();
-				role=(String) c1.getSelectedItem();
+				password = passwordField.getText().toString().toLowerCase();
+				username = usernameField.getText().toString().toLowerCase();
+				role = (String) c1.getSelectedItem();
 				passwordField.setText("");
 				usernameField.setText("");
-				
-				
+
 				login(username, password, role.toLowerCase());
-				
+
 			}
 		});
-		 
+
 		btnLogin.setBounds(282, 250, 89, 23);
 		contentPane.add(btnLogin);
-		
+
 		error = new JLabel("");
 		error.setForeground(Color.RED);
 		error.setBounds(104, 236, 220, 14);
 		contentPane.add(error);
-		
+
 		lblManagerLogin = new JLabel("User Login");
 		lblManagerLogin.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblManagerLogin.setBounds(204, 26, 167, 28);
 		contentPane.add(lblManagerLogin);
-		
+
 		label = new JLabel("");
 		label.setIcon(new ImageIcon("E:\\XAMPP\\htdocs\\logo.png"));
 		label.setBounds(10, 11, 167, 91);
 		contentPane.add(label);
-		
-		
-	}
-	public void login(String username, String password, String role)
-	{
-		final String errorText="Invalid user name or password!";
-		if(password.equals("")||username.equals("")||role.equals(""))
-			error.setText(errorText);
-		else
-		{
-			error.setText("");
-			if(role.equals("manager")) 
-			{
-				if(AuthenticationManager.varifyLogin(username,password,role))
-					{
-						error.setText("");
-						Manager p=new Manager( userId);
-						
-						p.setVisible(true);
-						
 
-					}
-				else
-					error.setText(errorText);
-			}
-			else if(  role.equals("tester"))
-			{
-				if(AuthenticationManager.varifyLogin(username,password,role))
-				{
+	}
+
+	/*
+	 * @ public normal_behavior
+	 * 
+	 * @ requires username != NULL && password != NULL && role != NULL
+	 * 
+	 * @ ensures userId != NULL && email != NULL && name != NULL
+	 * 
+	 * @
+	 */
+
+	public void login(String username, String password, String role) {
+		final String errorText = "Invalid user name or password!";
+		if (password.equals("") || username.equals("") || role.equals(""))
+			error.setText(errorText);
+		else {
+			error.setText("");
+			if (role.equals("manager")) {
+				if (AuthenticationManager.varifyLogin(username, password, role)) {
 					error.setText("");
-					 Tester t=new Tester( 2);
-					 t.setVisible(true);
-					
-				}
-				else
+					Manager p = new Manager(userId);
+
+					p.setVisible(true);
+
+				} else
+					error.setText(errorText);
+			} else if (role.equals("tester")) {
+				if (AuthenticationManager.varifyLogin(username, password, role)) {
+					error.setText("");
+					Tester t = new Tester(2);
+					t.setVisible(true);
+
+				} else
+					error.setText(errorText);
+			} else if (role.equals("developer")) {
+				if (AuthenticationManager.varifyLogin(username, password, role)) {
+					error.setText("");
+					Developer d = new Developer(1);
+					d.setVisible(true);
+
+				} else
 					error.setText(errorText);
 			}
-			else if(  role.equals("developer"))
-				{
-					if(AuthenticationManager.varifyLogin(username,password,role))
-					{
-						error.setText("");
-						Developer d=new Developer( 1);
-						d.setVisible(true);
-						
-					}
-			else
-				error.setText(errorText);
-			}
-			
+
 		}
 	}
-	
-	public static void viewBug(int bugID)
-	{
-		//implemented in each subclass
-	}
-	
-	
-//	public static String getMac()
-//	{
-//		InetAddress ip;
-//		String mc="";
-//		try {
-//			ip = InetAddress.getLocalHost();
-//			NetworkInterface network = NetworkInterface.getByInetAddress(ip);
-//
-//			byte[] mac = network.getHardwareAddress();
-//
-//			StringBuilder sb = new StringBuilder();
-//			for (int i = 0; i < mac.length; i++) {
-//				sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
-//			}
-//		
-//			mc= sb.toString();
-//
-//		} catch (UnknownHostException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (SocketException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return mc;
-//		
-//	
-//	}
-	
+
 }
