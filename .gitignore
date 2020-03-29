@@ -2,3 +2,5 @@
 BugTracker.iml
 target/
 bin/
+.classpath
+.project
