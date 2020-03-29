@@ -1,4 +1,4 @@
-package main.java;
+package com.carleton;
 
 import java.util.Properties;
 
@@ -35,14 +35,13 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
-import main.java.util.*;
+import com.carleton.util.ConnectionFactory;
+import com.carleton.util.DbUtil;
+import com.carleton.util.*;
 
 import javax.swing.JMenu;
 
@@ -164,7 +163,7 @@ public class Tester extends User implements ActionListener {
 	protected void GUI() {
 
 		setTitle("Tester Panel");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setBounds(100, 100, 840, 619);
 
 		JMenuBar menuBar = new JMenuBar();
@@ -217,7 +216,7 @@ public class Tester extends User implements ActionListener {
 	public void viewBugJframe() {
 		JFrame frame1 = new JFrame("View Bug");
 		JPanel panel = new JPanel(new GridBagLayout());
-		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		frame1.setLayout(new BorderLayout());
 
@@ -310,7 +309,7 @@ public class Tester extends User implements ActionListener {
 
 		JFrame frame1 = new JFrame("Bug Search Result");
 
-		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		frame1.setLayout(new BorderLayout());
 
@@ -417,7 +416,7 @@ public class Tester extends User implements ActionListener {
 		JPanel panel2 = new JPanel(new GridBagLayout());
 		JPanel panel3 = new JPanel(new GridBagLayout());
 		JFrame frame1 = new JFrame("Assign Bug  ");
-		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		frame1.setLayout(new BorderLayout());
 
@@ -597,7 +596,7 @@ public class Tester extends User implements ActionListener {
 		panel3.add(userselect);
 
 		frame1.add(panel3);
-		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		frame1.setLayout(new BorderLayout());
 
@@ -694,7 +693,7 @@ public class Tester extends User implements ActionListener {
 		JFrame frame1 = new JFrame("Solve Bug");
 		JPanel panel = new JPanel(new GridBagLayout());
 
-		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		frame1.setLayout(new BorderLayout());
 		final JPanel contentPane;

@@ -1,4 +1,4 @@
-package main.java;
+package com.carleton;
 
 import java.awt.EventQueue;
 
@@ -13,19 +13,11 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 import java.awt.event.ActionListener;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import main.java.util.*;
 
 //import Database;
 enum Permissions {
