@@ -1,4 +1,4 @@
-package main.java.util;
+package com.carleton.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

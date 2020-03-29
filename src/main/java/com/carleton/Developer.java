@@ -1,4 +1,4 @@
-package main.java;
+package com.carleton;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,15 +21,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
 import javax.swing.JMenu;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import main.java.util.*;
+
+import com.carleton.util.ConnectionFactory;
+import com.carleton.util.DbUtil;
+import com.carleton.util.*;
 
 public class Developer extends User implements ActionListener {
 	/**
@@ -137,7 +138,7 @@ public class Developer extends User implements ActionListener {
 	protected void GUI() {
 
 		setTitle("Developer Panel");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setBounds(100, 100, 840, 619);
 
 		JMenuBar menuBar = new JMenuBar();
@@ -187,7 +188,7 @@ public class Developer extends User implements ActionListener {
 
 		JFrame frame1 = new JFrame("View Bug");
 		JPanel panel = new JPanel(new GridBagLayout());
-		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		frame1.setLayout(new BorderLayout());
 
@@ -279,7 +280,7 @@ public class Developer extends User implements ActionListener {
 
 		JFrame frame1 = new JFrame("Bug Search Result");
 
-		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		frame1.setLayout(new BorderLayout());
 
@@ -388,7 +389,7 @@ public class Developer extends User implements ActionListener {
 		JFrame frame1 = new JFrame("Solve Bug");
 		JPanel panel = new JPanel(new GridBagLayout());
 
-		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		frame1.setLayout(new BorderLayout());
 		final JPanel contentPane;
