@@ -1,4 +1,4 @@
-package com.carleton;
+package main.java.com.carleton;
 
 import java.awt.EventQueue;
 
