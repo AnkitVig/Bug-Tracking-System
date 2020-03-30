@@ -1,4 +1,4 @@
-package main.java;
+package com.carleton;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -28,11 +27,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JMenu;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import main.java.util.*;
+
+import com.carleton.util.ConnectionFactory;
+import com.carleton.util.DbUtil;
+import com.carleton.util.*;
 
 public class Manager extends User implements ActionListener {
 	/**

@@ -1,4 +1,4 @@
-package main.java;
+package com.carleton;
 
 
 public class AuthenticationManager {
