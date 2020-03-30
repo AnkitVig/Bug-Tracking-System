@@ -46,7 +46,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.carleton.User</mainClass>
+                            <mainClass>main.java.com.carleton.User</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

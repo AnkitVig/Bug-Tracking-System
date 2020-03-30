@@ -1076,7 +1076,7 @@ public class Manager extends User implements ActionListener {
 		int rs1;
 		try {
 			connection = ConnectionFactory.getConnection();
-			String sql = "update project set userslist= concat( concat (userslist ,',' ),?) where projectID = ?";
+			String sql = "update project set userslist= userslist ||',' || ?  where projectID = ?";
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
 			String testerId = Integer.toString(this.userId);
@@ -1103,8 +1103,7 @@ public class Manager extends User implements ActionListener {
 		int rs1;
 		try {
 			connection = ConnectionFactory.getConnection();
-			String sql = "update bug_tracking_user set permissionlist= concat( concat (permissionlist ,',' ),'"
-					+ permission + "') where username = ?";
+			String sql = "update bug_tracking_user set permissionlist= permissionlist||','||'"+ permission + "' where username = ?";
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
 			String testerId = Integer.toString(this.userId);

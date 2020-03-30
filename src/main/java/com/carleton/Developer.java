@@ -417,14 +417,14 @@ public class Developer extends User implements ActionListener {
 		bugselect = new JComboBox();
 		bugselect.setBounds(154, 150, 129, 20);
 		final JLabel success = new JLabel("");
-		success.setForeground(Color.RED);
+		success.setForeground(Color.GREEN);
 		success.setBounds(110, 310, 220, 14);
 		frame1.add(success);
 
 		ResultSet rs = null;
 		try {
 			connection = ConnectionFactory.getConnection();
-			String sql = "Select bugId from bugs where  bugStatus = 'OPEN' or  bugStatus = 'open' or bugStatus = 'Open' and bugdevID = "
+			String sql = "Select bugId,bugTitle from bugs where  bugStatus = 'OPEN' or  bugStatus = 'open' or bugStatus = 'Open' and bugdevID = "
 					+ this.userId;
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
@@ -436,8 +436,8 @@ public class Developer extends User implements ActionListener {
 			while (rs.next()) {
 
 				String ids = rs.getString(1);
-
-				v.add(ids);
+				String names = rs.getString(2);
+				v.add(ids.concat("-").concat(names));
 
 			}
 

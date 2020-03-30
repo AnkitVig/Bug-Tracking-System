@@ -9,7 +9,7 @@ public class ConnectionFactory {
 	private static ConnectionFactory instance = new ConnectionFactory();
 
 	public static final String DRIVER_CLASS = "org.sqlite.JDBC";
-	public static final String URL = "jdbc:sqlite::resource:bug.db";
+	public static final String URL = "jdbc:sqlite:src/main/resources/bug.db";
 	
 	// private constructor
 	private ConnectionFactory() {
