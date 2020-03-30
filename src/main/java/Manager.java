@@ -325,7 +325,8 @@ public class Manager extends User implements ActionListener {
 		JButton btnSubmit = new JButton("Submit");
 		final JLabel success = new JLabel("");
 
-		success.setBounds(282, 400, 200, 60);
+		success.setBounds(282, 400, 300, 60);
+		Frame2.add(success);
 
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1036,7 +1037,8 @@ public class Manager extends User implements ActionListener {
 		JButton btnSubmit = new JButton("Submit");
 		final JLabel success = new JLabel("");
 
-		success.setBounds(282, 400, 200, 60);
+		success.setBounds(282, 400, 300, 60);
+		PFrame.add(success);
 
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
