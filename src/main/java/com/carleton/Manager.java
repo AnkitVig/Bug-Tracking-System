@@ -1,4 +1,4 @@
-package main.java.com.carleton;
+package com.carleton;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -31,8 +31,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import main.java.com.carleton.util.ConnectionFactory;
-import main.java.com.carleton.util.DbUtil;
+import com.carleton.util.ConnectionFactory;
+import com.carleton.util.DbUtil;
 
 
 public class Manager extends User implements ActionListener {

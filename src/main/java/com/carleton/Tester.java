@@ -1,4 +1,4 @@
-package main.java.com.carleton;
+package com.carleton;
 
 import java.util.Properties;
 
@@ -39,9 +39,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import main.java.com.carleton.util.ConnectionFactory;
-import main.java.com.carleton.util.DbUtil;
-import main.java.com.carleton.User;
+import com.carleton.util.ConnectionFactory;
+import com.carleton.util.DbUtil;
+import com.carleton.User;
 
 
 import javax.swing.JMenu;
