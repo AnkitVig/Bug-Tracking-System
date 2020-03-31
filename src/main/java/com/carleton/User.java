@@ -16,255 +16,255 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
-import javax.swing.ImageIcon;
-import java.awt.Toolkit;
 
 //import Database;
 enum Permissions {
-	AddProject, EditProject, DeleteProject, AddBug, EditBug, DeleteBug;
+    AddProject, EditProject, DeleteProject, AddBug, EditBug, DeleteBug;
 }
 
 enum BugStatus {
-	Open, Close, Resolved;
+    Open, Close, Resolved;
 }
 
 public class User extends JFrame {
 
-	/*
-	 * @ invariant userId != null
-	 * 
-	 * @ && (\forall Integer userId; userId != null ; u1.userId != u2.userId);
-	 * 
-	 * @
-	 */
+    /*
+     * @ invariant userId != null
+     *
+     * @ && (\forall Integer userId; userId != null ; u1.userId != u2.userId);
+     *
+     * @
+     */
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String password;
-	protected String username;
-	private String role;
-	private int userId;
-	private String name;
-	private String email;
-	Permissions permissionList;
+    private String password;
+    protected String username;
+    private String role;
+    private int userId;
+    private String name;
+    private String email;
+    Permissions permissionList;
 
-	public String getPassword() {
-		return password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public String getRole() {
-		return role;
-	}
+    public String getRole() {
+        return role;
+    }
 
-	public void setRole(String role) {
-		this.role = role;
-	}
+    public void setRole(String role) {
+        this.role = role;
+    }
 
-	public int getUserId() {
-		return userId;
-	}
+    public int getUserId() {
+        return userId;
+    }
 
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public Permissions getPermissionList() {
-		return permissionList;
-	}
+    public Permissions getPermissionList() {
+        return permissionList;
+    }
 
-	public void setPermissionList(Permissions permissionList) {
-		this.permissionList = permissionList;
-	}
+    public void setPermissionList(Permissions permissionList) {
+        this.permissionList = permissionList;
+    }
 
-	private JButton btnLogin;
-	private JLabel error;
+    private JButton btnLogin;
+    private JLabel error;
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
 
-					User frame = new User();
-					
-					frame.setVisible(true);
+                    User frame = new User();
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+                    frame.setVisible(true);
 
-	/**
-	 * Create the frame.
-	 */
-	public User() {
-		GUI();
-	}
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
-	protected void GUI() {
-		final JPanel contentPane;
-		final JTextField usernameField;
-		final JTextField roleField;
-		final JPasswordField passwordField;
-		final JLabel lblManagerLogin;
-		final JComboBox c1;
+    /**
+     * Create the frame.
+     */
+    public User() {
+        GUI();
+    }
 
-		final JLabel label;
-		setTitle("User");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 531, 387);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+    protected void GUI() {
+        final JPanel contentPane;
+        final JTextField usernameField;
+        final JTextField roleField;
+        final JPasswordField passwordField;
+        final JLabel lblManagerLogin;
+        final JComboBox c1;
 
-		JLabel lblUserName = new JLabel("User name");
-		lblUserName.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblUserName.setBounds(154, 141, 91, 14);
-		contentPane.add(lblUserName);
+        final JLabel label;
+        setTitle("User");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 531, 387);
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
 
-		usernameField = new JTextField();
-		usernameField.setBounds(282, 140, 129, 20);
-		contentPane.add(usernameField);
-		usernameField.setColumns(10);
+        JLabel lblUserName = new JLabel("User name");
+        lblUserName.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblUserName.setBounds(154, 141, 91, 14);
+        contentPane.add(lblUserName);
 
-		JLabel lblPassword = new JLabel("Password\r\n");
-		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPassword.setBounds(154, 174, 91, 14);
-		contentPane.add(lblPassword);
+        usernameField = new JTextField();
+        usernameField.setBounds(282, 140, 129, 20);
+        contentPane.add(usernameField);
+        usernameField.setColumns(10);
 
-		passwordField = new JPasswordField();
-		passwordField.setBounds(282, 173, 129, 20);
-		contentPane.add(passwordField);
+        JLabel lblPassword = new JLabel("Password\r\n");
+        lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblPassword.setBounds(154, 174, 91, 14);
+        contentPane.add(lblPassword);
 
-		JLabel lblRole = new JLabel("Role\r\n");
-		lblRole.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblRole.setBounds(154, 200, 91, 14);
-		contentPane.add(lblRole);
-		Vector v = new Vector();
-		v.add("Manager");
-		v.add("Developer");
-		v.add("Tester");
+        passwordField = new JPasswordField();
+        passwordField.setBounds(282, 173, 129, 20);
+        contentPane.add(passwordField);
 
-		c1 = new JComboBox(v);
-		c1.setBounds(282, 200, 129, 20);
+        JLabel lblRole = new JLabel("Role\r\n");
+        lblRole.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblRole.setBounds(154, 200, 91, 14);
+        contentPane.add(lblRole);
+        Vector v = new Vector();
+        v.add("Manager");
+        v.add("Developer");
+        v.add("Tester");
 
-		add(c1);
+        c1 = new JComboBox(v);
+        c1.setBounds(282, 200, 129, 20);
 
-		passwordField.addActionListener(new ActionListener() {
+        add(c1);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				btnLogin.doClick();
-			}
-		});
+        passwordField.addActionListener(new ActionListener() {
 
-		btnLogin = new JButton("Login");
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnLogin.doClick();
+            }
+        });
 
-		btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				password = passwordField.getText().toString().toLowerCase();
-				username = usernameField.getText().toString().toLowerCase();
-				role = (String) c1.getSelectedItem();
-				passwordField.setText("");
-				usernameField.setText("");
+        btnLogin = new JButton("Login");
 
-				login(username, password, role.toLowerCase());
+        btnLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                password = passwordField.getText().toString().toLowerCase();
+                username = usernameField.getText().toString().toLowerCase();
+                role = (String) c1.getSelectedItem();
+                passwordField.setText("");
+                usernameField.setText("");
 
-			}
-		});
+                login(username, password, role.toLowerCase());
 
-		btnLogin.setBounds(282, 250, 89, 23);
-		contentPane.add(btnLogin);
+            }
+        });
 
-		error = new JLabel("");
-		error.setForeground(Color.RED);
-		error.setBounds(104, 236, 220, 14);
-		contentPane.add(error);
+        btnLogin.setBounds(282, 250, 89, 23);
+        contentPane.add(btnLogin);
 
-		lblManagerLogin = new JLabel("User Login");
-		lblManagerLogin.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lblManagerLogin.setBounds(204, 26, 167, 28);
-		contentPane.add(lblManagerLogin);
+        error = new JLabel("");
+        error.setForeground(Color.RED);
+        error.setBounds(104, 236, 220, 14);
+        contentPane.add(error);
 
-		
+        lblManagerLogin = new JLabel("User Login");
+        lblManagerLogin.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        lblManagerLogin.setBounds(204, 26, 167, 28);
+        contentPane.add(lblManagerLogin);
 
-	}
 
-	/*
-	 * @ public normal_behavior
-	 * 
-	 * @ requires username != NULL && password != NULL && role != NULL
-	 * 
-	 * @ ensures userId != NULL && email != NULL && name != NULL
-	 * 
-	 * @
-	 */
+    }
 
-	public void login(String username, String password, String role) {
-		final String errorText = "Invalid user name or password!";
-		if (password.equals("") || username.equals("") || role.equals(""))
-			error.setText(errorText);
-		else {
-			error.setText("");
-			if (role.equals("manager")) {
-				if (AuthenticationManager.varifyLogin(username, password, role)) {
-					error.setText("");
-					Manager p = new Manager(userId);
+    /*
+     * @ public normal_behavior
+     *
+     * @ requires username != NULL && password != NULL && role != NULL
+     *
+     * @ ensures userId != NULL && email != NULL && name != NULL
+     *
+     * @
+     */
 
-					p.setVisible(true);
+    public void login(String username, String password, String role) {
+        final String errorText = "Invalid user name or password!";
+        if (password.equals("") || username.equals("") || role.equals(""))
+            error.setText(errorText);
+        else {
+            error.setText("");
+            if (role.equals("manager")) {
+                userId = AuthenticationManager.getInstance().verifyLogin(username, password, role);
+                if (userId > 0) {
+                    error.setText("");
+                    Manager p = new Manager(userId);
 
-				} else
-					error.setText(errorText);
-			} else if (role.equals("tester")) {
-				if (AuthenticationManager.varifyLogin(username, password, role)) {
-					error.setText("");
-					Tester t = new Tester(2);
-					t.setVisible(true);
+                    p.setVisible(true);
 
-				} else
-					error.setText(errorText);
-			} else if (role.equals("developer")) {
-				if (AuthenticationManager.varifyLogin(username, password, role)) {
-					error.setText("");
-					Developer d = new Developer(1);
-					d.setVisible(true);
+                } else
+                    error.setText(errorText);
+            } else if (role.equals("tester")) {
+                userId = AuthenticationManager.getInstance().verifyLogin(username, password, role);
+                if (userId > 0) {
+                    error.setText("");
+                    Tester t = new Tester(2);
+                    t.setVisible(true);
 
-				} else
-					error.setText(errorText);
-			}
+                } else
+                    error.setText(errorText);
+            } else if (role.equals("developer")) {
+                userId = AuthenticationManager.getInstance().verifyLogin(username, password, role);
+                if (userId > 0) {
+                    error.setText("");
+                    Developer d = new Developer(1);
+                    d.setVisible(true);
 
-		}
-	}
+                } else
+                    error.setText(errorText);
+            }
+
+        }
+    }
 
 }
