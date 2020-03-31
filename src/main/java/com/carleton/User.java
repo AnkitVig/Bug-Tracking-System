@@ -114,8 +114,7 @@ public class User extends JFrame {
 				try {
 
 					User frame = new User();
-					frame.setIconImage(Toolkit.getDefaultToolkit()
-							.getImage("F:\\Working Directory\\final project with sql\\Bill\\logo.png"));
+					
 					frame.setVisible(true);
 
 				} catch (Exception e) {
@@ -218,10 +217,7 @@ public class User extends JFrame {
 		lblManagerLogin.setBounds(204, 26, 167, 28);
 		contentPane.add(lblManagerLogin);
 
-		label = new JLabel("");
-		label.setIcon(new ImageIcon("E:\\XAMPP\\htdocs\\logo.png"));
-		label.setBounds(10, 11, 167, 91);
-		contentPane.add(label);
+		
 
 	}
 
