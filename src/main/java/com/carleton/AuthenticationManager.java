@@ -12,16 +12,19 @@ import java.util.Vector;
 
 public class AuthenticationManager {
     private static AuthenticationManager instance;
-    private Connection connection;
+    private static Connection connection;
 
-    public int verifyLogin(String username, String password, String role) {
+    public static int verifyLogin(String username, String password, String role) {
         boolean login = false;
-
         try {
             connection = ConnectionFactory.getConnection();
             String sql = "SELECT * FROM bug_tracking_user WHERE username = ? AND password = ? and role = ? LIMIT 1";
+            
 
             PreparedStatement pstm = connection.prepareStatement(sql);
+            pstm.setString(1, username);
+            pstm.setString(2, password);
+            pstm.setString(3, role);
 
             ResultSet rs = pstm.executeQuery();
 

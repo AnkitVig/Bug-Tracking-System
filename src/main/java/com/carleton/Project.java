@@ -2,7 +2,6 @@ package com.carleton;
 
 import com.carleton.util.ConnectionFactory;
 import com.carleton.util.DbUtil;
-import com.sun.org.glassfish.gmbal.Description;
 
 import javax.swing.JFrame;
 import java.sql.Connection;
