@@ -235,7 +235,7 @@ public class User extends JFrame {
         else {
             error.setText("");
             if (role.equals("manager")) {
-                userId = AuthenticationManager.verifyLogin(username, password, role);
+                userId = AuthenticationManager.getInstance().verifyLogin(username, password, role);
                 if (userId > 0) {
                     error.setText("");
                     Manager p = new Manager(userId);
@@ -245,7 +245,7 @@ public class User extends JFrame {
                 } else
                     error.setText(errorText);
             } else if (role.equals("tester")) {
-                userId = AuthenticationManager.verifyLogin(username, password, role);
+                userId = AuthenticationManager.getInstance().verifyLogin(username, password, role);
                 if (userId > 0) {
                     error.setText("");
                     Tester t = new Tester(userId);
@@ -254,7 +254,7 @@ public class User extends JFrame {
                 } else
                     error.setText(errorText);
             } else if (role.equals("developer")) {
-                userId = AuthenticationManager.verifyLogin(username, password, role);
+                userId = AuthenticationManager.getInstance().verifyLogin(username, password, role);
                 if (userId > 0) {
                     error.setText("");
                     Developer d = new Developer(userId);

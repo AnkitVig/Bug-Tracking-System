@@ -24,7 +24,7 @@ public class AuthenticationManager {
      *
      * @
      */
-    public static int verifyLogin(String username, String password, String role) {
+    public int verifyLogin(String username, String password, String role) {
         login = false;
         try {
             connection = ConnectionFactory.getConnection();
