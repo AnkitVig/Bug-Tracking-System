@@ -13,21 +13,13 @@ public class Bug{
 	String bug_developerID;
 	String bug_testerID;
 	Date bug_due_date = new Date();
-	Connection con;
 	Statement stmnt;
 	ResultSet rs;
-	
-	
+
+	private static Connection con;
+
 	public Bug(){
-		try{  
-			Class.forName("com.mysql.cj.jdbc.Driver");  
-			con=DriverManager.getConnection(  
-			"jdbc:mysql://localhost:3306/bug_tracking_system","root","mysqlpwd");
-			stmnt = con.createStatement();
-		}
-		catch(Exception e){ 
-			JOptionPane.showMessageDialog(null, "ERROR: "+e.getMessage());
-		}  
+		con = ConnectionFactory.getConnection();
 	}
 	
 	/*
@@ -140,9 +132,6 @@ public class Bug{
 			JOptionPane.showMessageDialog(null, "ERROR: "+e.getMessage());
 		}
 		return bid;
-	}
-	public static void main(String[] args){
-		new Bug();
 	}
 }
 
