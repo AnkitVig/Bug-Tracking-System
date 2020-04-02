@@ -14,6 +14,11 @@ public class Project extends JFrame {
 
     private Connection connection;
 
+    /*
+     * @ public normal_behavior
+     *
+     * @ requires name != NULL && description != NULL && userId != NULL && name.length > 0 && description.length > 0 && userId > 0
+     */
     public void addProject(String name, String description, int userId) {
         try {
             connection = ConnectionFactory.getConnection();
@@ -36,6 +41,11 @@ public class Project extends JFrame {
         }
     }
 
+    /*
+     * @ public normal_behavior
+     *
+     * @ requires projectId != NULL && projectId.length > 0
+     */
     public void closeProject(String projectId) {
         try {
             connection = ConnectionFactory.getConnection();
@@ -53,6 +63,11 @@ public class Project extends JFrame {
         }
     }
 
+    /*
+     * @ public normal_behavior
+     *
+     * @ requires projectId != NULL && projectId.length > 0 && description != NULL && description.length > 0
+     */
     public void editProject(String projectId, String description) {
         try {
             connection = ConnectionFactory.getConnection();
@@ -76,7 +91,6 @@ public class Project extends JFrame {
         try {
             connection = ConnectionFactory.getConnection();
             String sql = "SELECT * FROM project";
-            ;
 
             PreparedStatement pstmt = connection.prepareStatement(sql);
 
