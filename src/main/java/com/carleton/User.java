@@ -227,7 +227,6 @@ public class User extends JFrame {
      *
      * @
      */
-
     public void login(String username, String password, String role) {
         final String errorText = "Invalid user name or password!";
         if (password.equals("") || username.equals("") || role.equals(""))
