@@ -3,7 +3,6 @@ import java.sql.*;
 import javax.swing.*;
 
 public class Bug{
-	int bug_id;
 	String bug_description;
 	String bug_title;
 	String bug_projectID;
@@ -16,10 +15,8 @@ public class Bug{
 	Date bug_due_date = new Date();
 	Connection con;
 	Statement stmnt;
-	ResultSet rs,rs1;
-	//Bug(int bugID){
-		//extract details from database where bug_id is equal
-//	}
+	ResultSet rs;
+	
 	
 	public Bug(){
 		try{  
@@ -32,33 +29,73 @@ public class Bug{
 			JOptionPane.showMessageDialog(null, "ERROR: "+e.getMessage());
 		}  
 	}
-public int addBug(String bug_title, String bug_description, String bug_priority,
-			bug_status bs, String bug_due_date, String bug_testerID, String bug_developerID, String bug_projectID ){
-	int bugID = 0;
-	try{
-		stmnt.executeUpdate("insert into bugs(bugTitle, bugDescription , bugPriority, bugStatus , bugDueDate , bugtesterID , bugdevID ,bugProjectID)" + ""
-				+ "values ('"+bug_title+"','"+bug_description+"','"+bug_priority+"', '"+bs+"', '"+bug_due_date+"', '"+bug_testerID+"', '"+bug_developerID+"', '"+bug_projectID+"')");
 	
-	    rs = stmnt.executeQuery("select last_insert_id()");
-	    while(rs.next()){
-	    	bugID = rs.getInt(1);
-	    }
-	}
-	catch(Exception e){ 
-		JOptionPane.showMessageDialog(null, "ERROR: "+e.getMessage());
-	}
-	return bugID;
-	}
-public int closeBug(int bug_ID){
-	int b_id = bug_ID;
-	try{
-	    stmnt.executeUpdate("UPDATE bugs SET bugStatus = 'CLOSE' WHERE bugID = "+bug_ID+"");
-	}
-	catch(Exception e){ 
-		JOptionPane.showMessageDialog(null, "ERROR: "+e.getMessage());
-	}
-	return b_id;
-	}
+	/*
+	 * @ public normal_behaviour
+	 * 
+	 * @public invariant bugID >= 0;
+	 * 
+	 * @ requires bug_title != NULL && bug_description != NULL && bug_priority != NULL 
+	 * && bug_due_date != NULL && bug_testerID != NULL && bug_developerID !=NULL
+	 * && bug_projectID != NULL;
+	 * 
+	 * @ ensures bugID = \old (bugID) + 1;
+	 * 
+	 * @
+	 */
+	public int addBug(String bug_title, String bug_description, String bug_priority,
+				bug_status bs, String bug_due_date, String bug_testerID, String bug_developerID, String bug_projectID ){
+		int bugID = 0;
+		try{
+			stmnt.executeUpdate("insert into bugs(bugTitle, bugDescription , bugPriority, bugStatus , bugDueDate , bugtesterID , bugdevID ,bugProjectID)" + ""
+					+ "values ('"+bug_title+"','"+bug_description+"','"+bug_priority+"', '"+bs+"', '"+bug_due_date+"', '"+bug_testerID+"', '"+bug_developerID+"', '"+bug_projectID+"')");
+		
+		    rs = stmnt.executeQuery("select last_insert_id()");
+		    while(rs.next()){
+		    	bugID = rs.getInt(1);
+		    }
+		}
+		catch(Exception e){ 
+			JOptionPane.showMessageDialog(null, "ERROR: "+e.getMessage());
+		}
+		return bugID;
+		}
+	
+	
+	/*
+	 * @ public normal_behaviour
+	 * 
+	 * @ public invariant b_id >= 0;
+	 * 
+	 * @ requires bug_status == "OPEN" && (\exists int bug_ID; b_id = bug_ID);
+	 * 
+	 * @ ensures bug_status == "CLOSED";
+	 * 
+	 * @
+	 */
+	
+	public int closeBug(int bug_ID){
+		int b_id = bug_ID;
+		try{
+		    stmnt.executeUpdate("UPDATE bugs SET bugStatus = 'CLOSE' WHERE bugID = "+bug_ID+"");
+		}
+		catch(Exception e){ 
+			JOptionPane.showMessageDialog(null, "ERROR: "+e.getMessage());
+		}
+		return b_id;
+		}
+	
+	/*
+	 * @ public normal_behaviour
+	 * 
+	 * @public invariant b_id >= 0;
+	 * 
+	 * @ requires rs != NULL ;
+	 * 
+	 * @ ensures bugStatus != \old (bugStatus);
+	 * 
+	 * @
+	 */
 	public int editBugStatus(int bug_ID){
 		int b_id = bug_ID;
 		try{
@@ -75,7 +112,21 @@ public int closeBug(int bug_ID){
 		}
 		return b_id;
 	}
-	public void searchBug(int bugID){
+	
+	/*
+	 * @ public normal_behaviour
+	 * 
+	 * @public invariant bid >= 0;
+	 * 
+	 * @ requires rs != NULL && bugStatus != "CLOSED" && (\exists int bugID; bid = bugID);
+	 * 
+	 * @ ensures \result == bugID;
+	 * 
+	 * @
+	 */
+	
+	public int searchBug(int bugID){
+		int bid = bugID;
 		try{
 		    rs = stmnt.executeQuery("SELECT * FROM bugs WHERE bugID = "+bugID+"");
 		    while(rs.next()){
@@ -88,15 +139,11 @@ public int closeBug(int bug_ID){
 		catch(Exception e){ 
 			JOptionPane.showMessageDialog(null, "ERROR: "+e.getMessage());
 		}
+		return bid;
 	}
-public static void main(String[] args){
-	new Bug();
-	Bug b = new Bug();
-	//b.addBug("PHP dropdown","PHP dropdown is not working","LOW",bug_status.OPEN,"2020-05-11", "2", "1","P001");
-    //b.closeBug(11);
-	//b.editBugStatus(10);
-	b.searchBug(4);
-}
+	public static void main(String[] args){
+		new Bug();
+	}
 }
 
 
