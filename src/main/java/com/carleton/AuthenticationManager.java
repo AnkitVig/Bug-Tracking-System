@@ -1,0 +1,63 @@
+package com.carleton;
+
+
+import com.carleton.util.ConnectionFactory;
+import com.carleton.util.DbUtil;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
+
+public class AuthenticationManager {
+    private static AuthenticationManager instance;
+    private static Connection connection;
+    private Boolean login = null;
+
+    /*
+     * @ public normal_behavior
+     *
+     * @ requires username != NULL && password != NULL && role != NULL
+     *
+     * @ ensures login != NULL
+     *
+     * @
+     */
+    public static int verifyLogin(String username, String password, String role) {
+        login = false;
+        try {
+            connection = ConnectionFactory.getConnection();
+            String sql = "SELECT * FROM bug_tracking_user WHERE username = ? AND password = ? and role = ? LIMIT 1";
+
+
+            PreparedStatement pstm = connection.prepareStatement(sql);
+            pstm.setString(1, username);
+            pstm.setString(2, password);
+            pstm.setString(3, role);
+
+            ResultSet rs = pstm.executeQuery();
+
+            while (rs.next()) {
+                int userId = rs.getInt("id");
+                login = true;
+                return userId;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("SQLException in get() method");
+            e.printStackTrace();
+        } finally {
+            DbUtil.close(connection);
+        }
+
+        return 0;
+    }
+
+    public static AuthenticationManager getInstance() {
+        if (instance == null) {
+            instance = new AuthenticationManager();
+        }
+        return instance;
+    }
+}
