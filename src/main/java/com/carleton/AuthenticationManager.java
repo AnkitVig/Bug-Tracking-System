@@ -13,13 +13,23 @@ import java.util.Vector;
 public class AuthenticationManager {
     private static AuthenticationManager instance;
     private static Connection connection;
+    private Boolean login = null;
 
+    /*
+     * @ public normal_behavior
+     *
+     * @ requires username != NULL && password != NULL && role != NULL
+     *
+     * @ ensures login != NULL
+     *
+     * @
+     */
     public static int verifyLogin(String username, String password, String role) {
-        boolean login = false;
+        login = false;
         try {
             connection = ConnectionFactory.getConnection();
             String sql = "SELECT * FROM bug_tracking_user WHERE username = ? AND password = ? and role = ? LIMIT 1";
-            
+
 
             PreparedStatement pstm = connection.prepareStatement(sql);
             pstm.setString(1, username);
@@ -30,6 +40,7 @@ public class AuthenticationManager {
 
             while (rs.next()) {
                 int userId = rs.getInt("id");
+                login = true;
                 return userId;
             }
 
