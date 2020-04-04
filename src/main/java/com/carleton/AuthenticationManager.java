@@ -14,7 +14,21 @@ public class AuthenticationManager {
     private static AuthenticationManager instance;
     private static Connection connection;
     private Boolean login = null;
+    
+    /**
+     *  \fn public int verifyLogin(String username, String password, String role)
+     *  
+     *  @param [in] username String value holding the username entered by the user. 
+     *  
+     *  @param [in] password String value holding the password entered by the user.
+     *  
+     *  @param [in] role String value holding the role of the user corresponding to the username and password.
+     *  
+     *  @return Integer value holding the userId of the logged in user if the users exists.
+     *  
+     */
 
+    
     /*
      * @ public normal_behavior
      *
