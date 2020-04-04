@@ -217,6 +217,17 @@ public class User extends JFrame {
 
 
     }
+    
+    /**
+     *  \fn public void login(String username, String password, String role)
+     *  
+     *  @param [in] username String value holding the username of user.
+     *  
+     *  @param [in] password String value holding password of user.
+     *  
+     *  @param [in] role String value holding role of user.
+     *  
+     */
 
     /*
      * @ public normal_behavior

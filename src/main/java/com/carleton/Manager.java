@@ -617,10 +617,18 @@ public class Manager extends User implements ActionListener {
         frame1.setSize(700, 500);
 
     }
+    
+    /**
+     *  \fn public void generateReport(String projectID)
+     *  
+     *  @param [in] projectID String value holding the project ID of the project for which report is to be viewed.
+     *  
+     */
 
     /*@ public normal_behavior
-     @  requires projectId != NULL
-     @*/
+      @  requires projectId != NULL
+      @
+     */
     public void generateReport(String projectID) {
         JFrame frame1 = new JFrame("Bug Search Result");
 
@@ -803,6 +811,13 @@ public class Manager extends User implements ActionListener {
 //
 //		frame1.setSize(700, 500);
 //	}
+    
+    /**
+     *  \fn public void viewBug(String bugID)
+     *  
+     *  @param [in] bugID String value holding the bug ID of the bug to be viewed.
+     *  
+     */
 
     /*
      * @ public normal_behavior
@@ -1053,6 +1068,15 @@ public class Manager extends User implements ActionListener {
         PFrame.setSize(700, 700);
 
     }
+    
+    /**
+     *  \fn public void assignProject(String username, String project_id)
+     *  
+     *  @param [in] username String value holding the username of user to which project is to be assigned.
+     *  
+     *  @param [in] project_id String value holding the project ID of project to be assigned to user.
+     *  
+     */
 
 	/*@ public normal_behavior
 	 @  requires projectId != NULL and  userId > 0 and  role.equals("developer")== true or  role.equals("tester") == true
@@ -1082,6 +1106,15 @@ public class Manager extends User implements ActionListener {
         }
 
     }
+    
+    /**
+     *  \fn public void grantPermission(String username, Permissions permission)
+     *  
+     *  @param [in] username String value holding the username of the user to which permission has to be granted.
+     *  
+     *  @param [in] permission String value holding the permission to be granted.
+     *  
+     */
 
     /*@ public normal_behavior
      @  requires userId > 0 and  role.equals("developer")== true or  role.equals("tester") == true

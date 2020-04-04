@@ -295,6 +295,13 @@ public class Tester extends User implements ActionListener {
 		frame1.setSize(700, 500);
 
 	}
+	
+	/**
+     *  \fn public void viewBug(String bugID)
+     *  
+     *  @param [in] bugID String value holding the bug ID of the bug to be viewed.
+     *  
+     */
 
 	/*
 	 * @ public normal_behavior
@@ -606,6 +613,24 @@ public class Tester extends User implements ActionListener {
 		frame1.setSize(700, 900);
 
 	}
+	
+	/**
+     *  \fn protected void assignBug(String assignto2, String projectId, String bugName2, String bugDesc2, String bugPriority,
+			String bugDateField)
+     *  
+     *  @param [in] assignto2 String value holding the user ID of the user to whom bug is to be assigned.
+     *  
+     *  @param [in] projectId String value holding the project ID of project to which bug belongs.
+     *  
+     *  @param [in] bugName2 String value holding the name of the bug.
+     *  
+     *  @param [in] bugDesc2 String value holding the bug description.
+     *  
+     *  @param [in] bugPriority String value holding bug priority.
+     *  
+     *  @param [in] bugDateField String value holding the bug due date.
+     *  
+     */
 
 	/*
 	 * @ public normal_behavior
@@ -776,6 +801,13 @@ public class Tester extends User implements ActionListener {
 
 		});
 	}
+	
+	/**
+     *  \fn private void closeBug(String bugID)
+     *  
+     *  @param [in] bugID String value holding the bug ID of the bug to be closed.
+     *  
+     */
 
 	/*
 	 * @ public normal_behavior
@@ -807,6 +839,15 @@ public class Tester extends User implements ActionListener {
 		}
 
 	}
+	
+	/**
+     *  \fn public void notifyUser(String bugTitle, String username)
+     *  
+     *  @param [in] bugTitle String value holding the bug title.
+     *  
+     *  @param [in] username String value holding username of user who has to be notified.
+     *  
+     */
 
 	/*
 	 * @ public normal_behavior

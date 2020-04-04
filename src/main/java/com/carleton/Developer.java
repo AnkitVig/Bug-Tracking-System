@@ -265,6 +265,13 @@ public class Developer extends User implements ActionListener {
 
 		frame1.setSize(700, 500);
 	}
+	
+	/**
+     *  \fn public void viewBug(String bugID)
+     *  
+     *  @param [in] bugID Integer value holding the bug ID of the bug to be viewed.
+     *  
+     */
 
 	/*
 	 * @ public normal_behavior
@@ -471,6 +478,13 @@ public class Developer extends User implements ActionListener {
 		});
 
 	}
+	
+	/**
+     *  \fn private void solveBug(String bugID)
+     *  
+     *  @param [in] bugID String value holding the bug ID of the bug to be solved.
+     *  
+     */
 
 	/*
 	 * @ public normal_behavior
