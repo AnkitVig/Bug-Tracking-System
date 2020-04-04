@@ -284,7 +284,7 @@ public class Tester extends User implements ActionListener {
 			public void actionPerformed(ActionEvent arg0) {
 
 				String bugID = (String) bugselect.getSelectedItem();
-
+				
 				viewBug(bugID);
 
 			}

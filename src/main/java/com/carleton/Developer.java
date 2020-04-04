@@ -172,7 +172,7 @@ public class Developer extends User implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 
-		System.out.println("Selected: " + e.getActionCommand());
+		//System.out.println("Selected: " + e.getActionCommand());
 		if (e.getSource() == viewBug) {
 			viewBugJframe();
 		}
@@ -188,7 +188,7 @@ public class Developer extends User implements ActionListener {
 
 		JFrame frame1 = new JFrame("View Bug");
 		JPanel panel = new JPanel(new GridBagLayout());
-		frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		frame1.setLayout(new BorderLayout());
 
@@ -202,14 +202,14 @@ public class Developer extends User implements ActionListener {
 		select.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		select.setBounds(110, 225, 100, 25);
 
-		JButton search = new JButton("Search");
+		JButton searchBug = new JButton("Search");
 		final JComboBox bugselect = new JComboBox();
 
 		title.setBounds(80, 91, 2000, 35);
 
-		search.setBounds(282, 300, 89, 23);
+		searchBug.setBounds(282, 300, 89, 23);
 
-		search.addActionListener(this);
+		searchBug.addActionListener(this);
 
 		panel.setBounds(282, 141, 200, 20);
 		// setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -217,7 +217,7 @@ public class Developer extends User implements ActionListener {
 		frame1.add(title);
 
 		frame1.add(select);
-		frame1.add(search);
+		frame1.add(searchBug);
 		panel.add(bugselect);
 		frame1.add(panel);
 
@@ -242,6 +242,7 @@ public class Developer extends User implements ActionListener {
 			}
 
 			bugselect.setModel(new DefaultComboBoxModel(v));
+	
 		} catch (SQLException e) {
 			System.out.println("SQLException in get() method");
 			e.printStackTrace();
@@ -251,11 +252,11 @@ public class Developer extends User implements ActionListener {
 			DbUtil.close(connection);
 		}
 
-		search.addActionListener(new ActionListener() {
+		searchBug.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
 				String bugID = (String) bugselect.getSelectedItem();
-
+				System.out.println(bugID);
 				viewBug(bugID);
 
 			}
@@ -462,7 +463,7 @@ public class Developer extends User implements ActionListener {
 			public void actionPerformed(ActionEvent arg0) {
 
 				String bugID = (String) bugselect.getSelectedItem();
-
+				System.out.println(bugID);
 				solveBug(bugID);
 				success.setText("Successfully Updated " + bugID);
 
@@ -483,6 +484,7 @@ public class Developer extends User implements ActionListener {
 	 */
 
 	private void solveBug(String bugID) {
+		System.out.println(bugID);
 
 		int rs;
 		try {
@@ -490,7 +492,7 @@ public class Developer extends User implements ActionListener {
 			String sql = "Update bugs set bugStatus = 'Resolved' where  bugID = ? ";
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
-			pstm.setString(1, bugID);
+			//pstm.setString(1, bugID);
 
 			rs = pstm.executeUpdate();
 
