@@ -22,6 +22,30 @@ public class Bug{
 		con = ConnectionFactory.getConnection();
 	}
 	
+	 /**
+     *  \fn public int addBug(String bug_title, String bug_description, String bug_priority,
+				bug_status bs, String bug_due_date, String bug_testerID, String bug_developerID, String bug_projectID )
+     *  
+     *  @param [in] bug_title String value holding the bug title.
+     *  
+     *  @param [in] bug_description String value holding the bug description.
+     *  
+     *  @param [in] bug priority String value holding the bug priority.
+     *  
+     *  @param [in] bs Enumeration type holding the bug status.
+     *  
+     *  @param [in] bug_due_date String value holding the due date of bug.
+     *  
+     *  @param [in] bug_testerID String value holding userID of project tester.
+     *  
+     *  @param [in] bug_developerID String value holding userID of project developer.
+     *  
+     *  @param [in] bug_projectID String value holding the project ID.
+     *  
+     *  @return Integer value holding the newly generated bug ID. 
+     *  
+     */
+	
 	/*
 	 * @ public normal_behaviour
 	 * 
@@ -53,6 +77,14 @@ public class Bug{
 		return bugID;
 		}
 	
+	/**
+     *  \fn public int closeBug(int bug_ID)
+     *  
+     *  @param [in] bug_ID Integer value holding the bug ID of the bug to be closed.
+     *  
+     *  @return Integer value holding bug ID of the closed bug. 
+     *  
+     */
 	
 	/*
 	 * @ public normal_behaviour
@@ -76,6 +108,16 @@ public class Bug{
 		}
 		return b_id;
 		}
+	
+	/**
+     *  \fn int editBugStatus(int bug_ID)
+     *  
+     *  @param [in] bug_ID Integer value holding the bug ID of the bug to be edited.
+     *  
+     *  @return Integer value holding bug ID of the edited bug. 
+     *  
+     */
+	
 	
 	/*
 	 * @ public normal_behaviour
@@ -104,6 +146,16 @@ public class Bug{
 		}
 		return b_id;
 	}
+	
+	/**
+     *  \fn int searchBug(int bugID)
+     *  
+     *  @param [in] bug_ID Integer value holding the bug ID of the bug to be searched.
+     *  
+     *  @return Integer value holding bug ID of the searched bug. 
+     *  
+     */
+	
 	
 	/*
 	 * @ public normal_behaviour
