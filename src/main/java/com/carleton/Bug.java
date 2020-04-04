@@ -22,7 +22,7 @@ public class Bug{
 		con = ConnectionFactory.getConnection();
 	}
 	
-	 /**
+	/**
      *  \fn public int addBug(String bug_title, String bug_description, String bug_priority,
 				bug_status bs, String bug_due_date, String bug_testerID, String bug_developerID, String bug_projectID )
      *  
