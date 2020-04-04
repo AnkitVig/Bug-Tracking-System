@@ -256,8 +256,9 @@ public class Developer extends User implements ActionListener {
 			public void actionPerformed(ActionEvent arg0) {
 
 				String bugID = (String) bugselect.getSelectedItem();
-				System.out.println(bugID);
-				viewBug(bugID);
+				String[] arrOfStr = bugID.split("-", 2); 
+				
+				viewBug(Integer.parseInt(arrOfStr[0]));
 
 			}
 		});
@@ -266,6 +267,13 @@ public class Developer extends User implements ActionListener {
 
 		frame1.setSize(700, 500);
 	}
+	
+	/**
+     *  \fn public void viewBug(String bugID)
+     *  
+     *  @param [in] bugID Integer value holding the bug ID of the bug to be viewed.
+     *  
+     */
 
 	/*
 	 * @ public normal_behavior
@@ -277,7 +285,7 @@ public class Developer extends User implements ActionListener {
 	 * 
 	 * @
 	 */
-	public void viewBug(String bugID) {
+	public void viewBug(int bugID) {
 
 		JFrame frame1 = new JFrame("Bug Search Result");
 
@@ -333,11 +341,12 @@ public class Developer extends User implements ActionListener {
 
 			connection = ConnectionFactory.getConnection();
 			String sql = "Select a.bugId, a.bugTitle, a.bugDescription,a.bugPriority"
-					+ ",a.bugStatus ,a.bugDueDate from bugs a where  bugStatus != 'CLOSED' or  bugStatus != 'closed' or bugStatus != 'Closed' "
-					+ "and a.bugId ='" + bugID + "' and bugdevID =" + this.userId;
+					+ ",a.bugStatus ,a.bugDueDate from bugs a where  a.bugStatus != 'CLOSED' and  a.bugStatus != 'closed' and a.bugStatus != 'Closed' "
+					+ "and a.bugId = ?" ;
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
 			int i = 0;
+			pstm.setInt(1, bugID);
 			rs = pstm.executeQuery();
 
 			if (rs.next()) {
@@ -463,8 +472,9 @@ public class Developer extends User implements ActionListener {
 			public void actionPerformed(ActionEvent arg0) {
 
 				String bugID = (String) bugselect.getSelectedItem();
-				System.out.println(bugID);
-				solveBug(bugID);
+				String[] arrOfStr = bugID.split("-", 2); 
+				
+				solveBug(Integer.parseInt(arrOfStr[0]));
 				success.setText("Successfully Updated " + bugID);
 
 			}
@@ -472,6 +482,13 @@ public class Developer extends User implements ActionListener {
 		});
 
 	}
+	
+	/**
+     *  \fn private void solveBug(String bugID)
+     *  
+     *  @param [in] bugID String value holding the bug ID of the bug to be solved.
+     *  
+     */
 
 	/*
 	 * @ public normal_behavior
@@ -483,7 +500,7 @@ public class Developer extends User implements ActionListener {
 	 * @
 	 */
 
-	private void solveBug(String bugID) {
+	private void solveBug(int bugID) {
 		System.out.println(bugID);
 
 		int rs;
@@ -492,7 +509,7 @@ public class Developer extends User implements ActionListener {
 			String sql = "Update bugs set bugStatus = 'Resolved' where  bugID = ? ";
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
-			//pstm.setString(1, bugID);
+			pstm.setInt(1, bugID);
 
 			rs = pstm.executeUpdate();
 

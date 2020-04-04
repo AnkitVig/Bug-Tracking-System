@@ -13,23 +13,49 @@ import java.util.Vector;
 public class AuthenticationManager {
     private static AuthenticationManager instance;
     private static Connection connection;
+    private static Boolean login = null;
+    
+    /**
+     *  \fn public int verifyLogin(String username, String password, String role)
+     *  
+     *  @param [in] username String value holding the username entered by the user. 
+     *  
+     *  @param [in] password String value holding the password entered by the user.
+     *  
+     *  @param [in] role String value holding the role of the user corresponding to the username and password.
+     *  
+     *  @return Integer value holding the userId of the logged in user if the users exists.
+     *  
+     */
 
+    
+    /*
+     * @ public normal_behavior
+     *
+     * @ requires username != NULL && password != NULL && role != NULL
+     *
+     * @ ensures login != NULL
+     *
+     * @
+     */
     public static int verifyLogin(String username, String password, String role) {
-        boolean login = false;
+ 
+        login = false;
         try {
             connection = ConnectionFactory.getConnection();
             String sql = "SELECT * FROM bug_tracking_user WHERE username = ? AND password = ? and role = ? LIMIT 1";
-            
+
 
             PreparedStatement pstm = connection.prepareStatement(sql);
             pstm.setString(1, username);
             pstm.setString(2, password);
             pstm.setString(3, role);
-
+          
             ResultSet rs = pstm.executeQuery();
 
             while (rs.next()) {
                 int userId = rs.getInt("id");
+                login = true;
                 return userId;
             }
 

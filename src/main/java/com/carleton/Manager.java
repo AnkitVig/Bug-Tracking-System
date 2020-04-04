@@ -435,8 +435,9 @@ public class Manager extends User implements ActionListener {
             public void actionPerformed(ActionEvent arg0) {
 
                 String bugID = (String) bugselect.getSelectedItem();
-
-                viewBug(bugID);
+                String[] arrOfStr = bugID.split("-", 2); 
+				
+				viewBug(Integer.parseInt(arrOfStr[0]));
 
             }
         });
@@ -617,10 +618,18 @@ public class Manager extends User implements ActionListener {
         frame1.setSize(700, 500);
 
     }
+    
+    /**
+     *  \fn public void generateReport(String projectID)
+     *  
+     *  @param [in] projectID String value holding the project ID of the project for which report is to be viewed.
+     *  
+     */
 
     /*@ public normal_behavior
-     @  requires projectId != NULL
-     @*/
+      @  requires projectId != NULL
+      @
+     */
     public void generateReport(String projectID) {
         JFrame frame1 = new JFrame("Bug Search Result");
 
@@ -803,6 +812,13 @@ public class Manager extends User implements ActionListener {
 //
 //		frame1.setSize(700, 500);
 //	}
+    
+    /**
+     *  \fn public void viewBug(String bugID)
+     *  
+     *  @param [in] bugID String value holding the bug ID of the bug to be viewed.
+     *  
+     */
 
     /*
      * @ public normal_behavior
@@ -814,7 +830,7 @@ public class Manager extends User implements ActionListener {
      *
      * @
      */
-    public void viewBug(String bugID) {
+    public void viewBug(int bugID) {
         JFrame frame1 = new JFrame("Bug Search Result");
 
         frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -865,11 +881,12 @@ public class Manager extends User implements ActionListener {
 
             connection = ConnectionFactory.getConnection();
             String sql = "Select a.bugId, a.bugTitle, a.bugDescription,a.bugPriority"
-                    + ",a.bugStatus ,a.bugDueDate from bugs a where  bugStatus != 'CLOSED' or  bugStatus != 'closed' or bugStatus != 'Closed' and"
-                    + " a.bugId ='" + bugID + "'";
+					+ ",a.bugStatus ,a.bugDueDate from bugs a where  a.bugStatus != 'CLOSED' and  a.bugStatus != 'closed' and a.bugStatus != 'Closed' "
+					+ "and a.bugId = ?" ;
 
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            int i = 0;
+			PreparedStatement pstm = connection.prepareStatement(sql);
+			int i = 0;
+			pstm.setInt(1, bugID);
             rs = pstm.executeQuery();
 
             if (rs.next()) {
@@ -1053,6 +1070,15 @@ public class Manager extends User implements ActionListener {
         PFrame.setSize(700, 700);
 
     }
+    
+    /**
+     *  \fn public void assignProject(String username, String project_id)
+     *  
+     *  @param [in] username String value holding the username of user to which project is to be assigned.
+     *  
+     *  @param [in] project_id String value holding the project ID of project to be assigned to user.
+     *  
+     */
 
 	/*@ public normal_behavior
 	 @  requires projectId != NULL and  userId > 0 and  role.equals("developer")== true or  role.equals("tester") == true
@@ -1082,6 +1108,15 @@ public class Manager extends User implements ActionListener {
         }
 
     }
+    
+    /**
+     *  \fn public void grantPermission(String username, Permissions permission)
+     *  
+     *  @param [in] username String value holding the username of the user to which permission has to be granted.
+     *  
+     *  @param [in] permission String value holding the permission to be granted.
+     *  
+     */
 
     /*@ public normal_behavior
      @  requires userId > 0 and  role.equals("developer")== true or  role.equals("tester") == true
