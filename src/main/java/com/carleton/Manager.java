@@ -275,10 +275,13 @@ public class Manager extends User implements ActionListener {
         lblPermission.setBounds(110, 174, 100, 25);
         Frame2.add(lblPermission);
 
-        List<Permissions> permissionList = Arrays.asList(Permissions.values());
-        Vector list = new Vector(permissionList);
+        Vector v = new Vector();
+		v.add("Add Bug");
+		v.add("Edit Bug");
+		v.add("Delete Bug");
+        
 
-        final JComboBox permissionField = new JComboBox(list);
+        final JComboBox permissionField = new JComboBox(v);
         panel.setBounds(282, 174, 200, 20);
         Frame2.add(panel);
         panel.add(permissionField);
@@ -330,7 +333,7 @@ public class Manager extends User implements ActionListener {
         btnSubmit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 String user = (String) UserField.getSelectedItem();
-                Permissions permission = (Permissions) permissionField.getSelectedItem();
+                String permission = (String) permissionField.getSelectedItem();
                 String remark = DesField.getText().toString().toLowerCase();
 
                 DesField.setText("");
@@ -396,19 +399,13 @@ public class Manager extends User implements ActionListener {
         ResultSet rs = null;
         try {
             connection = ConnectionFactory.getConnection();
-            String sql = "Select bugId,bugTitle from bugs";
+			String sql = "Select bugId,bugTitle from bugs where  bugStatus != 'CLOSED' and  bugStatus != 'closed' and bugStatus != 'Closed'";
+
 
             PreparedStatement pstm = connection.prepareStatement(sql);
             int i = 0;
             rs = pstm.executeQuery();
 
-//			            Class.forName("oracle.jdbc.driver.OracleDriver");
-
-//			            con = DriverManager.getConnection("jdbc:oracle:thin:@mcndesktop07:1521:xe", "sandeep", "welcome");
-
-//			            st = con.createStatement();
-
-//			            rs = st.executeQuery("select uname from emp");
 
             Vector v = new Vector();
 
@@ -458,16 +455,11 @@ public class Manager extends User implements ActionListener {
 
         frame1.setLayout(new BorderLayout());
 
-        // TableModel tm = new TableModel();
 
         DefaultTableModel model = new DefaultTableModel();
 
         model.setColumnIdentifiers(columnNamesList);
 
-        // DefaultTableModel model = new DefaultTableModel(tm.getData1(),
-        // tm.getColumnNames());
-
-        // table = new JTable(model);
 
         JTable table = new JTable();
 
@@ -484,8 +476,6 @@ public class Manager extends User implements ActionListener {
         scroll.setVerticalScrollBarPolicy(
 
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-        // String textvalue = textbox.getText();
 
         String bugId = "";
 
@@ -557,8 +547,6 @@ public class Manager extends User implements ActionListener {
 
         JLabel title = new JLabel("Select Project from the list");
 
-        // title.setForeground(Color.red);
-
         title.setFont(new Font("Tahoma", Font.PLAIN, 25));
 
         JLabel select = new JLabel("Select Project :");
@@ -575,7 +563,7 @@ public class Manager extends User implements ActionListener {
         search.addActionListener(this);
 
         panel.setBounds(282, 141, 200, 20);
-        // setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
 
         frame1.add(title);
 
@@ -637,16 +625,10 @@ public class Manager extends User implements ActionListener {
 
         frame1.setLayout(new BorderLayout());
 
-        // TableModel tm = new TableModel();
 
         DefaultTableModel model = new DefaultTableModel();
 
         model.setColumnIdentifiers(columnNames_report);
-
-        // DefaultTableModel model = new DefaultTableModel(tm.getData1(),
-        // tm.getColumnNames());
-
-        // table = new JTable(model);
 
         JTable table = new JTable();
 
@@ -664,7 +646,7 @@ public class Manager extends User implements ActionListener {
 
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        // String textvalue = textbox.getText();
+ 
         String ProjectID = "";
         String ProjectTitle = "";
         String ProjectDescription = "";
@@ -881,8 +863,8 @@ public class Manager extends User implements ActionListener {
 
             connection = ConnectionFactory.getConnection();
             String sql = "Select a.bugId, a.bugTitle, a.bugDescription,a.bugPriority"
-					+ ",a.bugStatus ,a.bugDueDate from bugs a where  a.bugStatus != 'CLOSED' and  a.bugStatus != 'closed' and a.bugStatus != 'Closed' "
-					+ "and a.bugId = ?" ;
+					+ ",a.bugStatus ,a.bugDueDate from bugs a where  "
+					+ " a.bugId = ?" ;
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
 			int i = 0;
@@ -1122,7 +1104,7 @@ public class Manager extends User implements ActionListener {
      @  requires userId > 0 and  role.equals("developer")== true or  role.equals("tester") == true
      @ ensures permissionsList.add(username);
      @*/
-    public void grantPermission(String username, Permissions permission) {
+    public void grantPermission(String username, String permission) {
         int rs1;
         try {
             connection = ConnectionFactory.getConnection();

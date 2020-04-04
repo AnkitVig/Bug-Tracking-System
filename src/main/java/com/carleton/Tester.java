@@ -253,7 +253,8 @@ public class Tester extends User implements ActionListener {
 		ResultSet rs = null;
 		try {
 			connection = ConnectionFactory.getConnection();
-			String sql = "Select bugId,bugTitle from bugs where  bugtesterID =" + this.userId;
+
+			String sql = "Select bugId,bugTitle from bugs where  bugStatus != 'CLOSED' and  bugStatus != 'closed' and bugStatus != 'Closed' and bugtesterID =" + this.userId;
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
 			int i = 0;
@@ -365,8 +366,8 @@ public class Tester extends User implements ActionListener {
 
 			connection = ConnectionFactory.getConnection();
 			String sql = "Select a.bugId, a.bugTitle, a.bugDescription,a.bugPriority"
-					+ ",a.bugStatus ,a.bugDueDate from bugs a where  a.bugStatus != 'CLOSED' and  a.bugStatus != 'closed' and a.bugStatus != 'Closed' "
-					+ "and a.bugId = ?" ;
+					+ ",a.bugStatus ,a.bugDueDate from bugs a where  "
+					+ " a.bugId = ?" ;
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
 			int i = 0;
@@ -727,7 +728,7 @@ public class Tester extends User implements ActionListener {
 		final JPanel contentPane;
 		final JComboBox bugselect;
 
-		JLabel title = new JLabel("Select Bug assigned to you to set status 'Close'");
+		JLabel title = new JLabel("Select Bug assigned to you to set status 'Closed'");
 
 		title.setForeground(Color.red);
 
@@ -758,7 +759,7 @@ public class Tester extends User implements ActionListener {
 		ResultSet rs = null;
 		try {
 			connection = ConnectionFactory.getConnection();
-			String sql = "Select bugId from bugs where  bugtesterID = " + this.userId;
+			String sql = "Select bugId,bugTitle from bugs where bugStatus != 'CLOSED' and bugStatus != 'closed' and bugStatus != 'Closed' and bugtesterID = " + this.userId;
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
 
@@ -769,8 +770,9 @@ public class Tester extends User implements ActionListener {
 			while (rs.next()) {
 
 				String ids = rs.getString(1);
+				String bugTitle = rs.getString("bugTitle");
 
-				v.add(ids);
+				v.add(ids.concat("-").concat(bugTitle));
 
 			}
 
@@ -795,8 +797,8 @@ public class Tester extends User implements ActionListener {
 			public void actionPerformed(ActionEvent arg0) {
 
 				String bugID = (String) bugselect.getSelectedItem();
-
-				closeBug(bugID);
+				String[] arrOfStr = bugID.split("-", 2); 
+				closeBug(Integer.parseInt(arrOfStr[0]));
 				success.setText("Successfully Closed " + bugID);
 
 			}
@@ -820,14 +822,14 @@ public class Tester extends User implements ActionListener {
 	 * 
 	 * @
 	 */
-	private void closeBug(String bugID) {
+	private void closeBug(int bugID) {
 		int rs;
 		try {
 			connection = ConnectionFactory.getConnection();
-			String sql = "Update bugs set bugStatus = 'Close' where  bugID = ?";
+			String sql = "Update bugs set bugStatus = 'Closed' where  bugID = ?";
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
-			pstm.setString(1, bugID);
+			pstm.setInt(1, bugID);
 
 			rs = pstm.executeUpdate();
 

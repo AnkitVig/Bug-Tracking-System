@@ -23,7 +23,7 @@ enum Permissions {
 }
 
 enum BugStatus {
-    Open, Close, Resolved;
+    Open, Closed, Resolved;
 }
 
 public class User extends JFrame {

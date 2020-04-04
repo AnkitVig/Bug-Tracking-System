@@ -224,7 +224,7 @@ public class Developer extends User implements ActionListener {
 		ResultSet rs = null;
 		try {
 			connection = ConnectionFactory.getConnection();
-			String sql = "Select bugId,bugTitle from bugs where  bugdevID =" + this.userId;
+			String sql = "Select bugId,bugTitle from bugs where  bugStatus != 'CLOSED' and  bugStatus != 'closed' and bugStatus != 'Closed' and bugdevID =" + this.userId;
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
 			int i = 0;
@@ -341,8 +341,8 @@ public class Developer extends User implements ActionListener {
 
 			connection = ConnectionFactory.getConnection();
 			String sql = "Select a.bugId, a.bugTitle, a.bugDescription,a.bugPriority"
-					+ ",a.bugStatus ,a.bugDueDate from bugs a where  a.bugStatus != 'CLOSED' and  a.bugStatus != 'closed' and a.bugStatus != 'Closed' "
-					+ "and a.bugId = ?" ;
+					+ ",a.bugStatus ,a.bugDueDate from bugs a where  "
+					+ " a.bugId = ?" ;
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
 			int i = 0;
