@@ -323,8 +323,6 @@ public class Tester extends User implements ActionListener {
 
 		frame1.setLayout(new BorderLayout());
 
-		// TableModel tm = new TableModel();
-
 		DefaultTableModel model = new DefaultTableModel();
 
 		model.setColumnIdentifiers(columnNames);

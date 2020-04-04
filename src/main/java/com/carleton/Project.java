@@ -133,7 +133,7 @@ public class Project extends JFrame {
             System.out.println("SQLException in get() method");
             e.printStackTrace();
         } finally {
-            DbUtil.close(connection);
+         //   DbUtil.close(connection);
         }
 
         return results;

@@ -293,16 +293,11 @@ public class Developer extends User implements ActionListener {
 
 		frame1.setLayout(new BorderLayout());
 
-		// TableModel tm = new TableModel();
 
 		DefaultTableModel model = new DefaultTableModel();
 
 		model.setColumnIdentifiers(columnNames);
 
-		// DefaultTableModel model = new DefaultTableModel(tm.getData1(),
-		// tm.getColumnNames());
-
-		// table = new JTable(model);
 
 		JTable table = new JTable();
 
@@ -321,8 +316,6 @@ public class Developer extends User implements ActionListener {
 		scroll.setVerticalScrollBarPolicy(
 
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-		// String textvalue = textbox.getText();
 
 		String bugId = "";
 
