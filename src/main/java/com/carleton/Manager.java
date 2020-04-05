@@ -446,8 +446,8 @@ public class Manager extends User implements ActionListener {
     }
 
     /*@ public normal_behavior
-     @  requires userId != NULL
-     @*/
+    @  requires userId != 0;
+    @*/
     private void viewBugList() {
         JFrame frame1 = new JFrame("Bug Search Result");
 
@@ -615,9 +615,9 @@ public class Manager extends User implements ActionListener {
      */
 
     /*@ public normal_behavior
-      @  requires projectId != NULL
-      @
-     */
+    @  requires projectId.equals(null) == false;
+    @*/
+    
     public void generateReport(String projectID) {
         JFrame frame1 = new JFrame("Bug Search Result");
 
@@ -805,7 +805,7 @@ public class Manager extends User implements ActionListener {
     /*
      * @ public normal_behavior
      *
-     * @ requires bugId > 0 && bugStatus != "Closed"
+     * @ requires bugId > 0 && bugStatus.equals("Closed") == false
      *
      * @ ensures bugTitle != NULL && bugDescription != NULL && bugPriority != NULL
      * && bugStatus != NULL && bugDueDate != NULL ;
@@ -1062,9 +1062,9 @@ public class Manager extends User implements ActionListener {
      *  
      */
 
-	/*@ public normal_behavior
-	 @  requires projectId != NULL and  userId > 0 and  role.equals("developer")== true or  role.equals("tester") == true
-	 @ ensures project_users.add(username); 
+    /*@ public normal_behavior
+	 @  requires  projectId.equals(null) == false &&  userId > 0 &&  role.equals("developer")== true ||  role.equals("tester") == true;
+	 @ ensures userslist.add(username); 
 	 @*/
 
     public void assignProject(String username, String project_id) {
@@ -1101,9 +1101,9 @@ public class Manager extends User implements ActionListener {
      */
 
     /*@ public normal_behavior
-     @  requires userId > 0 and  role.equals("developer")== true or  role.equals("tester") == true
-     @ ensures permissionsList.add(username);
-     @*/
+    @  requires userId > 0 &&  role.equals("developer")== true ||  role.equals("tester") == true;
+    @ ensures permissionsList.add(permission);
+    @*/
     public void grantPermission(String username, String permission) {
         int rs1;
         try {
