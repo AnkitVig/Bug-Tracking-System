@@ -136,14 +136,15 @@ public class Manager extends User implements ActionListener {
     public void setPermissionList(Permissions permissionList) {
         this.permissionList = permissionList;
     }
-
+    public String projectId;
     private String username;
-    private String role;
-    private int userId;
+    public String role;
+    public int userId;
     private String name;
     private String email;
-    Permissions permissionList;
-
+    public Permissions permissionList;
+    public  List<String> userslist;
+    public List<String> permissionslist;
     /**
      * Create the frame.
      */
@@ -1102,7 +1103,7 @@ public class Manager extends User implements ActionListener {
 
     /*@ public normal_behavior
     @  requires userId > 0 &&  role.equals("developer")== true ||  role.equals("tester") == true;
-    @ ensures permissionsList.add(permission);
+    @ ensures permissionslist.add(permission);
     @*/
     public void grantPermission(String username, String permission) {
         int rs1;
