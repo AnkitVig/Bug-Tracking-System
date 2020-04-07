@@ -50,15 +50,13 @@ public class Tester extends User implements ActionListener {
 	/**
 	 * 
 	 */
-	/*
-	 * @ invariant userId != null
-	 * 
-	 * @ && (\forall Integer userId; userId != null ; u1.userId != u2.userId)
-	 * 
-	 * @ && role == "Tester";
-	 * 
-	 * @
-	 */
+	/*@  public
+	 @ invariant userId != 0
+	 @ 
+	 @ && (\forall Integer userId; userId != null ; u1.userId != u2.userId)
+	 @ && role.equals("Tester") == true;
+	 @
+	 @*/
 	private Connection connection;
 	private PreparedStatement preparedStatment;
 	private static final long serialVersionUID = 9104811318735213684L;
@@ -81,8 +79,8 @@ public class Tester extends User implements ActionListener {
 	public static String bugDesc;
 	public static String bugPriority;
 	public static String bugDate;
-	private String role;
-	private int userId;
+	public String role;
+	public int userId;
 	private String name;
 	private String email;
 	private String developer_name;

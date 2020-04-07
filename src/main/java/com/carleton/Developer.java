@@ -36,15 +36,14 @@ public class Developer extends User implements ActionListener {
 	/**
 	 * 
 	 */
-	/*
-	 * @ invariant userId != null
-	 * 
-	 * @ && (\forall Integer userId; userId != null ; u1.userId != u2.userId)
-	 * 
-	 * @ && role == "Developer";
-	 * 
-	 * @
-	 */
+	/*@ public 
+	 @ invariant userId != 0
+	 @ 
+	 @ && (\forall Integer userId; userId != null ; u1.userId != u2.userId)
+	 @ && role.equals("Developer") == true;
+	 @
+	 @*/
+	
 	private Connection connection;
 	private PreparedStatement preparedStatment;
 	private static final long serialVersionUID = 9104811318735213684L;
@@ -112,11 +111,13 @@ public class Developer extends User implements ActionListener {
 	public void setPermissionList(Permissions permissionList) {
 		this.permissionList = permissionList;
 	}
-
+	public int bugId;
+	public String bugStatus, bugTitle, bugDescription , bugPriority,bugDueDate;
+	public int bugdevID;
 	private String password;
 	private String username;
-	private String role;
-	private int userId;
+	public String role;
+	public int userId;
 	private String name;
 	private String email;
 	Permissions permissionList;
@@ -275,16 +276,16 @@ public class Developer extends User implements ActionListener {
      *  
      */
 
-	/*
-	 * @ public normal_behavior
-	 * 
-	 * @ requires bugId > 0 && bugStatus != "Closed" && bugdevID = this.userId
-	 * 
-	 * @ ensures bugTitle != NULL && bugDescription != NULL && bugPriority != NULL
-	 * && bugStatus != NULL && bugDueDate != NULL ;
-	 * 
-	 * @
-	 */
+	/*@
+	 @ public normal_behavior
+	 @ 
+	 @ requires bugId > 0 && bugStatus != "Closed" && bugdevID == userId;
+	 @ 
+	 @ ensures bugTitle .equals(null) ==false  && bugDescription .equals(null) ==false  && bugPriority.equals(null) ==false 
+	 @ && bugStatus.equals(null) ==false  && bugDueDate.equals(null) ==false  ;
+	 @ 
+	 @
+	 @*/
 	public void viewBug(int bugID) {
 
 		JFrame frame1 = new JFrame("Bug Search Result");
@@ -483,15 +484,14 @@ public class Developer extends User implements ActionListener {
      *  
      */
 
-	/*
-	 * @ public normal_behavior
-	 * 
-	 * @ requires bugId > 0 && bugStatus == "Open"
-	 * 
-	 * @ ensures bugId > 0 && bugStatus == "Resolved"
-	 * 
-	 * @
-	 */
+	/*@
+	 @ public normal_behavior
+	 @ 
+	 @ requires bugId > 0 && bugStatus.equals("Open") == true ;
+	 @ 
+	 @ ensures bugId > 0 && bugStatus.equals("Resolved") == true ;
+	 @ 
+	 @*/
 
 	private void solveBug(int bugID) {
 		System.out.println(bugID);

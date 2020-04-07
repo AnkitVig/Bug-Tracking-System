@@ -28,22 +28,23 @@ enum BugStatus {
 
 public class User extends JFrame {
 
-    /*
-     * @ invariant userId != null
-     *
-     * @ && (\forall Integer userId; userId != null ; u1.userId != u2.userId);
-     *
-     * @
-     */
+    /*@ public
+     @ invariant userId != 0
+     @
+     @ && (\forall Integer userId; userId != null ; u1.userId != u2.userId);
+     @
+     @
+     @*/
 
     private static final long serialVersionUID = 1L;
 
-    private String password;
-    protected String username;
-    private String role;
-    private int userId;
-    private String name;
-    private String email;
+    public User u1, u2;
+    public String password;
+    public String username;
+    public String role;
+    public int userId;
+    public String name;
+    public String email;
     Permissions permissionList;
 
     public String getPassword() {
@@ -218,15 +219,14 @@ public class User extends JFrame {
 
     }
 
-    /*
-     * @ public normal_behavior
-     *
-     * @ requires username != NULL && password != NULL && role != NULL
-     *
-     * @ ensures userId != NULL && email != NULL && name != NULL
-     *
-     * @
-     */
+    /*@
+     @ public normal_behavior
+     @
+     @ requires username.equals(null) == false && password.equals(null) == false && role.equals(null) == false;
+     @
+     @ ensures userId != 0 && email.equals(null) == false  && name.equals(null) == false;
+     @
+     @*/
 
     public void login(String username, String password, String role) {
         final String errorText = "Invalid user name or password!";

@@ -39,15 +39,13 @@ public class Manager extends User implements ActionListener {
     /**
      *
      */
-    /*
-     * @ invariant userId != null
-     *
-     * @ && (\forall Integer userId; userId != null ; u1.userId != u2.userId)
-     *
-     * @ && role == "Manager";
-     *
-     * @
-     */
+	/*@  public
+	 @ invariant userId != 0
+	 @ 
+	 @ && (\forall Integer userId; userId != null ; u1.userId != u2.userId)
+	 @ && role.equals("Manager") == true;
+	 @
+	 @*/
     private Connection connection;
     private PreparedStatement preparedStatment;
     private static final long serialVersionUID = 9104811318735213684L;
