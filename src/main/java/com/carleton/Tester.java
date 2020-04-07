@@ -82,12 +82,17 @@ public class Tester extends User implements ActionListener {
 	public String role;
 	public int userId;
 	private String name;
-	private String email;
+	public String email;
+	public int emailSuccess = 0;
 	private String developer_name;
 	private String developer_email;
 	private String Bug_name;
 	private String Bug_Description;
 	Permissions permissionList;
+	public Session mailSession;
+
+	public int bugId,bugtesterID,bugdevID;
+	public String bugStatus, bugTitle, bugDescription,bugDueDate;
 
 	public String getPassword() {
 		return password;
@@ -212,90 +217,7 @@ public class Tester extends User implements ActionListener {
 		}
 	}
 
-	public void viewBugJframe() {
-		JFrame frame1 = new JFrame("View Bug");
-		JPanel panel = new JPanel(new GridBagLayout());
-		frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-		frame1.setLayout(new BorderLayout());
-
-		JLabel title = new JLabel("Select Bug assigned to you from the list");
-
-		// title.setForeground(Color.red);
-
-		title.setFont(new Font("Tahoma", Font.PLAIN, 25));
-
-		JLabel select = new JLabel("Select Bug :");
-		select.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		select.setBounds(110, 225, 100, 25);
-
-		JButton search = new JButton("Search");
-		final JComboBox bugselect = new JComboBox();
-
-		title.setBounds(80, 91, 2000, 35);
-
-		search.setBounds(282, 300, 89, 23);
-
-		search.addActionListener(this);
-
-		panel.setBounds(282, 141, 200, 20);
-		// setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-		frame1.add(title);
-
-		frame1.add(select);
-		frame1.add(search);
-		panel.add(bugselect);
-		frame1.add(panel);
-
-		ResultSet rs = null;
-		try {
-			connection = ConnectionFactory.getConnection();
-
-			String sql = "Select bugId,bugTitle from bugs where  bugStatus != 'CLOSED' and  bugStatus != 'closed' and bugStatus != 'Closed' and bugtesterID =" + this.userId;
-
-			PreparedStatement pstm = connection.prepareStatement(sql);
-			int i = 0;
-			rs = pstm.executeQuery();
-
-			Vector v = new Vector();
-
-			while (rs.next()) {
-
-				String bugId = rs.getString("bugId");
-				String bugTitle = rs.getString("bugTitle");
-
-				v.add(bugId.concat("-").concat(bugTitle));
-
-			}
-
-			bugselect.setModel(new DefaultComboBoxModel(v));
-		} catch (SQLException e) {
-			System.out.println("SQLException in get() method");
-			e.printStackTrace();
-		} finally {
-			DbUtil.close(rs);
-			DbUtil.close(preparedStatment);
-			DbUtil.close(connection);
-		}
-
-		search.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-
-				String bugID = (String) bugselect.getSelectedItem();
-				String[] arrOfStr = bugID.split("-", 2); 
-				
-				viewBug(Integer.parseInt(arrOfStr[0]));
-
-			}
-		});
-
-		frame1.setVisible(true);
-
-		frame1.setSize(700, 500);
-
-	}
-	
+		
 	/**
      *  \fn public void viewBug(String bugID)
      *  
@@ -303,16 +225,16 @@ public class Tester extends User implements ActionListener {
      *  
      */
 
-	/*
-	 * @ public normal_behavior
-	 * 
-	 * @ requires bugId > 0 && bugStatus != "Closed" && bugdevID = this.userId
-	 * 
-	 * @ ensures bugTitle != NULL && bugDescription != NULL && bugPriority != NULL
-	 * && bugStatus != NULL && bugDueDate != NULL ;
-	 * 
-	 * @
-	 */
+	/*@
+	 @ public normal_behavior
+	 @ 
+	 @ requires bugId > 0 && bugStatus.equals( "Closed") == false && bugdevID == this.userId;
+	 @ 
+	 @ ensures bugTitle != null && bugDescription != null && bugPriority != null
+	 @ && bugStatus != null && bugDueDate != null ;
+	 @ 
+	 @
+	 @*/
 	public void viewBug(int bugID) {
 
 		JFrame frame1 = new JFrame("Bug Search Result");
@@ -416,6 +338,410 @@ public class Tester extends User implements ActionListener {
 		frame1.setSize(700, 500);
 	}
 
+		
+	/**
+     *  \fn protected void assignBug(String assignto2, String projectId, String bugName2, String bugDesc2, String bugPriority,
+			String bugDateField)
+     *  
+     *  @param [in] assignto2 String value holding the user ID of the user to whom bug is to be assigned.
+     *  
+     *  @param [in] projectId String value holding the project ID of project to which bug belongs.
+     *  
+     *  @param [in] bugName2 String value holding the name of the bug.
+     *  
+     *  @param [in] bugDesc2 String value holding the bug description.
+     *  
+     *  @param [in] bugPriority String value holding bug priority.
+     *  
+     *  @param [in] bugDateField String value holding the bug due date.
+     *  
+     */
+
+	/*@
+	 @ public normal_behavior
+	 @ 
+	 @ requires assignto2 != null && projectId != null && bugName2 != null &&
+	 @ bugDesc2 != null && bugPriority != null && bugDateField != null &&
+	 @ bugtesterID == this.userId && bugDateField.matches("\\d{4}-\\d{2}-\\d{2}");
+	 @ 
+	 @ ensures bugId > 0 && bugStatus.equals ("Open") == true;
+	 @ 
+	 @
+	 @*/
+
+	protected void assignBug(String assignto2, String projectId, String bugName2, String bugDesc2, String bugPriority,
+			String bugDateField) {
+
+		Date date = Date.valueOf(bugDateField);
+
+		ResultSet rs = null;
+		int ids = 0;
+		try {
+
+			connection = ConnectionFactory.getConnection();
+			String sql = "select id from bug_tracking_user where username = ?";
+
+			PreparedStatement pstm = connection.prepareStatement(sql);
+
+			pstm.setString(1, assignto2);
+
+			rs = pstm.executeQuery();
+
+			while (rs.next()) {
+
+				ids = rs.getInt(1);
+
+			}
+
+		} catch (SQLException e) {
+			System.out.println("SQLException in get() method");
+			e.printStackTrace();
+		} finally {
+			DbUtil.close(rs);
+			DbUtil.close(preparedStatment);
+			DbUtil.close(connection);
+		}
+
+		int rs1;
+		try {
+			connection = ConnectionFactory.getConnection();
+			String sql = "insert into bugs (bugTitle,bugDescription,bugPriority,bugProjectID,bugtesterID,bugdevID,bugDueDate) values (?,?,?,?,?,?,?)";
+
+			PreparedStatement pstm = connection.prepareStatement(sql);
+			String testerId = Integer.toString(this.userId);
+			pstm.setString(1, bugName2);
+			pstm.setString(2, bugDesc2);
+			pstm.setString(3, bugPriority);
+			pstm.setString(4, projectId);
+			pstm.setString(5, testerId);
+			pstm.setInt(6, ids);
+
+			pstm.setDate(7, java.sql.Date.valueOf(bugDateField));
+
+			rs1 = pstm.executeUpdate();
+
+		} catch (SQLException e) {
+			System.out.println("SQLException in get() method");
+			e.printStackTrace();
+		} finally {
+
+			DbUtil.close(preparedStatment);
+			DbUtil.close(connection);
+		}
+		try {
+			notifyUser(bugName2, assignto2);
+		} catch (AddressException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+
+	
+	/**
+     *  \fn private void closeBug(String bugID)
+     *  
+     *  @param [in] bugID String value holding the bug ID of the bug to be closed.
+     *  
+     */
+
+	/*@
+	 @ public normal_behavior
+	 @ 
+	 @ requires bugId > 0 && bugStatus.equals("Closed") == false;
+	 @ 
+	 @ ensures bugStatus.equals("Closed") == true ;
+	 @ 
+	 @
+	 @*/
+	private void closeBug(int bugID) {
+		int rs;
+		try {
+			connection = ConnectionFactory.getConnection();
+			String sql = "Update bugs set bugStatus = 'Closed' where  bugID = ?";
+
+			PreparedStatement pstm = connection.prepareStatement(sql);
+			pstm.setInt(1, bugID);
+
+			rs = pstm.executeUpdate();
+
+		} catch (SQLException e) {
+			System.out.println("SQLException in get() method");
+			e.printStackTrace();
+		} finally {
+
+			DbUtil.close(preparedStatment);
+			DbUtil.close(connection);
+		}
+
+	}
+	
+	/**
+     *  \fn public void notifyUser(String bugTitle, String username)
+     *  
+     *  @param [in] bugTitle String value holding the bug title.
+     *  
+     *  @param [in] username String value holding username of user who has to be notified.
+     *  
+     */
+
+	/*@
+	 @ public normal_behavior
+	 @ 
+	 @ requires email.equals(null) ==false && username.equals(null) ==false;
+	 @ 
+	 @ ensures emailSuccess == 1;
+	 @ 
+	 @ also
+	 @ 
+	 @ exceptional_behavior
+	 @
+	 @ requires mailSession == null;
+	 @ 
+	 @ signals (AddressException e) emailSuccess == 0;
+	 @ signals (MessagingException e) emailSuccess == 0;
+	 @
+	 @*/
+	public void notifyUser(String bugTitle, String username) throws AddressException, MessagingException {
+		
+		String userEmail = null;
+		ResultSet rs = null;
+		try {
+			connection = ConnectionFactory.getConnection();
+			String sql = "Select email from bug_tracking_user where  username = ?";
+
+			PreparedStatement pstm = connection.prepareStatement(sql);
+			pstm.setString(1, username);
+
+			rs = pstm.executeQuery();
+
+			while (rs.next()) {
+
+				userEmail = rs.getString(1);
+
+			}
+
+		} catch (SQLException e) {
+			System.out.println("SQLException in get() method");
+			e.printStackTrace();
+		} finally {
+			DbUtil.close(rs);
+			DbUtil.close(preparedStatment);
+			DbUtil.close(connection);
+		}
+
+		Properties emailProperties;
+		
+		MimeMessage emailMessage;
+
+		String emailPort = "587";// gmail's smtp port
+
+		emailProperties = System.getProperties();
+		emailProperties.put("mail.smtp.port", emailPort);
+		emailProperties.put("mail.smtp.auth", "true");
+		emailProperties.put("mail.smtp.starttls.enable", "true");
+
+		String[] toEmails = { userEmail };
+		String emailSubject = "Email from bug tracker";
+		String emailBody = "A bug with name '" + bugTitle + "' has been created and assigned to you for your review.";
+
+		mailSession = Session.getDefaultInstance(emailProperties, null);
+		emailMessage = new MimeMessage(mailSession);
+
+		for (int i = 0; i < toEmails.length; i++) {
+			emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmails[i]));
+		}
+
+		emailMessage.setSubject(emailSubject);
+		emailMessage.setContent(emailBody, "text/html");// for a html email
+		// emailMessage.setText(emailBody);// for a text email
+
+		String emailHost = "smtp.gmail.com";
+		String fromUser = "bugtrackerdbc@gmail.com";// just the id alone without @gmail.com
+		String fromUserEmailPassword = "abcd98825";
+
+		Transport transport = mailSession.getTransport("smtp");
+
+		transport.connect(emailHost, fromUser, fromUserEmailPassword);
+		transport.sendMessage(emailMessage, emailMessage.getAllRecipients());
+		transport.close();
+		System.out.println("Email sent successfully.");
+		emailSuccess = 1;
+	}
+	public void closeBugJframe() {
+		JFrame frame1 = new JFrame("Solve Bug");
+		JPanel panel = new JPanel(new GridBagLayout());
+
+		frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+		frame1.setLayout(new BorderLayout());
+		final JPanel contentPane;
+		final JComboBox bugselect;
+
+		JLabel title = new JLabel("Select Bug assigned to you to set status 'Closed'");
+
+		title.setForeground(Color.red);
+
+		title.setFont(new Font("Tahoma", Font.PLAIN, 20));
+
+		JButton search = new JButton("Change status to 'Close'");
+
+		title.setBounds(20, 150, 500, 40);
+
+		search.setBounds(50, 280, 300, 20);
+
+		search.addActionListener(this);
+
+		// setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+		frame1.add(title);
+		frame1.add(search);
+		JLabel select = new JLabel("Select Bug");
+		select.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		select.setBounds(50, 210, 500, 40);
+		bugselect = new JComboBox();
+		bugselect.setBounds(154, 150, 129, 20);
+		final JLabel success = new JLabel("");
+		success.setForeground(Color.GREEN);
+		success.setBounds(110, 310, 220, 14);
+		frame1.add(success);
+
+		ResultSet rs = null;
+		try {
+			connection = ConnectionFactory.getConnection();
+			String sql = "Select bugId,bugTitle from bugs where bugStatus != 'CLOSED' and bugStatus != 'closed' and bugStatus != 'Closed' and bugtesterID = " + this.userId;
+
+			PreparedStatement pstm = connection.prepareStatement(sql);
+
+			rs = pstm.executeQuery();
+
+			Vector v = new Vector();
+
+			while (rs.next()) {
+
+				String ids = rs.getString(1);
+				String bugTitle = rs.getString("bugTitle");
+
+				v.add(ids.concat("-").concat(bugTitle));
+
+			}
+
+			bugselect.setModel(new DefaultComboBoxModel(v));
+		} catch (SQLException e) {
+			System.out.println("SQLException in get() method");
+			e.printStackTrace();
+		} finally {
+			DbUtil.close(rs);
+			DbUtil.close(preparedStatment);
+			DbUtil.close(connection);
+		}
+
+		panel.add(bugselect);
+		frame1.add(select);
+		frame1.add(panel);
+
+		frame1.setVisible(true);
+
+		frame1.setSize(700, 500);
+		search.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				String bugID = (String) bugselect.getSelectedItem();
+				String[] arrOfStr = bugID.split("-", 2); 
+				closeBug(Integer.parseInt(arrOfStr[0]));
+				success.setText("Successfully Closed " + bugID);
+
+			}
+
+		});
+	}
+	public void viewBugJframe() {
+		JFrame frame1 = new JFrame("View Bug");
+		JPanel panel = new JPanel(new GridBagLayout());
+		frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+		frame1.setLayout(new BorderLayout());
+
+		JLabel title = new JLabel("Select Bug assigned to you from the list");
+
+		// title.setForeground(Color.red);
+
+		title.setFont(new Font("Tahoma", Font.PLAIN, 25));
+
+		JLabel select = new JLabel("Select Bug :");
+		select.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		select.setBounds(110, 225, 100, 25);
+
+		JButton search = new JButton("Search");
+		final JComboBox bugselect = new JComboBox();
+
+		title.setBounds(80, 91, 2000, 35);
+
+		search.setBounds(282, 300, 89, 23);
+
+		search.addActionListener(this);
+
+		panel.setBounds(282, 141, 200, 20);
+		// setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+		frame1.add(title);
+
+		frame1.add(select);
+		frame1.add(search);
+		panel.add(bugselect);
+		frame1.add(panel);
+
+		ResultSet rs = null;
+		try {
+			connection = ConnectionFactory.getConnection();
+
+			String sql = "Select bugId,bugTitle from bugs where  bugStatus != 'CLOSED' and  bugStatus != 'closed' and bugStatus != 'Closed' and bugtesterID =" + this.userId;
+
+			PreparedStatement pstm = connection.prepareStatement(sql);
+			int i = 0;
+			rs = pstm.executeQuery();
+
+			Vector v = new Vector();
+
+			while (rs.next()) {
+
+				String bugId = rs.getString("bugId");
+				String bugTitle = rs.getString("bugTitle");
+
+				v.add(bugId.concat("-").concat(bugTitle));
+
+			}
+
+			bugselect.setModel(new DefaultComboBoxModel(v));
+		} catch (SQLException e) {
+			System.out.println("SQLException in get() method");
+			e.printStackTrace();
+		} finally {
+			DbUtil.close(rs);
+			DbUtil.close(preparedStatment);
+			DbUtil.close(connection);
+		}
+
+		search.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				String bugID = (String) bugselect.getSelectedItem();
+				String[] arrOfStr = bugID.split("-", 2); 
+				
+				viewBug(Integer.parseInt(arrOfStr[0]));
+
+			}
+		});
+
+		frame1.setVisible(true);
+
+		frame1.setSize(700, 500);
+
+	}
 	public void assignBugJframe() {
 
 		final JComboBox projectselect;
@@ -612,324 +938,5 @@ public class Tester extends User implements ActionListener {
 		frame1.setSize(700, 900);
 
 	}
-	
-	/**
-     *  \fn protected void assignBug(String assignto2, String projectId, String bugName2, String bugDesc2, String bugPriority,
-			String bugDateField)
-     *  
-     *  @param [in] assignto2 String value holding the user ID of the user to whom bug is to be assigned.
-     *  
-     *  @param [in] projectId String value holding the project ID of project to which bug belongs.
-     *  
-     *  @param [in] bugName2 String value holding the name of the bug.
-     *  
-     *  @param [in] bugDesc2 String value holding the bug description.
-     *  
-     *  @param [in] bugPriority String value holding bug priority.
-     *  
-     *  @param [in] bugDateField String value holding the bug due date.
-     *  
-     */
 
-	/*
-	 * @ public normal_behavior
-	 * 
-	 * @ requires assignto2 != NULL && projectId != NULL && bugName2 != NULL &&
-	 * bugDesc2 != NULL && bugPriority != NULLL && bugDateField != NULL &&
-	 * bugtesterID = this.userId && bugDateField.matches("\\d{4}-\\d{2}-\\d{2}");
-	 * 
-	 * @ ensures bugId != NUll && bugStatus == "Open";
-	 * 
-	 * @
-	 */
-
-	protected void assignBug(String assignto2, String projectId, String bugName2, String bugDesc2, String bugPriority,
-			String bugDateField) {
-
-		Date date = Date.valueOf(bugDateField);
-
-		ResultSet rs = null;
-		int ids = 0;
-		try {
-
-			connection = ConnectionFactory.getConnection();
-			String sql = "select id from bug_tracking_user where username = ?";
-
-			PreparedStatement pstm = connection.prepareStatement(sql);
-
-			pstm.setString(1, assignto2);
-
-			rs = pstm.executeQuery();
-
-			while (rs.next()) {
-
-				ids = rs.getInt(1);
-
-			}
-
-		} catch (SQLException e) {
-			System.out.println("SQLException in get() method");
-			e.printStackTrace();
-		} finally {
-			DbUtil.close(rs);
-			DbUtil.close(preparedStatment);
-			DbUtil.close(connection);
-		}
-
-		int rs1;
-		try {
-			connection = ConnectionFactory.getConnection();
-			String sql = "insert into bugs (bugTitle,bugDescription,bugPriority,bugProjectID,bugtesterID,bugdevID,bugDueDate) values (?,?,?,?,?,?,?)";
-
-			PreparedStatement pstm = connection.prepareStatement(sql);
-			String testerId = Integer.toString(this.userId);
-			pstm.setString(1, bugName2);
-			pstm.setString(2, bugDesc2);
-			pstm.setString(3, bugPriority);
-			pstm.setString(4, projectId);
-			pstm.setString(5, testerId);
-			pstm.setInt(6, ids);
-
-			pstm.setDate(7, java.sql.Date.valueOf(bugDateField));
-
-			rs1 = pstm.executeUpdate();
-
-		} catch (SQLException e) {
-			System.out.println("SQLException in get() method");
-			e.printStackTrace();
-		} finally {
-
-			DbUtil.close(preparedStatment);
-			DbUtil.close(connection);
-		}
-		try {
-			notifyUser(bugName2, assignto2);
-		} catch (AddressException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	public void closeBugJframe() {
-		JFrame frame1 = new JFrame("Solve Bug");
-		JPanel panel = new JPanel(new GridBagLayout());
-
-		frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-		frame1.setLayout(new BorderLayout());
-		final JPanel contentPane;
-		final JComboBox bugselect;
-
-		JLabel title = new JLabel("Select Bug assigned to you to set status 'Closed'");
-
-		title.setForeground(Color.red);
-
-		title.setFont(new Font("Tahoma", Font.PLAIN, 20));
-
-		JButton search = new JButton("Change status to 'Close'");
-
-		title.setBounds(20, 150, 500, 40);
-
-		search.setBounds(50, 280, 300, 20);
-
-		search.addActionListener(this);
-
-		// setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-		frame1.add(title);
-		frame1.add(search);
-		JLabel select = new JLabel("Select Bug");
-		select.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		select.setBounds(50, 210, 500, 40);
-		bugselect = new JComboBox();
-		bugselect.setBounds(154, 150, 129, 20);
-		final JLabel success = new JLabel("");
-		success.setForeground(Color.GREEN);
-		success.setBounds(110, 310, 220, 14);
-		frame1.add(success);
-
-		ResultSet rs = null;
-		try {
-			connection = ConnectionFactory.getConnection();
-			String sql = "Select bugId,bugTitle from bugs where bugStatus != 'CLOSED' and bugStatus != 'closed' and bugStatus != 'Closed' and bugtesterID = " + this.userId;
-
-			PreparedStatement pstm = connection.prepareStatement(sql);
-
-			rs = pstm.executeQuery();
-
-			Vector v = new Vector();
-
-			while (rs.next()) {
-
-				String ids = rs.getString(1);
-				String bugTitle = rs.getString("bugTitle");
-
-				v.add(ids.concat("-").concat(bugTitle));
-
-			}
-
-			bugselect.setModel(new DefaultComboBoxModel(v));
-		} catch (SQLException e) {
-			System.out.println("SQLException in get() method");
-			e.printStackTrace();
-		} finally {
-			DbUtil.close(rs);
-			DbUtil.close(preparedStatment);
-			DbUtil.close(connection);
-		}
-
-		panel.add(bugselect);
-		frame1.add(select);
-		frame1.add(panel);
-
-		frame1.setVisible(true);
-
-		frame1.setSize(700, 500);
-		search.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-
-				String bugID = (String) bugselect.getSelectedItem();
-				String[] arrOfStr = bugID.split("-", 2); 
-				closeBug(Integer.parseInt(arrOfStr[0]));
-				success.setText("Successfully Closed " + bugID);
-
-			}
-
-		});
-	}
-	
-	/**
-     *  \fn private void closeBug(String bugID)
-     *  
-     *  @param [in] bugID String value holding the bug ID of the bug to be closed.
-     *  
-     */
-
-	/*
-	 * @ public normal_behavior
-	 * 
-	 * @ requires bugId > 0 && bugStatus != "Closed";
-	 * 
-	 * @ ensures bugStatus == "Closed";
-	 * 
-	 * @
-	 */
-	private void closeBug(int bugID) {
-		int rs;
-		try {
-			connection = ConnectionFactory.getConnection();
-			String sql = "Update bugs set bugStatus = 'Closed' where  bugID = ?";
-
-			PreparedStatement pstm = connection.prepareStatement(sql);
-			pstm.setInt(1, bugID);
-
-			rs = pstm.executeUpdate();
-
-		} catch (SQLException e) {
-			System.out.println("SQLException in get() method");
-			e.printStackTrace();
-		} finally {
-
-			DbUtil.close(preparedStatment);
-			DbUtil.close(connection);
-		}
-
-	}
-	
-	/**
-     *  \fn public void notifyUser(String bugTitle, String username)
-     *  
-     *  @param [in] bugTitle String value holding the bug title.
-     *  
-     *  @param [in] username String value holding username of user who has to be notified.
-     *  
-     */
-
-	/*
-	 * @ public normal_behavior
-	 * 
-	 * @ requires email != NULL && username != NULL;
-	 * 
-	 * @ ensures emailSuccess == 1;
-	 * 
-	 * @ also
-	 * 
-	 * @ exceptional_behavior
-	 * 
-	 * @ requires mailSession == NULL;
-	 * 
-	 * @ signals (AddressException e, MessagingException e1) emailSuccess == 0;
-	 * 
-	 * @
-	 */
-	public void notifyUser(String bugTitle, String username) throws AddressException, MessagingException {
-		int emailSuccess = 0;
-		String userEmail = null;
-		ResultSet rs = null;
-		try {
-			connection = ConnectionFactory.getConnection();
-			String sql = "Select email from bug_tracking_user where  username = ?";
-
-			PreparedStatement pstm = connection.prepareStatement(sql);
-			pstm.setString(1, username);
-
-			rs = pstm.executeQuery();
-
-			while (rs.next()) {
-
-				userEmail = rs.getString(1);
-
-			}
-
-		} catch (SQLException e) {
-			System.out.println("SQLException in get() method");
-			e.printStackTrace();
-		} finally {
-			DbUtil.close(rs);
-			DbUtil.close(preparedStatment);
-			DbUtil.close(connection);
-		}
-
-		Properties emailProperties;
-		Session mailSession;
-		MimeMessage emailMessage;
-
-		String emailPort = "587";// gmail's smtp port
-
-		emailProperties = System.getProperties();
-		emailProperties.put("mail.smtp.port", emailPort);
-		emailProperties.put("mail.smtp.auth", "true");
-		emailProperties.put("mail.smtp.starttls.enable", "true");
-
-		String[] toEmails = { userEmail };
-		String emailSubject = "Email from bug tracker";
-		String emailBody = "A bug with name '" + bugTitle + "' has been created and assigned to you for your review.";
-
-		mailSession = Session.getDefaultInstance(emailProperties, null);
-		emailMessage = new MimeMessage(mailSession);
-
-		for (int i = 0; i < toEmails.length; i++) {
-			emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmails[i]));
-		}
-
-		emailMessage.setSubject(emailSubject);
-		emailMessage.setContent(emailBody, "text/html");// for a html email
-		// emailMessage.setText(emailBody);// for a text email
-
-		String emailHost = "smtp.gmail.com";
-		String fromUser = "bugtrackerdbc@gmail.com";// just the id alone without @gmail.com
-		String fromUserEmailPassword = "abcd98825";
-
-		Transport transport = mailSession.getTransport("smtp");
-
-		transport.connect(emailHost, fromUser, fromUserEmailPassword);
-		transport.sendMessage(emailMessage, emailMessage.getAllRecipients());
-		transport.close();
-		System.out.println("Email sent successfully.");
-		emailSuccess = 1;
-	}
 }

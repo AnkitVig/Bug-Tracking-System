@@ -185,90 +185,6 @@ public class Developer extends User implements ActionListener {
 		}
 	}
 
-	public void viewBugJframe() {
-
-		JFrame frame1 = new JFrame("View Bug");
-		JPanel panel = new JPanel(new GridBagLayout());
-		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-		frame1.setLayout(new BorderLayout());
-
-		JLabel title = new JLabel("Select Bug assigned to you from the list");
-
-		// title.setForeground(Color.red);
-
-		title.setFont(new Font("Tahoma", Font.PLAIN, 25));
-
-		JLabel select = new JLabel("Select Bug :");
-		select.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		select.setBounds(110, 225, 100, 25);
-
-		JButton searchBug = new JButton("Search");
-		final JComboBox bugselect = new JComboBox();
-
-		title.setBounds(80, 91, 2000, 35);
-
-		searchBug.setBounds(282, 300, 89, 23);
-
-		searchBug.addActionListener(this);
-
-		panel.setBounds(282, 141, 200, 20);
-		// setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-		frame1.add(title);
-
-		frame1.add(select);
-		frame1.add(searchBug);
-		panel.add(bugselect);
-		frame1.add(panel);
-
-		ResultSet rs = null;
-		try {
-			connection = ConnectionFactory.getConnection();
-			String sql = "Select bugId,bugTitle from bugs where  bugStatus != 'CLOSED' and  bugStatus != 'closed' and bugStatus != 'Closed' and bugdevID =" + this.userId;
-
-			PreparedStatement pstm = connection.prepareStatement(sql);
-			int i = 0;
-			rs = pstm.executeQuery();
-
-			Vector v = new Vector();
-
-			while (rs.next()) {
-
-				String bugId = rs.getString("bugId");
-				String bugTitle = rs.getString("bugTitle");
-
-				v.add(bugId.concat("-").concat(bugTitle));
-
-			}
-
-			bugselect.setModel(new DefaultComboBoxModel(v));
-	
-		} catch (SQLException e) {
-			System.out.println("SQLException in get() method");
-			e.printStackTrace();
-		} finally {
-			DbUtil.close(rs);
-			DbUtil.close(preparedStatment);
-			DbUtil.close(connection);
-		}
-
-		searchBug.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-
-				String bugID = (String) bugselect.getSelectedItem();
-				String[] arrOfStr = bugID.split("-", 2); 
-				
-				viewBug(Integer.parseInt(arrOfStr[0]));
-
-			}
-		});
-
-		frame1.setVisible(true);
-
-		frame1.setSize(700, 500);
-	}
-	
 	/**
      *  \fn public void viewBug(String bugID)
      *  
@@ -281,7 +197,7 @@ public class Developer extends User implements ActionListener {
 	 @ 
 	 @ requires bugId > 0 && bugStatus != "Closed" && bugdevID == userId;
 	 @ 
-	 @ ensures bugTitle .equals(null) ==false  && bugDescription .equals(null) ==false  && bugPriority.equals(null) ==false 
+	 @ ensures bugTitle.equals(null) ==false  && bugDescription .equals(null) ==false  && bugPriority.equals(null) ==false 
 	 @ && bugStatus.equals(null) ==false  && bugDueDate.equals(null) ==false  ;
 	 @ 
 	 @
@@ -389,6 +305,128 @@ public class Developer extends User implements ActionListener {
 		frame1.setSize(700, 500);
 	}
 
+	
+	/**
+     *  \fn private void solveBug(String bugID)
+     *  
+     *  @param [in] bugID String value holding the bug ID of the bug to be solved.
+     *  
+     */
+
+	/*@
+	 @ public normal_behavior
+	 @ 
+	 @ requires bugId > 0 && bugStatus.equals("Open") == true ;
+	 @ 
+	 @ ensures bugId > 0 && bugStatus.equals("Resolved") == true ;
+	 @ 
+	 @*/
+
+	private void solveBug(int bugID) {
+		System.out.println(bugID);
+
+		int rs;
+		try {
+			connection = ConnectionFactory.getConnection();
+			String sql = "Update bugs set bugStatus = 'Resolved' where  bugID = ? ";
+
+			PreparedStatement pstm = connection.prepareStatement(sql);
+			pstm.setInt(1, bugID);
+
+			rs = pstm.executeUpdate();
+
+		} catch (SQLException e) {
+			System.out.println("SQLException in get() method");
+			e.printStackTrace();
+		} finally {
+
+			DbUtil.close(preparedStatment);
+			DbUtil.close(connection);
+		}
+	}
+	public void viewBugJframe() {
+
+		JFrame frame1 = new JFrame("View Bug");
+		JPanel panel = new JPanel(new GridBagLayout());
+		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		frame1.setLayout(new BorderLayout());
+
+		JLabel title = new JLabel("Select Bug assigned to you from the list");
+
+		// title.setForeground(Color.red);
+
+		title.setFont(new Font("Tahoma", Font.PLAIN, 25));
+
+		JLabel select = new JLabel("Select Bug :");
+		select.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		select.setBounds(110, 225, 100, 25);
+
+		JButton searchBug = new JButton("Search");
+		final JComboBox bugselect = new JComboBox();
+
+		title.setBounds(80, 91, 2000, 35);
+
+		searchBug.setBounds(282, 300, 89, 23);
+
+		searchBug.addActionListener(this);
+
+		panel.setBounds(282, 141, 200, 20);
+		// setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+		frame1.add(title);
+
+		frame1.add(select);
+		frame1.add(searchBug);
+		panel.add(bugselect);
+		frame1.add(panel);
+
+		ResultSet rs = null;
+		try {
+			connection = ConnectionFactory.getConnection();
+			String sql = "Select bugId,bugTitle from bugs where  bugStatus != 'CLOSED' and  bugStatus != 'closed' and bugStatus != 'Closed' and bugdevID =" + this.userId;
+
+			PreparedStatement pstm = connection.prepareStatement(sql);
+			int i = 0;
+			rs = pstm.executeQuery();
+
+			Vector v = new Vector();
+
+			while (rs.next()) {
+
+				String bugId = rs.getString("bugId");
+				String bugTitle = rs.getString("bugTitle");
+
+				v.add(bugId.concat("-").concat(bugTitle));
+
+			}
+
+			bugselect.setModel(new DefaultComboBoxModel(v));
+	
+		} catch (SQLException e) {
+			System.out.println("SQLException in get() method");
+			e.printStackTrace();
+		} finally {
+			DbUtil.close(rs);
+			DbUtil.close(preparedStatment);
+			DbUtil.close(connection);
+		}
+
+		searchBug.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				String bugID = (String) bugselect.getSelectedItem();
+				String[] arrOfStr = bugID.split("-", 2); 
+				
+				viewBug(Integer.parseInt(arrOfStr[0]));
+
+			}
+		});
+
+		frame1.setVisible(true);
+
+		frame1.setSize(700, 500);
+	}
 	public void solveBugJframe() {
 		JFrame frame1 = new JFrame("Solve Bug");
 		JPanel panel = new JPanel(new GridBagLayout());
@@ -428,7 +466,7 @@ public class Developer extends User implements ActionListener {
 		ResultSet rs = null;
 		try {
 			connection = ConnectionFactory.getConnection();
-			String sql = "Select bugId,bugTitle from bugs where  bugStatus = 'OPEN' or  bugStatus = 'open' or bugStatus = 'Open' and bugdevID = "
+			String sql = "Select bugId,bugTitle from bugs where  bugStatus == 'OPEN' or  bugStatus == 'open' or bugStatus == 'Open' and bugdevID = "
 					+ this.userId;
 
 			PreparedStatement pstm = connection.prepareStatement(sql);
@@ -477,42 +515,5 @@ public class Developer extends User implements ActionListener {
 
 	}
 	
-	/**
-     *  \fn private void solveBug(String bugID)
-     *  
-     *  @param [in] bugID String value holding the bug ID of the bug to be solved.
-     *  
-     */
 
-	/*@
-	 @ public normal_behavior
-	 @ 
-	 @ requires bugId > 0 && bugStatus.equals("Open") == true ;
-	 @ 
-	 @ ensures bugId > 0 && bugStatus.equals("Resolved") == true ;
-	 @ 
-	 @*/
-
-	private void solveBug(int bugID) {
-		System.out.println(bugID);
-
-		int rs;
-		try {
-			connection = ConnectionFactory.getConnection();
-			String sql = "Update bugs set bugStatus = 'Resolved' where  bugID = ? ";
-
-			PreparedStatement pstm = connection.prepareStatement(sql);
-			pstm.setInt(1, bugID);
-
-			rs = pstm.executeUpdate();
-
-		} catch (SQLException e) {
-			System.out.println("SQLException in get() method");
-			e.printStackTrace();
-		} finally {
-
-			DbUtil.close(preparedStatment);
-			DbUtil.close(connection);
-		}
-	}
 }

@@ -11,9 +11,19 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 public class AuthenticationManager {
+	
+	 /*@
+    @ public invariant
+    @
+    @  username != null && password != null && role != null;
+    @*/
+	
     private static AuthenticationManager instance;
     private static Connection connection;
-    private static Boolean login = null;
+    public static Boolean login = null;
+    public String username,password,role;
+    
+    
     
     /**
      *  \fn public int verifyLogin(String username, String password, String role)
@@ -29,15 +39,15 @@ public class AuthenticationManager {
      */
 
     
-    /*
-     * @ public normal_behavior
-     *
-     * @ requires username != NULL && password != NULL && role != NULL
-     *
-     * @ ensures login != NULL
-     *
-     * @
-     */
+    /*@
+     @ public normal_behavior
+     @
+     @ requires username != null && password != null && role != null;
+     @
+     @ ensures login != null;
+     @
+     @
+     @*/
     public static int verifyLogin(String username, String password, String role) {
  
         login = false;

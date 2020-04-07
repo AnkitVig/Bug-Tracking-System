@@ -12,7 +12,7 @@ public class Bug{
 	String bug_projectID;
 	String bug_priority;
 	enum bug_status {
-		OPEN, INPROGRESS, CLOSE
+		OPEN, RESOLVED, CLOSED
 	}
 	String bug_developerID;
 	String bug_testerID;

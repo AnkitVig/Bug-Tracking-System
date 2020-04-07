@@ -143,6 +143,8 @@ public class Manager extends User implements ActionListener {
     public Permissions permissionList;
     public  List<String> userslist;
     public List<String> permissionslist;
+	public int bugId,bugtesterID,bugdevID;
+	public String bugStatus, bugTitle, bugDescription,bugPriority,bugDueDate;
     /**
      * Create the frame.
      */
@@ -246,206 +248,9 @@ public class Manager extends User implements ActionListener {
         }
     }
 
-    private void grantPermsiionsJFrame() {
-        // TODO Auto-generated method stub
-        JPanel panel = new JPanel(new GridBagLayout());
-        JPanel panel2 = new JPanel(new GridBagLayout());
-        JFrame Frame2 = new JFrame("Grant Permission");
-        Frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        Frame2.setLayout(new BorderLayout());
-
-        JLabel select = new JLabel("Select user to set permission!!!");
-        select.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        select.setBounds(80, 91, 2000, 25);
-        Frame2.add(select);
-
-        JLabel lblUser = new JLabel(" Select User :");
-        lblUser.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblUser.setBounds(110, 141, 100, 14);
-        Frame2.add(lblUser);
-        final JComboBox UserField = new JComboBox();
-        panel2.setBounds(282, 140, 200, 20);
-        Frame2.add(panel2);
-        panel2.add(UserField);
-
-        JLabel lblPermission = new JLabel("Select Permission :\r\n");
-        lblPermission.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblPermission.setBounds(110, 174, 100, 25);
-        Frame2.add(lblPermission);
-
-        Vector v = new Vector();
-		v.add("Add Bug");
-		v.add("Edit Bug");
-		v.add("Delete Bug");
-        
-
-        final JComboBox permissionField = new JComboBox(v);
-        panel.setBounds(282, 174, 200, 20);
-        Frame2.add(panel);
-        panel.add(permissionField);
-
-        JLabel lblDesc = new JLabel("Remarks :\r\n");
-        lblDesc.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblDesc.setBounds(110, 200, 200, 25);
-        Frame2.add(lblDesc);
-
-        final JTextField DesField = new JTextField();
-        DesField.setBounds(282, 200, 200, 60);
-        Frame2.add(DesField);
-        DesField.setColumns(10);
-        ResultSet rs2 = null;
-        try {
-            connection = ConnectionFactory.getConnection();
-            String sql = "Select username from bug_tracking_user where role = 'developer' or role = 'tester'";
-
-            PreparedStatement pstm = connection.prepareStatement(sql);
-
-            rs2 = pstm.executeQuery();
-
-            Vector v2 = new Vector();
-
-            while (rs2.next()) {
-
-                String ids = rs2.getString(1);
-
-                v2.add(ids);
-
-            }
-
-            UserField.setModel(new DefaultComboBoxModel(v2));
-        } catch (SQLException e) {
-            System.out.println("SQLException in get() method");
-            e.printStackTrace();
-        } finally {
-            DbUtil.close(rs2);
-            DbUtil.close(preparedStatment);
-            DbUtil.close(connection);
-        }
-
-        JButton btnSubmit = new JButton("Submit");
-        final JLabel success = new JLabel("");
-
-        success.setBounds(282, 400, 300, 60);
-        Frame2.add(success);
-
-        btnSubmit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                String user = (String) UserField.getSelectedItem();
-                String permission = (String) permissionField.getSelectedItem();
-                String remark = DesField.getText().toString().toLowerCase();
-
-                DesField.setText("");
-
-                grantPermission(user, permission);
-                success.setForeground(Color.GREEN);
-                success.setText("Permssion Granted Successfully ");
-            }
-        });
-
-        btnSubmit.setBounds(282, 300, 89, 23);
-        Frame2.add(btnSubmit);
-
-        Frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        Frame2.setLayout(new BorderLayout());
-
-        Frame2.setVisible(true);
-
-        Frame2.setSize(700, 700);
-
-    }
-
-    private void viewBugJFrame() {
-
-        JFrame frame1 = new JFrame("View Bug");
-        JPanel panel = new JPanel(new GridBagLayout());
-        frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        frame1.setLayout(new BorderLayout());
-
-        JLabel title = new JLabel("Select Bug assigned to you from the list");
-
-        // title.setForeground(Color.red);
-
-        title.setFont(new Font("Tahoma", Font.PLAIN, 25));
-
-        JLabel select = new JLabel("Select Bug :");
-        select.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        select.setBounds(110, 225, 100, 25);
-
-        JButton search = new JButton("Search");
-        final JComboBox bugselect = new JComboBox();
-
-        title.setBounds(80, 91, 2000, 35);
-
-        // select.setBounds(50, 210, 500, 40);
-
-        search.setBounds(282, 300, 89, 23);
-
-        search.addActionListener(this);
-
-        panel.setBounds(282, 141, 200, 20);
-        // setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        frame1.add(title);
-
-        frame1.add(select);
-        frame1.add(search);
-        panel.add(bugselect);
-        frame1.add(panel);
-
-        ResultSet rs = null;
-        try {
-            connection = ConnectionFactory.getConnection();
-			String sql = "Select bugId,bugTitle from bugs where  bugStatus != 'CLOSED' and  bugStatus != 'closed' and bugStatus != 'Closed'";
-
-
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            int i = 0;
-            rs = pstm.executeQuery();
-
-
-            Vector v = new Vector();
-
-            while (rs.next()) {
-
-                String bugId = rs.getString("bugId");
-                String bugTitle = rs.getString("bugTitle");
-
-                v.add(bugId.concat("-").concat(bugTitle));
-
-            }
-
-            bugselect.setModel(new DefaultComboBoxModel(v));
-        } catch (SQLException e) {
-            System.out.println("SQLException in get() method");
-            e.printStackTrace();
-        } finally {
-            DbUtil.close(rs);
-            DbUtil.close(preparedStatment);
-            DbUtil.close(connection);
-        }
-
-        search.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-
-                String bugID = (String) bugselect.getSelectedItem();
-                String[] arrOfStr = bugID.split("-", 2); 
-				
-				viewBug(Integer.parseInt(arrOfStr[0]));
-
-            }
-        });
-
-        frame1.setVisible(true);
-
-        frame1.setSize(700, 500);
-
-    }
-
+   
     /*@ public normal_behavior
-    @  requires userId != 0;
+    @  requires this.userId != 0;
     @*/
     private void viewBugList() {
         JFrame frame1 = new JFrame("Bug Search Result");
@@ -536,75 +341,6 @@ public class Manager extends User implements ActionListener {
 
     }
 
-    private void generateReportsJFrame() {
-
-        JFrame frame1 = new JFrame("REPORTS FOR PROJECTS AND IT'S BUGS");
-        JPanel panel = new JPanel(new GridBagLayout());
-        frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        frame1.setLayout(new BorderLayout());
-
-        JLabel title = new JLabel("Select Project from the list");
-
-        title.setFont(new Font("Tahoma", Font.PLAIN, 25));
-
-        JLabel select = new JLabel("Select Project :");
-        select.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        select.setBounds(110, 225, 100, 25);
-
-        JButton search = new JButton("Search");
-        final JComboBox projectselect = new JComboBox();
-
-        title.setBounds(80, 91, 2000, 35);
-
-        search.setBounds(282, 300, 89, 23);
-
-        search.addActionListener(this);
-
-        panel.setBounds(282, 141, 200, 20);
-
-
-        frame1.add(title);
-
-        frame1.add(select);
-        frame1.add(search);
-        panel.add(projectselect);
-        frame1.add(panel);
-
-        ResultSet rs = new Project().viewProjectList();
-        try {
-            Vector v = new Vector();
-
-            while (rs.next()) {
-                String projectID = rs.getString("projectID");
-                v.add(projectID);
-            }
-
-            projectselect.setModel(new DefaultComboBoxModel(v));
-        } catch (SQLException e) {
-            System.out.println("SQLException in get() method");
-            e.printStackTrace();
-        } finally {
-            DbUtil.close(rs);
-            DbUtil.close(preparedStatment);
-            DbUtil.close(connection);
-        }
-
-        search.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-
-                String projectID = (String) projectselect.getSelectedItem();
-
-                generateReport(projectID);
-
-            }
-        });
-
-        frame1.setVisible(true);
-
-        frame1.setSize(700, 500);
-
-    }
     
     /**
      *  \fn public void generateReport(String projectID)
@@ -716,83 +452,7 @@ public class Manager extends User implements ActionListener {
         frame1.setSize(900, 600);
 
     }
-//	private void ViewTeamMembers() {
-//
-//		JFrame frame1 = new JFrame("Bug Search Result");
-//
-//		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//
-//		frame1.setLayout(new BorderLayout());
-//
-//		// TableModel tm = new TableModel();
-//
-//		DefaultTableModel model = new DefaultTableModel();
-//		model.setColumnIdentifiers(columnNames_user);
-//
-//		// DefaultTableModel model = new DefaultTableModel(tm.getData1(),
-//		// tm.getColumnNames());
-//
-//		// table = new JTable(model);
-//
-//		JTable table = new JTable();
-//
-//		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-//
-//		table.setFillsViewportHeight(true);
-//
-//		JScrollPane scroll = new JScrollPane(table);
-//
-//		scroll.setHorizontalScrollBarPolicy(
-//
-//				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//
-//		scroll.setVerticalScrollBarPolicy(
-//
-//				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-//
-//		// String textvalue = textbox.getText();
-//		String name, id, username, password, email, role, permissionlist;
-//
-//		ResultSet rs = null;
-//		try {
-//
-//			connection = ConnectionFactory.getConnection();
-//			String sql = "select name, id, username, email, role, permissionlist from bug_tracking_user where role = 'developer' or role = 'tester' ";
-//
-//			PreparedStatement pstm = connection.prepareStatement(sql);
-//			int i = 0;
-//			rs = pstm.executeQuery();
-//
-//			while (rs.next()) {
-//				name = rs.getString("name");
-//				id = rs.getString("id");
-//				username = rs.getString("username");
-//
-//				email = rs.getString("email");
-//				role = rs.getString("role");
-//				permissionlist = rs.getString("permissionlist");
-//
-//				model.addRow(new Object[] { name, id, username, email, role, permissionlist });
-//
-//			}
-//
-//			table.setModel(model);
-//
-//		} catch (SQLException e) {
-//			System.out.println("SQLException in get() method");
-//			e.printStackTrace();
-//		} finally {
-//			DbUtil.close(rs);
-//			DbUtil.close(preparedStatment);
-//			DbUtil.close(connection);
-//		}
-//
-//		frame1.add(scroll);
-//
-//		frame1.setVisible(true);
-//
-//		frame1.setSize(700, 500);
-//	}
+
     
     /**
      *  \fn public void viewBug(String bugID)
@@ -801,16 +461,16 @@ public class Manager extends User implements ActionListener {
      *  
      */
 
-    /*
-     * @ public normal_behavior
-     *
-     * @ requires bugId > 0 && bugStatus.equals("Closed") == false
-     *
-     * @ ensures bugTitle != NULL && bugDescription != NULL && bugPriority != NULL
-     * && bugStatus != NULL && bugDueDate != NULL ;
-     *
-     * @
-     */
+    /*@
+     @ public normal_behavior
+     @
+     @ requires bugId > 0 && bugStatus.equals("Closed") == false;
+     @
+     @ ensures bugTitle != null && bugDescription != null && bugPriority != null
+     @ && bugStatus != null && bugDueDate != null ;
+     @
+     @
+     @*/
     public void viewBug(int bugID) {
         JFrame frame1 = new JFrame("Bug Search Result");
 
@@ -916,6 +576,81 @@ public class Manager extends User implements ActionListener {
         frame1.setSize(700, 500);
     }
 
+        
+    /**
+     *  \fn public void assignProject(String username, String project_id)
+     *  
+     *  @param [in] username String value holding the username of user to which project is to be assigned.
+     *  
+     *  @param [in] project_id String value holding the project ID of project to be assigned to user.
+     *  
+     */
+
+    /*@ public normal_behavior
+	 @  requires  projectId.equals(null) == false &&  userId > 0 &&  role.equals("developer")== true ||  role.equals("tester") == true;
+	 @ ensures userslist.add(username); 
+	 @*/
+
+    public void assignProject(String username, String project_id) {
+        int rs1;
+        try {
+            connection = ConnectionFactory.getConnection();
+            String sql = "update project set userslist= userslist ||',' || ?  where projectID = ?";
+
+            PreparedStatement pstm = connection.prepareStatement(sql);
+            String testerId = Integer.toString(this.userId);
+            pstm.setString(1, username);
+            pstm.setString(2, project_id);
+
+            rs1 = pstm.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("SQLException in get() method");
+            e.printStackTrace();
+        } finally {
+
+            DbUtil.close(preparedStatment);
+            DbUtil.close(connection);
+        }
+
+    }
+    
+    /**
+     *  \fn public void grantPermission(String username, Permissions permission)
+     *  
+     *  @param [in] username String value holding the username of the user to which permission has to be granted.
+     *  
+     *  @param [in] permission String value holding the permission to be granted.
+     *  
+     */
+
+    /*@ public normal_behavior
+    @  requires userId > 0 &&  role.equals("developer")== true ||  role.equals("tester") == true;
+    @  ensures permissionslist.add(permission);
+    @*/
+    public void grantPermission(String username, String permission) {
+        int rs1;
+        try {
+            connection = ConnectionFactory.getConnection();
+            String sql = "update bug_tracking_user set permissionlist= permissionlist||','||'" + permission + "' where username = ?";
+
+            PreparedStatement pstm = connection.prepareStatement(sql);
+            String testerId = Integer.toString(this.userId);
+
+            pstm.setString(1, username);
+
+            rs1 = pstm.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("SQLException in get() method");
+            e.printStackTrace();
+        } finally {
+
+            DbUtil.close(preparedStatment);
+            DbUtil.close(connection);
+        }
+
+    }
     public void assignProjectJFrame() {
         JPanel panel = new JPanel(new GridBagLayout());
         JPanel panel2 = new JPanel(new GridBagLayout());
@@ -1051,79 +786,343 @@ public class Manager extends User implements ActionListener {
         PFrame.setSize(700, 700);
 
     }
-    
-    /**
-     *  \fn public void assignProject(String username, String project_id)
-     *  
-     *  @param [in] username String value holding the username of user to which project is to be assigned.
-     *  
-     *  @param [in] project_id String value holding the project ID of project to be assigned to user.
-     *  
-     */
+    private void grantPermsiionsJFrame() {
+        // TODO Auto-generated method stub
+        JPanel panel = new JPanel(new GridBagLayout());
+        JPanel panel2 = new JPanel(new GridBagLayout());
+        JFrame Frame2 = new JFrame("Grant Permission");
+        Frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-    /*@ public normal_behavior
-	 @  requires  projectId.equals(null) == false &&  userId > 0 &&  role.equals("developer")== true ||  role.equals("tester") == true;
-	 @ ensures userslist.add(username); 
-	 @*/
+        Frame2.setLayout(new BorderLayout());
 
-    public void assignProject(String username, String project_id) {
-        int rs1;
+        JLabel select = new JLabel("Select user to set permission!!!");
+        select.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        select.setBounds(80, 91, 2000, 25);
+        Frame2.add(select);
+
+        JLabel lblUser = new JLabel(" Select User :");
+        lblUser.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblUser.setBounds(110, 141, 100, 14);
+        Frame2.add(lblUser);
+        final JComboBox UserField = new JComboBox();
+        panel2.setBounds(282, 140, 200, 20);
+        Frame2.add(panel2);
+        panel2.add(UserField);
+
+        JLabel lblPermission = new JLabel("Select Permission :\r\n");
+        lblPermission.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblPermission.setBounds(110, 174, 100, 25);
+        Frame2.add(lblPermission);
+
+        Vector v = new Vector();
+		v.add("Add Bug");
+		v.add("Edit Bug");
+		v.add("Delete Bug");
+        
+
+        final JComboBox permissionField = new JComboBox(v);
+        panel.setBounds(282, 174, 200, 20);
+        Frame2.add(panel);
+        panel.add(permissionField);
+
+        JLabel lblDesc = new JLabel("Remarks :\r\n");
+        lblDesc.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblDesc.setBounds(110, 200, 200, 25);
+        Frame2.add(lblDesc);
+
+        final JTextField DesField = new JTextField();
+        DesField.setBounds(282, 200, 200, 60);
+        Frame2.add(DesField);
+        DesField.setColumns(10);
+        ResultSet rs2 = null;
         try {
             connection = ConnectionFactory.getConnection();
-            String sql = "update project set userslist= userslist ||',' || ?  where projectID = ?";
+            String sql = "Select username from bug_tracking_user where role = 'developer' or role = 'tester'";
 
             PreparedStatement pstm = connection.prepareStatement(sql);
-            String testerId = Integer.toString(this.userId);
-            pstm.setString(1, username);
-            pstm.setString(2, project_id);
 
-            rs1 = pstm.executeUpdate();
+            rs2 = pstm.executeQuery();
 
+            Vector v2 = new Vector();
+
+            while (rs2.next()) {
+
+                String ids = rs2.getString(1);
+
+                v2.add(ids);
+
+            }
+
+            UserField.setModel(new DefaultComboBoxModel(v2));
         } catch (SQLException e) {
             System.out.println("SQLException in get() method");
             e.printStackTrace();
         } finally {
-
+            DbUtil.close(rs2);
             DbUtil.close(preparedStatment);
             DbUtil.close(connection);
         }
 
-    }
-    
-    /**
-     *  \fn public void grantPermission(String username, Permissions permission)
-     *  
-     *  @param [in] username String value holding the username of the user to which permission has to be granted.
-     *  
-     *  @param [in] permission String value holding the permission to be granted.
-     *  
-     */
+        JButton btnSubmit = new JButton("Submit");
+        final JLabel success = new JLabel("");
 
-    /*@ public normal_behavior
-    @  requires userId > 0 &&  role.equals("developer")== true ||  role.equals("tester") == true;
-    @ ensures permissionslist.add(permission);
-    @*/
-    public void grantPermission(String username, String permission) {
-        int rs1;
+        success.setBounds(282, 400, 300, 60);
+        Frame2.add(success);
+
+        btnSubmit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                String user = (String) UserField.getSelectedItem();
+                String permission = (String) permissionField.getSelectedItem();
+                String remark = DesField.getText().toString().toLowerCase();
+
+                DesField.setText("");
+
+                grantPermission(user, permission);
+                success.setForeground(Color.GREEN);
+                success.setText("Permssion Granted Successfully ");
+            }
+        });
+
+        btnSubmit.setBounds(282, 300, 89, 23);
+        Frame2.add(btnSubmit);
+
+        Frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        Frame2.setLayout(new BorderLayout());
+
+        Frame2.setVisible(true);
+
+        Frame2.setSize(700, 700);
+
+    }
+
+    private void viewBugJFrame() {
+
+        JFrame frame1 = new JFrame("View Bug");
+        JPanel panel = new JPanel(new GridBagLayout());
+        frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        frame1.setLayout(new BorderLayout());
+
+        JLabel title = new JLabel("Select Bug assigned to you from the list");
+
+        // title.setForeground(Color.red);
+
+        title.setFont(new Font("Tahoma", Font.PLAIN, 25));
+
+        JLabel select = new JLabel("Select Bug :");
+        select.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        select.setBounds(110, 225, 100, 25);
+
+        JButton search = new JButton("Search");
+        final JComboBox bugselect = new JComboBox();
+
+        title.setBounds(80, 91, 2000, 35);
+        search.setBounds(282, 300, 89, 23);
+
+        search.addActionListener(this);
+
+        panel.setBounds(282, 141, 200, 20);
+
+        frame1.add(title);
+
+        frame1.add(select);
+        frame1.add(search);
+        panel.add(bugselect);
+        frame1.add(panel);
+
+        ResultSet rs = null;
         try {
             connection = ConnectionFactory.getConnection();
-            String sql = "update bug_tracking_user set permissionlist= permissionlist||','||'" + permission + "' where username = ?";
+			String sql = "Select bugId,bugTitle from bugs where  bugStatus != 'CLOSED' and  bugStatus != 'closed' and bugStatus != 'Closed'";
+
 
             PreparedStatement pstm = connection.prepareStatement(sql);
-            String testerId = Integer.toString(this.userId);
+            int i = 0;
+            rs = pstm.executeQuery();
 
-            pstm.setString(1, username);
 
-            rs1 = pstm.executeUpdate();
+            Vector v = new Vector();
 
+            while (rs.next()) {
+
+                String bugId = rs.getString("bugId");
+                String bugTitle = rs.getString("bugTitle");
+
+                v.add(bugId.concat("-").concat(bugTitle));
+
+            }
+
+            bugselect.setModel(new DefaultComboBoxModel(v));
         } catch (SQLException e) {
             System.out.println("SQLException in get() method");
             e.printStackTrace();
         } finally {
-
+            DbUtil.close(rs);
             DbUtil.close(preparedStatment);
             DbUtil.close(connection);
         }
 
+        search.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+
+                String bugID = (String) bugselect.getSelectedItem();
+                String[] arrOfStr = bugID.split("-", 2); 
+				
+				viewBug(Integer.parseInt(arrOfStr[0]));
+
+            }
+        });
+
+        frame1.setVisible(true);
+
+        frame1.setSize(700, 500);
+
     }
+    private void generateReportsJFrame() {
+
+        JFrame frame1 = new JFrame("REPORTS FOR PROJECTS AND IT'S BUGS");
+        JPanel panel = new JPanel(new GridBagLayout());
+        frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        frame1.setLayout(new BorderLayout());
+
+        JLabel title = new JLabel("Select Project from the list");
+
+        title.setFont(new Font("Tahoma", Font.PLAIN, 25));
+
+        JLabel select = new JLabel("Select Project :");
+        select.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        select.setBounds(110, 225, 100, 25);
+
+        JButton search = new JButton("Search");
+        final JComboBox projectselect = new JComboBox();
+
+        title.setBounds(80, 91, 2000, 35);
+
+        search.setBounds(282, 300, 89, 23);
+
+        search.addActionListener(this);
+
+        panel.setBounds(282, 141, 200, 20);
+
+
+        frame1.add(title);
+
+        frame1.add(select);
+        frame1.add(search);
+        panel.add(projectselect);
+        frame1.add(panel);
+
+        ResultSet rs = new Project().viewProjectList();
+        try {
+            Vector v = new Vector();
+
+            while (rs.next()) {
+                String projectID = rs.getString("projectID");
+                v.add(projectID);
+            }
+
+            projectselect.setModel(new DefaultComboBoxModel(v));
+        } catch (SQLException e) {
+            System.out.println("SQLException in get() method");
+            e.printStackTrace();
+        } finally {
+            DbUtil.close(rs);
+            DbUtil.close(preparedStatment);
+            DbUtil.close(connection);
+        }
+
+        search.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+
+                String projectID = (String) projectselect.getSelectedItem();
+
+                generateReport(projectID);
+
+            }
+        });
+
+        frame1.setVisible(true);
+
+        frame1.setSize(700, 500);
+
+    }
+//	private void ViewTeamMembers() {
+//
+//		JFrame frame1 = new JFrame("Bug Search Result");
+//
+//		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//
+//		frame1.setLayout(new BorderLayout());
+//
+//		// TableModel tm = new TableModel();
+//
+//		DefaultTableModel model = new DefaultTableModel();
+//		model.setColumnIdentifiers(columnNames_user);
+//
+//		// DefaultTableModel model = new DefaultTableModel(tm.getData1(),
+//		// tm.getColumnNames());
+//
+//		// table = new JTable(model);
+//
+//		JTable table = new JTable();
+//
+//		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+//
+//		table.setFillsViewportHeight(true);
+//
+//		JScrollPane scroll = new JScrollPane(table);
+//
+//		scroll.setHorizontalScrollBarPolicy(
+//
+//				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//
+//		scroll.setVerticalScrollBarPolicy(
+//
+//				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+//
+//		// String textvalue = textbox.getText();
+//		String name, id, username, password, email, role, permissionlist;
+//
+//		ResultSet rs = null;
+//		try {
+//
+//			connection = ConnectionFactory.getConnection();
+//			String sql = "select name, id, username, email, role, permissionlist from bug_tracking_user where role = 'developer' or role = 'tester' ";
+//
+//			PreparedStatement pstm = connection.prepareStatement(sql);
+//			int i = 0;
+//			rs = pstm.executeQuery();
+//
+//			while (rs.next()) {
+//				name = rs.getString("name");
+//				id = rs.getString("id");
+//				username = rs.getString("username");
+//
+//				email = rs.getString("email");
+//				role = rs.getString("role");
+//				permissionlist = rs.getString("permissionlist");
+//
+//				model.addRow(new Object[] { name, id, username, email, role, permissionlist });
+//
+//			}
+//
+//			table.setModel(model);
+//
+//		} catch (SQLException e) {
+//			System.out.println("SQLException in get() method");
+//			e.printStackTrace();
+//		} finally {
+//			DbUtil.close(rs);
+//			DbUtil.close(preparedStatment);
+//			DbUtil.close(connection);
+//		}
+//
+//		frame1.add(scroll);
+//
+//		frame1.setVisible(true);
+//
+//		frame1.setSize(700, 500);
+//	}
 }
