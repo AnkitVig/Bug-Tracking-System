@@ -29,16 +29,16 @@ enum BugStatus {
 public class User extends JFrame {
 
     /*@ public
-     @ invariant userId != 0
+     @ invariant this.userId != 0
      @
-     @ && (\forall Integer userId; userId != null ; u1.userId != u2.userId);
+     @ && (\forall int userId; userId != 0 ; userId != this.userId);
      @
      @
      @*/
 
     private static final long serialVersionUID = 1L;
 
-    public User u1, u2;
+
     public String password;
     public String username;
     public String role;

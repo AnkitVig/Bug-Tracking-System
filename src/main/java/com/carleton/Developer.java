@@ -37,9 +37,9 @@ public class Developer extends User implements ActionListener {
 	 * 
 	 */
 	/*@ public 
-	 @ invariant userId != 0
-	 @ 
-	 @ && (\forall Integer userId; userId != null ; u1.userId != u2.userId)
+     @ invariant this.userId != 0
+     @
+     @ && (\forall int userId; userId != 0 ; userId != this.userId)
 	 @ && role.equals("Developer") == true;
 	 @
 	 @*/
