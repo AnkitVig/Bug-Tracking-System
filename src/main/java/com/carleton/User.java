@@ -29,9 +29,9 @@ enum BugStatus {
 public class User extends JFrame {
 
     /*@ public
-     @ invariant this.userId != 0
+     @ invariant this.userId > 0
      @
-     @ && (\forall int userId; userId != 0 ; userId != this.userId);
+     @ && (\forall int userId; userId > 0 ; userId != this.userId);
      @
      @
      @*/

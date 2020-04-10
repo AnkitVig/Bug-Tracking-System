@@ -11,9 +11,20 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 public class Project extends JFrame {
-
+	public String projectID;
+	public String usersList;
+	public int bugCount;
     private Connection connection;
-    
+    public ResultSet results;
+    /*@
+	 @ public invariant
+	 @ 
+	 @ this.projectID != null
+	 @ && (\forall String projectID; projectID != null ; projectID != this.projectID)
+	 @ && usersList != null && usersList.length() > 0 ;
+	 @
+	 @*/
+	
     /**
      *  \fn public void addProject(String name, String description, int userId)
      *  
@@ -25,11 +36,12 @@ public class Project extends JFrame {
      *  
      */
 
-    /*
-     * @ public normal_behavior
-     *
-     * @ requires name != NULL && description != NULL && userId != NULL && name.length > 0 && description.length > 0 && userId > 0
-     */
+    /*@
+     @ public normal_behavior
+     @
+     @ requires name != null && description != null && userId > 0 && name.length() > 0 && description.length() > 0 ;
+     @ ensures projectID != null;
+     @*/
     public void addProject(String name, String description, int userId) {
         try {
             connection = ConnectionFactory.getConnection();
@@ -59,12 +71,13 @@ public class Project extends JFrame {
      *  
      */
 
-    /*
-     * @ public normal_behavior
-     *
-     * @ requires projectId != NULL && projectId.length > 0
-     */
-    public void closeProject(String projectId) {
+    /*@
+     @ public normal_behavior
+     @
+     @ requires projectId != null && projectId.length() > 0  && (\exists String projectid; projectid == projectId);
+     @ ensures projectId == null;
+     @*/
+    public void deleteProject(String projectId) {
         try {
             connection = ConnectionFactory.getConnection();
             String sql = "DELETE FROM project WHERE projectId = ?";
@@ -90,11 +103,12 @@ public class Project extends JFrame {
      *  
      */
 
-    /*
-     * @ public normal_behavior
-     *
-     * @ requires projectId != NULL && projectId.length > 0 && description != NULL && description.length > 0
-     */
+    /*@
+     @ public normal_behavior
+     @
+     @ requires projectId != null && projectId.length() > 0 && description != null && description.length() > 0;
+     @ ensures description != \old (description);
+     @*/
     public void editProject(String projectId, String description) {
         try {
             connection = ConnectionFactory.getConnection();
@@ -120,6 +134,13 @@ public class Project extends JFrame {
      *  
      */
 
+    /*@
+     @ public normal_behavior
+     @
+     @ requires results ==  null;
+     @ ensures results != null;
+     @*/
+    
     public ResultSet viewProjectList() {
         ResultSet results = null;
         try {

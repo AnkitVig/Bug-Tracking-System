@@ -7,10 +7,12 @@ import com.carleton.util.DbUtil;
 import com.carleton.User;
 
 public class Bug{
-	String bug_description;
-	String bug_title;
-	String bug_projectID;
-	String bug_priority;
+	public int bug_ID;
+	public String bug_description;
+	public String bug_title;
+	public String bug_projectID;
+	public String bug_priority;
+	public String bugStatus;
 	enum bug_status {
 		OPEN, RESOLVED, CLOSED
 	}
@@ -19,12 +21,22 @@ public class Bug{
 	Date bug_due_date = new Date();
 	Statement stmnt;
 	ResultSet rs;
-
-	private static Connection con;
+	public Project p = new Project();
+	private Connection con;
 
 	public Bug(){
 		con = ConnectionFactory.getConnection();
 	}
+	/*@
+	 @ public invariant
+	 @ 
+	 @ this.bug_ID > 0
+	 @ && (\forall int bug_ID; bug_ID > 0 ; bug_ID != this.bug_ID)
+	 @ && p.projectID != null
+	 @ && p.bugCount >=0 ;
+	 @ 
+	 @
+	 @*/
 	
 	/**
      *  \fn public int addBug(String bug_title, String bug_description, String bug_priority,
@@ -50,19 +62,18 @@ public class Bug{
      *  
      */
 	
-	/*
-	 * @ public normal_behaviour
-	 * 
-	 * @public invariant bugID >= 0;
-	 * 
-	 * @ requires bug_title != NULL && bug_description != NULL && bug_priority != NULL 
-	 * && bug_due_date != NULL && bug_testerID != NULL && bug_developerID !=NULL
-	 * && bug_projectID != NULL;
-	 * 
-	 * @ ensures bugID = \old (bugID) + 1;
-	 * 
-	 * @
-	 */
+	/*@
+	 @ public normal_behaviour
+	 @ 
+	 @
+	 @ requires bug_title != null && bug_description != null && bug_priority != null 
+	 @ && bug_due_date != null && bug_testerID != null && bug_developerID !=null
+	 @ && bug_projectID != null;
+	 @ 
+	 @ ensures bug_ID == \old (bug_ID) + 1;
+	 @ 
+	 @
+	 @*/
 	public int addBug(String bug_title, String bug_description, String bug_priority,
 				bug_status bs, String bug_due_date, String bug_testerID, String bug_developerID, String bug_projectID ){
 		int bugID = 0;
@@ -90,17 +101,15 @@ public class Bug{
      *  
      */
 	
-	/*
-	 * @ public normal_behaviour
-	 * 
-	 * @ public invariant b_id >= 0;
-	 * 
-	 * @ requires bug_status == "OPEN" && (\exists int bug_ID; b_id = bug_ID);
-	 * 
-	 * @ ensures bug_status == "CLOSED";
-	 * 
-	 * @
-	 */
+	/*@
+	 @ public normal_behaviour 
+	 @
+	 @ requires bugStatus.equals("OPEN") == true && (\exists int b_id; b_id == bug_ID);
+	 @ 
+	 @ ensures  bugStatus.equals("CLOSED") == true;
+	 @ 
+	 @
+	 @*/
 	
 	public int closeBug(int bug_ID){
 		int b_id = bug_ID;
@@ -123,17 +132,15 @@ public class Bug{
      */
 	
 	
-	/*
-	 * @ public normal_behaviour
-	 * 
-	 * @public invariant b_id >= 0;
-	 * 
-	 * @ requires rs != NULL ;
-	 * 
-	 * @ ensures bugStatus != \old (bugStatus);
-	 * 
-	 * @
-	 */
+	/*@
+	 @ public normal_behaviour
+	 @ 
+	 @ requires bug_ID  >= 0 ;
+	 @ 
+	 @ ensures bugStatus != \old (bugStatus);
+	 @ 
+	 @
+	 @*/
 	public int editBugStatus(int bug_ID){
 		int b_id = bug_ID;
 		try{
@@ -161,17 +168,16 @@ public class Bug{
      */
 	
 	
-	/*
-	 * @ public normal_behaviour
-	 * 
-	 * @public invariant bid >= 0;
-	 * 
-	 * @ requires rs != NULL && bugStatus != "CLOSED" && (\exists int bugID; bid = bugID);
-	 * 
-	 * @ ensures \result == bugID;
-	 * 
-	 * @
-	 */
+	/*@
+	 @ public normal_behaviour
+	 @ 
+	 @ 
+	 @ requires bugStatus.equals("CLOSED") == false && (\exists int bid; bid == bugID);
+	 @ 
+	 @ ensures \result == bugID;
+	 @ 
+	 @
+	 @*/
 	
 	public int searchBug(int bugID){
 		int bid = bugID;

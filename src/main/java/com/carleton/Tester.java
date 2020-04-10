@@ -51,12 +51,13 @@ public class Tester extends User implements ActionListener {
 	 * 
 	 */
 	/*@ public 
-    @ invariant this.userId != 0
+    @ invariant this.userId > 0
     @
-    @ && (\forall int userId; userId != 0 ; userId != this.userId)
+    @ && (\forall int userId; userId > 0 ; userId != this.userId)
 	@ && role.equals("Tester") == true;
 	@
 	@*/
+	
 	private Connection connection;
 	private PreparedStatement preparedStatment;
 	private static final long serialVersionUID = 9104811318735213684L;
