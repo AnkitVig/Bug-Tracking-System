@@ -4,6 +4,8 @@ import com.carleton.util.ConnectionFactory;
 import com.carleton.util.DbUtil;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,12 +34,12 @@ public class Bug extends JFrame {
 	 @ public invariant
 	 @ 
 	 @ this.bugID != null
-	 @ && (\forall String bugID; bugID != null ; bugID != this.bugID)
+	 @ && (\forall String bugID; bugID != null ; bugID != this.bugID);
 	 @
 	 @*/
 
 	public Bug(){
-		con = ConnectionFactory.getConnection();
+		connection = ConnectionFactory.getConnection();
 	}
 	
 	/**
@@ -74,7 +76,7 @@ public class Bug extends JFrame {
 	 @ ensures bugID != null;
 	 */
 	public int addBug(String bug_title, String bug_description, String bug_priority,
-				bug_status bs, String bug_due_date, String bug_testerID, String bug_developerID, String bug_projectID ){
+				String bs, String bug_due_date, String bug_testerID, String bug_developerID, String bug_projectID ){
 		int bugID = 0;
 		try{
 			String sql = "INSERT INTO bugs(bugTitle, bugDescription , bugPriority, bugStatus , bugDueDate , bugtesterID , bugdevID ,bugProjectID)" + ""
@@ -127,7 +129,7 @@ public class Bug extends JFrame {
 		    String sql = "UPDATE bugs SET bugStatus = 'CLOSE' WHERE bugID = ?";
 		    
 		    PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, bug_ID);
+            pstmt.setInt(1, bug_ID);
             
             pstmt.executeUpdate();
 		}
@@ -156,16 +158,16 @@ public class Bug extends JFrame {
 		    String sql = "SELECT * FROM bugs WHERE bugID = ? AND bugStatus != ?";
 		    
 		    PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, bug_ID);
-            pstmt.setString(2, 'CLOSED');
+            pstmt.setInt(1, bug_ID);
+            pstmt.setString(2, "CLOSED");
             
-            results = pstmt.executeUpdate();
+           	pstmt.executeUpdate();
 		    if(results.next()){
 		    	String sql1 = "UPDATE bugs SET bugStatus = 'INPROGRESS' WHERE bugID = ?";
 		    	PreparedStatement pstmt1 = connection.prepareStatement(sql1);
-	            pstmt.setString(1, bug_ID);
+	            pstmt.setInt(1, bug_ID);
 	            
-	            results1 = pstmt1.executeUpdate();
+	              pstmt1.executeUpdate();
 		    }
 		    else{
 		    	JOptionPane.showMessageDialog(null, "This bug is already closed!");
@@ -199,9 +201,9 @@ public class Bug extends JFrame {
 		    String sql = "SELECT * FROM bugs WHERE bugID = ?";
 		    
 		    PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, bugID);
+            pstmt.setInt(1, bugID);
    
-            results = pstmt.executeUpdate();
+             pstmt.executeUpdate();
 		    
 		    while(results.next()){
 		    	JOptionPane.showMessageDialog(null, "Bug Title: " +  results.getString(2) + "\nBug Description: " + results.getString(3) + 
