@@ -1,42 +1,44 @@
 package com.carleton;
-import java.util.Date;
-import java.sql.*;
-import javax.swing.*;
+
 import com.carleton.util.ConnectionFactory;
 import com.carleton.util.DbUtil;
-import com.carleton.User;
 
-public class Bug{
-	public int bug_ID;
+import javax.swing.JFrame;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
+
+import java.util.Date;
+
+public class Bug extends JFrame {
+	public String bugID;
 	public String bug_description;
 	public String bug_title;
 	public String bug_projectID;
 	public String bug_priority;
-	public String bugStatus;
-	enum bug_status {
+	public enum bug_status {
 		OPEN, RESOLVED, CLOSED
 	}
-	String bug_developerID;
-	String bug_testerID;
-	Date bug_due_date = new Date();
-	Statement stmnt;
-	ResultSet rs;
-	public Project p = new Project();
-	private Connection con;
+	public String bug_developerID;
+	public String bug_testerID;
+	public Date bug_due_date = new Date();
+	
+	public ResultSet results, results1;
+	private static Connection connection;
+	
+	/*@
+	 @ public invariant
+	 @ 
+	 @ this.bugID != null
+	 @ && (\forall String bugID; bugID != null ; bugID != this.bugID)
+	 @
+	 @*/
 
 	public Bug(){
 		con = ConnectionFactory.getConnection();
 	}
-	/*@
-	 @ public invariant
-	 @ 
-	 @ this.bug_ID > 0
-	 @ && (\forall int bug_ID; bug_ID > 0 ; bug_ID != this.bug_ID)
-	 @ && p.projectID != null
-	 @ && p.bugCount >=0 ;
-	 @ 
-	 @
-	 @*/
 	
 	/**
      *  \fn public int addBug(String bug_title, String bug_description, String bug_priority,
@@ -62,28 +64,39 @@ public class Bug{
      *  
      */
 	
-	/*@
+	/*
 	 @ public normal_behaviour
-	 @ 
-	 @
 	 @ requires bug_title != null && bug_description != null && bug_priority != null 
-	 @ && bug_due_date != null && bug_testerID != null && bug_developerID !=null
-	 @ && bug_projectID != null;
-	 @ 
-	 @ ensures bug_ID == \old (bug_ID) + 1;
-	 @ 
-	 @
-	 @*/
+	 @ && bug_due_date != null && bug_testerID != null && bug_developerID != null
+	 @ && bug_projectID != null && bug_title.length() > 0 && bug_description.length() > 0 &&
+	 @ bug_priority.length() > 0 && bug_due_date.length() > 0 && bug_testerID.length() > 0 &&
+	 @ bug_developerID.length() > 0 && bug_projectID.length() > 0;
+	 @ ensures bugID != null;
+	 */
 	public int addBug(String bug_title, String bug_description, String bug_priority,
 				bug_status bs, String bug_due_date, String bug_testerID, String bug_developerID, String bug_projectID ){
 		int bugID = 0;
 		try{
-			stmnt.executeUpdate("insert into bugs(bugTitle, bugDescription , bugPriority, bugStatus , bugDueDate , bugtesterID , bugdevID ,bugProjectID)" + ""
-					+ "values ('"+bug_title+"','"+bug_description+"','"+bug_priority+"', '"+bs+"', '"+bug_due_date+"', '"+bug_testerID+"', '"+bug_developerID+"', '"+bug_projectID+"')");
+			String sql = "INSERT INTO bugs(bugTitle, bugDescription , bugPriority, bugStatus , bugDueDate , bugtesterID , bugdevID ,bugProjectID)" + ""
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+			
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, bug_title);
+            pstmt.setString(2, bug_description);
+            pstmt.setString(3, bug_priority);
+            pstmt.setString(4, bs);
+            pstmt.setString(5, bug_due_date);
+            pstmt.setString(6, bug_testerID);
+            pstmt.setString(7, bug_developerID);
+            pstmt.setString(5, bug_projectID);
+
+            pstmt.executeUpdate();
 		
-		    rs = stmnt.executeQuery("select last_insert_id()");
-		    while(rs.next()){
-		    	bugID = rs.getInt(1);
+            PreparedStatement pstmt1 = connection.prepareStatement(sql);
+            
+		    results = pstmt1.executeQuery("select last_insert_id()");
+		    while(results.next()){
+		    	bugID = results.getInt(1);
 		    }
 		}
 		catch(Exception e){ 
@@ -101,20 +114,22 @@ public class Bug{
      *  
      */
 	
-	/*@
+	/*
 	 @ public normal_behaviour 
+	 @ requires bug_status == "OPEN" && (\exists int bug_ID; b_id = bug_ID);
+	 @ ensures bug_status == "CLOSED" && b_id != null;
 	 @
-	 @ requires bugStatus.equals("OPEN") == true && (\exists int b_id; b_id == bug_ID);
-	 @ 
-	 @ ensures  bugStatus.equals("CLOSED") == true;
-	 @ 
-	 @
-	 @*/
+	 */
 	
 	public int closeBug(int bug_ID){
 		int b_id = bug_ID;
 		try{
-		    stmnt.executeUpdate("UPDATE bugs SET bugStatus = 'CLOSE' WHERE bugID = "+bug_ID+"");
+		    String sql = "UPDATE bugs SET bugStatus = 'CLOSE' WHERE bugID = ?";
+		    
+		    PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, bug_ID);
+            
+            pstmt.executeUpdate();
 		}
 		catch(Exception e){ 
 			JOptionPane.showMessageDialog(null, "ERROR: "+e.getMessage());
@@ -127,26 +142,30 @@ public class Bug{
      *  
      *  @param [in] bug_ID Integer value holding the bug ID of the bug to be edited.
      *  
-     *  @return Integer value holding bug ID of the edited bug. 
-     *  
      */
 	
 	
-	/*@
+	/*
 	 @ public normal_behaviour
-	 @ 
-	 @ requires bug_ID  >= 0 ;
-	 @ 
+	 @ requires bug_ID != null ;
 	 @ ensures bugStatus != \old (bugStatus);
-	 @ 
-	 @
-	 @*/
-	public int editBugStatus(int bug_ID){
+	 */
+	public void editBugStatus(int bug_ID){
 		int b_id = bug_ID;
 		try{
-		    rs = stmnt.executeQuery("SELECT * FROM bugs WHERE bugID = "+bug_ID+" AND bugStatus != 'CLOSE'");
-		    if(rs.next()){
-		    	stmnt.executeUpdate("UPDATE bugs SET bugStatus = 'INPROGRESS' WHERE bugID = "+bug_ID+" ");
+		    String sql = "SELECT * FROM bugs WHERE bugID = ? AND bugStatus != ?";
+		    
+		    PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, bug_ID);
+            pstmt.setString(2, 'CLOSED');
+            
+            results = pstmt.executeUpdate();
+		    if(results.next()){
+		    	String sql1 = "UPDATE bugs SET bugStatus = 'INPROGRESS' WHERE bugID = ?";
+		    	PreparedStatement pstmt1 = connection.prepareStatement(sql1);
+	            pstmt.setString(1, bug_ID);
+	            
+	            results1 = pstmt1.executeUpdate();
 		    }
 		    else{
 		    	JOptionPane.showMessageDialog(null, "This bug is already closed!");
@@ -155,7 +174,6 @@ public class Bug{
 		catch(Exception e){ 
 			JOptionPane.showMessageDialog(null, "ERROR: "+e.getMessage());
 		}
-		return b_id;
 	}
 	
 	/**
@@ -168,26 +186,28 @@ public class Bug{
      */
 	
 	
-	/*@
+	/*
 	 @ public normal_behaviour
-	 @ 
-	 @ 
-	 @ requires bugStatus.equals("CLOSED") == false && (\exists int bid; bid == bugID);
-	 @ 
+	 @ requires results != NULL && bugStatus != "CLOSED" && (\exists int bugID; bid = bugID);
 	 @ ensures \result == bugID;
-	 @ 
 	 @
-	 @*/
+	 */
 	
 	public int searchBug(int bugID){
 		int bid = bugID;
 		try{
-		    rs = stmnt.executeQuery("SELECT * FROM bugs WHERE bugID = "+bugID+"");
-		    while(rs.next()){
-		    	JOptionPane.showMessageDialog(null, "Bug Title: " +  rs.getString(2) + "\nBug Description: " + rs.getString(3) + 
-		          "\nBug Priority: " + rs.getString(4) + "\nBug Status: " + rs.getString(5) + "\nBug Due Date: " +
-		          rs.getString(6) + "\nBug TesterID: " + rs.getString(7)+ "\nBug Developer ID: " +
-		          rs.getString(8) + "\nBug Project ID: " + rs.getString(9));
+		    String sql = "SELECT * FROM bugs WHERE bugID = ?";
+		    
+		    PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, bugID);
+   
+            results = pstmt.executeUpdate();
+		    
+		    while(results.next()){
+		    	JOptionPane.showMessageDialog(null, "Bug Title: " +  results.getString(2) + "\nBug Description: " + results.getString(3) + 
+		          "\nBug Priority: " + results.getString(4) + "\nBug Status: " + results.getString(5) + "\nBug Due Date: " +
+		          results.getString(6) + "\nBug TesterID: " + results.getString(7)+ "\nBug Developer ID: " +
+		          results.getString(8) + "\nBug Project ID: " + results.getString(9));
 		    }
 		}
 		catch(Exception e){ 
@@ -196,5 +216,4 @@ public class Bug{
 		return bid;
 	}
 }
-
 
