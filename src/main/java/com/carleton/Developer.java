@@ -466,7 +466,9 @@ public class Developer extends User implements ActionListener {
 		ResultSet rs = null;
 		try {
 			connection = ConnectionFactory.getConnection();
-			String sql = "Select bugId,bugTitle from bugs where  bugStatus == 'OPEN' or  bugStatus == 'open' or bugStatus == 'Open' and bugdevID = "
+			String sql = "Select bugId,bugTitle from bugs where bugStatus != 'CLOSED' "
+					+ "and  bugStatus != 'closed' and bugStatus != 'Closed' and "
+					+ " bugStatus != 'RESOLVED' and  bugStatus != 'resolved' and bugStatus != 'Resolved' and bugdevID = "
 					+ this.userId;
 
 			PreparedStatement pstm = connection.prepareStatement(sql);

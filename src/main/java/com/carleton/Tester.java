@@ -417,7 +417,7 @@ public class Tester extends User implements ActionListener {
 			pstm.setString(5, testerId);
 			pstm.setInt(6, ids);
 
-			pstm.setDate(7, java.sql.Date.valueOf(bugDateField));
+			pstm.setString(7, bugDateField);
 
 			rs1 = pstm.executeUpdate();
 
