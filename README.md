@@ -7,5 +7,6 @@
 ```
 cd "Path to the Project folder"
 mvn install
+mvn package
 java -jar target/BugTracker-1.0-SNAPSHOT.jar
 ```
